@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-comic: 'Bangers', cursive;
+  --color-marvel-red: #e62429;
+  --color-hero-blue: #003399;
+  --color-comic-yellow: #fde802;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+  --marvel-red: #e62429;
+  --hero-blue: #003399;
+}
+
+/* Base UI - Clean & Simple */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  transition: background-color 0.5s ease;
+}
+
+.marvel-font {
+  font-family: var(--font-comic);
+}
+
+/* COMIC MODE SCOPED STYLES */
+.comic-mode {
+  --background: #fdfdfd;
+}
+
+.comic-mode .comic-page-bg {
+  background-color: #f0f0f0;
+  background-image:
+    linear-gradient(90deg, transparent 49%, rgba(0, 0, 0, 0.05) 50%, transparent 51%),
+    linear-gradient(0deg, transparent 49%, rgba(0, 0, 0, 0.05) 50%, transparent 51%),
+    radial-gradient(rgba(0, 51, 153, 0.1) 2px, transparent 2px);
+  background-size: 200px 200px, 200px 200px, 20px 20px;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.comic-mode .sunburst {
+  background:
+    repeating-conic-gradient(from 0deg,
+      var(--color-hero-blue) 0deg 10deg,
+      rgba(0, 51, 153, 0.8) 10deg 20deg);
+  position: absolute;
+  z-index: 0;
+  opacity: 0.1;
+}
+
+.comic-mode .onomatopoeia {
+  font-family: var(--font-comic);
+  text-transform: uppercase;
+  font-style: italic;
+  font-weight: 900;
+  -webkit-text-stroke: 1.5px black;
+  filter: drop-shadow(6px 6px 0px rgba(0, 0, 0, 0.3));
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+.comic-mode .marvel-logo {
+  background-color: var(--marvel-red);
+  color: white;
+  font-family: var(--font-comic);
+  padding: 4px 12px;
+  display: inline-block;
+  transform: skew(-2deg);
+  border: 4px solid #000;
+  text-transform: uppercase;
+  font-size: 3rem;
+  line-height: 1;
+  box-shadow: 4px 4px 0px white, 8px 8px 0px #000;
+}
+
+/* Clean Mode Default Sidebar - Placeholder logic */
+.clean-mode .sidebar {
+  background: white;
+  border-right: 1px solid #e5e7eb;
+}
+
+.clean-mode .comic-border {
+  border: 1px solid #e5e7eb;
+  box-shadow: none;
+}
+
+/* Comic Mode Active Borders */
+.comic-mode .comic-border {
+  border: 4px solid #000;
+  box-shadow: 8px 8px 0px #000;
+}
+
+/* Onomatopoeia Variants */
+.comic-mode .pow {
+  color: var(--color-comic-yellow);
+  transform: rotate(-10deg) scale(1.5);
+}
+
+.comic-mode .wham {
+  color: var(--marvel-red);
+  transform: rotate(5deg) scale(1.3);
+}
+
+.comic-mode .boom {
+  color: var(--color-hero-blue);
+  transform: rotate(-5deg) scale(1.8);
+}
+
+.comic-mode .punch {
+  color: #ffffff;
+  -webkit-text-stroke: 2px #e62429;
+  transform: rotate(15deg) scale(2);
+}
+
+.comic-mode .kapow {
+  color: #fde802;
+  -webkit-text-stroke: 2px black;
+  transform: rotate(-20deg) scale(2.5);
+}
+
+/* Speech Bubbles */
+.comic-mode .speech-bubble {
+  position: relative;
+  background: white;
+  border: 4px solid black;
+  padding: 15px;
+  color: black;
+  font-weight: 800;
+  font-style: italic;
+}
+
+.comic-mode .speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 20px;
+  border-width: 15px 15px 0 0;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+/* Animations */
+@keyframes flash {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-action {
+  animation: flash 0.5s infinite;
+}
