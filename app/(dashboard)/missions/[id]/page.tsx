@@ -80,14 +80,14 @@ export default function MissionDetailPage() {
                         <h3 className="text-3xl font-black uppercase italic mb-8 marvel-font tracking-widest">Phase Log</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {mission.milestones.map((m: any, i: number) => (
-                                <div key={i} className="bg-zinc-900 border-4 border-black p-6 hover:bg-white hover:text-black transition-all group cursor-help">
+                                <div key={i} className="bg-white border-4 border-black shadow-[6px_6px_0px_#000] p-6 hover:-translate-y-1 hover:shadow-[8px_8px_0px_#000] transition-all group cursor-help text-black">
                                     <div className="flex justify-between items-start mb-4">
-                                        <div className="w-12 h-12 bg-marvel-red flex items-center justify-center border-2 border-black rotate-3 group-hover:rotate-0 transition-transform">
+                                        <div className="w-12 h-12 bg-marvel-red flex items-center justify-center border-4 border-black rotate-3 group-hover:rotate-0 transition-transform">
                                             <m.icon className="text-white" />
                                         </div>
-                                        <span className="text-[10px] font-black uppercase tracking-widest bg-zinc-800 text-zinc-400 px-2 py-1">{m.status}</span>
+                                        <span className="text-[10px] font-black uppercase tracking-widest bg-black text-white px-3 py-1 skew-x-[-10deg]">{m.status}</span>
                                     </div>
-                                    <h4 className="text-xl font-black uppercase italic">{m.title}</h4>
+                                    <h4 className="text-xl font-black uppercase italic mt-2">{m.title}</h4>
                                 </div>
                             ))}
                         </div>
