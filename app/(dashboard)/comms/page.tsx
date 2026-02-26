@@ -65,14 +65,14 @@ export default function CommsPage() {
 
     return (
         <div className="h-full flex flex-col p-6 md:p-12">
-            <header className={`mb-12 flex justify-between items-end pb-8 relative ${comicMode ? 'border-b-8 border-black' : japaneseMode ? 'border-b border-[#E0D8C8]' : hashiMode ? 'border-b border-[#00f2ff]/10' : 'border-b border-zinc-200'}`}>
+            <header className={`mb-12 flex justify-between items-end pb-8 relative ${comicMode ? 'border-b-8 border-black' : japaneseMode ? 'border-b border-[#E0D8C8]' : hashiMode ? 'border-b border-[#8a0303]/20' : 'border-b border-zinc-200'}`}>
                 {comicMode && <div className="onomatopoeia wham absolute -top-10 right-20 text-8xl opacity-30 select-none">Wham!</div>}
                 <div>
-                    <div className={`inline-block px-4 py-1 uppercase text-xs mb-4 ${comicMode ? 'font-black italic bg-marvel-red text-white skew-x-[-10deg]' : japaneseMode ? 'font-serif tracking-[0.3em] text-[#1A2639]/40 bg-transparent' : hashiMode ? 'font-black tracking-[0.4em] text-[#00f2ff]/60 border-l-2 border-[#00f2ff] pl-3' : 'font-black bg-zinc-100 text-zinc-500'}`}>
-                        {hashiMode ? 'SECURE FREQUENCY: 144.92 MHz' : 'Frequency: 144.92 MHz'}
+                    <div className={`inline-block px-4 py-1 uppercase text-xs mb-4 ${comicMode ? 'font-black italic bg-marvel-red text-white skew-x-[-10deg]' : japaneseMode ? 'font-serif tracking-[0.3em] text-[#1A2639]/40 bg-transparent' : hashiMode ? 'font-black tracking-[0.4em] text-[#8a0303] border-l-2 border-[#8a0303] pl-3' : 'font-black bg-zinc-100 text-zinc-500'}`}>
+                        {hashiMode ? 'ABYSSAL WHISPERS: 144.92 MHz' : 'Frequency: 144.92 MHz'}
                     </div>
-                    <h1 className={`leading-none ${comicMode ? 'text-6xl md:text-8xl font-black uppercase italic tracking-tighter marvel-font drop-shadow-[8px_8px_0px_rgba(0,0,153,0.1)]' : japaneseMode ? 'text-5xl font-serif text-[#1A2639] tracking-[0.05em]' : hashiMode ? 'text-6xl md:text-8xl font-black uppercase tracking-[0.05em] text-[#e2e2e7] neon-text' : 'text-6xl md:text-8xl font-black uppercase italic tracking-tighter'}`}>
-                        {hashiMode ? 'Shadow Comms' : comicMode ? 'The War Room' : 'Team Channels'}
+                    <h1 className={`leading-none ${comicMode ? 'text-6xl md:text-8xl font-black uppercase italic tracking-tighter comic-font drop-shadow-[8px_8px_0px_rgba(0,0,153,0.1)]' : japaneseMode ? 'text-5xl japanese-font text-[#1A2639] tracking-[0.05em]' : hashiMode ? 'text-6xl md:text-8xl font-black uppercase tracking-[0.05em] text-[#d3ccc0] drop-shadow-[0_0_15px_rgba(138,3,3,0.8)] hashi-font' : 'text-6xl md:text-8xl font-black uppercase italic tracking-tighter'}`}>
+                        {hashiMode ? 'Band of the Hawk' : comicMode ? 'The War Room' : 'Team Channels'}
                     </h1>
                 </div>
             </header>
@@ -85,12 +85,12 @@ export default function CommsPage() {
                     : japaneseMode
                         ? 'bg-[#FAF8F5]/80 backdrop-blur-sm border border-[#E0D8C8]'
                         : hashiMode
-                            ? 'bg-[#050508]/60 backdrop-blur-xl border border-[#00f2ff]/10'
+                            ? 'bg-[#030304]/80 backdrop-blur-xl border border-[#8a0303]/30'
                             : 'bg-white border border-zinc-200 rounded-3xl shadow-sm'
                     }`}>
-                    <div className={`p-6 ${comicMode ? 'bg-black text-white' : japaneseMode ? 'bg-[#1A2639] text-[#FDFBF7]' : hashiMode ? 'bg-[#9d00ff]/10 text-[#9d00ff]' : 'bg-zinc-900 text-white'}`}>
-                        <h2 className={`text-2xl ${comicMode ? 'font-black uppercase italic' : japaneseMode ? 'font-serif tracking-[0.2em]' : hashiMode ? 'font-black tracking-[0.1em] uppercase' : 'font-bold'}`}>
-                            Directives
+                    <div className={`p-6 ${comicMode ? 'bg-black text-white' : japaneseMode ? 'bg-[#1A2639] text-[#FDFBF7]' : hashiMode ? 'bg-[#1a0b1f]/80 text-[#8a0303]' : 'bg-zinc-900 text-white'}`}>
+                        <h2 className={`text-2xl ${comicMode ? 'font-black uppercase italic comic-font' : japaneseMode ? 'japanese-font tracking-[0.2em]' : hashiMode ? 'hashi-font tracking-[0.1em] uppercase font-bold' : 'font-bold'}`}>
+                            {hashiMode ? 'COMMANDMENTS' : 'Directives'}
                         </h2>
                     </div>
 
@@ -105,8 +105,8 @@ export default function CommsPage() {
                                     }}
                                     className={`w-full text-left font-black uppercase italic text-lg pb-1 border-b-2 flex items-center justify-between transition-colors
                                         ${activeProject === project.id
-                                            ? (hashiMode ? 'text-[#e2e2e7] border-[#ffcc33] border-b-4' : 'text-black border-black border-b-4')
-                                            : (hashiMode ? 'text-[#e2e2e7]/20 border-[#e2e2e7]/10 hover:text-[#e2e2e7]' : 'text-zinc-400 border-zinc-200 hover:text-black')}`}
+                                            ? (hashiMode ? 'text-[#c20000] border-[#c20000] border-b-4' : 'text-black border-black border-b-4')
+                                            : (hashiMode ? 'text-[#d3ccc0]/40 border-[#d3ccc0]/10 hover:text-[#c20000]' : 'text-zinc-400 border-zinc-200 hover:text-black')}`}
                                 >
                                     {project.name}
                                     {activeProject === project.id && <ChevronRight className="h-5 w-5" />}
@@ -122,8 +122,8 @@ export default function CommsPage() {
                                                 onClick={() => setActiveChannel(channel.id)}
                                                 className={`w-full text-left px-3 py-2 flex items-center gap-2 font-bold transition-all border-2
                                                     ${activeChannel === channel.id
-                                                        ? (hashiMode ? 'bg-[#00f2ff]/10 text-[#00f2ff] border-[#00f2ff]/30 shadow-[0_0_15px_rgba(0,242,255,0.1)]' : 'bg-marvel-red text-white border-black shadow-[4px_4px_0px_#000] skew-x-[-2deg]')
-                                                        : (hashiMode ? 'bg-transparent text-[#e2e2e7]/40 border-transparent hover:text-[#e2e2e7]' : 'bg-white text-black border-transparent hover:border-black hover:bg-zinc-50')}`}
+                                                        ? (hashiMode ? 'bg-[#8a0303]/20 text-[#c20000] border-[#8a0303]/50 shadow-[0_0_15px_rgba(138,3,3,0.3)]' : 'bg-marvel-red text-white border-black shadow-[4px_4px_0px_#000] skew-x-[-2deg]')
+                                                        : (hashiMode ? 'bg-transparent text-[#d3ccc0]/50 border-transparent hover:text-[#c20000]' : 'bg-white text-black border-transparent hover:border-black hover:bg-zinc-50')}`}
                                             >
                                                 <Pin className="h-4 w-4 shrink-0" />
                                                 <span className="truncate">{channel.name}</span>
@@ -140,8 +140,8 @@ export default function CommsPage() {
                                                 onClick={() => setActiveChannel(channel.id)}
                                                 className={`w-full text-left px-3 py-2 flex items-center gap-2 font-bold transition-all border-2
                                                     ${activeChannel === channel.id
-                                                        ? (hashiMode ? 'bg-[#9d00ff]/10 text-[#9d00ff] border-[#9d00ff]/30 shadow-[0_0_15px_rgba(157,0,255,0.1)]' : 'bg-hero-blue text-white border-black shadow-[4px_4px_0px_#000] skew-x-[-2deg]')
-                                                        : (hashiMode ? 'bg-transparent text-[#e2e2e7]/40 border-transparent hover:text-[#e2e2e7]' : 'bg-white text-zinc-600 border-transparent hover:border-black hover:bg-zinc-50')}`}
+                                                        ? (hashiMode ? 'bg-[#1a0b1f]/60 text-[#8a0303] border-[#8a0303]/30 shadow-[0_0_15px_rgba(138,3,3,0.2)]' : 'bg-hero-blue text-white border-black shadow-[4px_4px_0px_#000] skew-x-[-2deg]')
+                                                        : (hashiMode ? 'bg-transparent text-[#d3ccc0]/50 border-transparent hover:text-[#c20000]' : 'bg-white text-zinc-600 border-transparent hover:border-black hover:bg-zinc-50')}`}
                                             >
                                                 <User className="h-4 w-4 shrink-0" />
                                                 <span className="truncate">{channel.name}</span>
@@ -161,17 +161,17 @@ export default function CommsPage() {
                     : japaneseMode
                         ? 'bg-[#FDFBF7]/90 backdrop-blur-sm border border-[#E0D8C8]'
                         : hashiMode
-                            ? 'bg-[#050508]/40 backdrop-blur-md border border-[#00f2ff]/10'
+                            ? 'bg-[#030304]/60 backdrop-blur-md border border-[#8a0303]/20'
                             : 'bg-white border border-zinc-200 rounded-3xl shadow-sm'
                     }`}>
                     {comicMode && <div className="absolute inset-0 comic-page-bg opacity-40 z-0 pointer-events-none" />}
 
                     {/* Chat Header interno */}
-                    <div className={`p-4 z-10 flex items-center gap-3 ${comicMode ? 'border-b-4 border-black bg-white' : japaneseMode ? 'border-b border-[#E0D8C8] bg-transparent' : hashiMode ? 'border-b border-[#00f2ff]/10 bg-transparent' : 'border-b border-zinc-200 bg-white'}`}>
-                        <div className={`p-2 ${comicMode ? 'bg-marvel-red text-white border-2 border-black rotate-3' : japaneseMode ? 'text-[#BE1E2D]' : hashiMode ? 'text-[#00f2ff] drop-shadow-[0_0_8px_rgba(0,242,255,0.4)]' : 'bg-zinc-100 text-zinc-600 rounded-lg'}`}>
+                    <div className={`p-4 z-10 flex items-center gap-3 ${comicMode ? 'border-b-4 border-black bg-white' : japaneseMode ? 'border-b border-[#E0D8C8] bg-transparent' : hashiMode ? 'border-b border-[#8a0303]/20 bg-transparent' : 'border-b border-zinc-200 bg-white'}`}>
+                        <div className={`p-2 ${comicMode ? 'bg-marvel-red text-white border-2 border-black rotate-3' : japaneseMode ? 'text-[#BE1E2D]' : hashiMode ? 'text-[#8a0303] drop-shadow-[0_0_8px_rgba(138,3,3,0.5)]' : 'bg-zinc-100 text-zinc-600 rounded-lg'}`}>
                             {currentProject?.channels.find(c => c.id === activeChannel)?.isGroup ? <Hash className="h-6 w-6" strokeWidth={japaneseMode || hashiMode ? 1.5 : 2} /> : <User className="h-6 w-6" strokeWidth={japaneseMode || hashiMode ? 1.5 : 2} />}
                         </div>
-                        <h3 className={`text-2xl ${comicMode ? 'font-black uppercase italic' : japaneseMode ? 'font-serif text-[#1A2639] tracking-[0.1em]' : hashiMode ? 'font-black text-[#e2e2e7] tracking-[0.2em] neon-text uppercase' : 'font-bold'}`}>
+                        <h3 className={`text-2xl ${comicMode ? 'font-black uppercase italic comic-font' : japaneseMode ? 'japanese-font text-[#1A2639] tracking-[0.1em]' : hashiMode ? 'font-black text-[#d3ccc0] tracking-[0.2em] uppercase hashi-font' : 'font-bold'}`}>
                             {currentProject?.channels.find(c => c.id === activeChannel)?.name}
                         </h3>
                     </div>
@@ -180,19 +180,19 @@ export default function CommsPage() {
                     <div className="flex-1 p-8 space-y-12 overflow-y-auto relative z-10 scrollbar-hide">
                         {messages.length === 0 ? (
                             <div className="h-full flex items-center justify-center">
-                                <span className={`font-black italic uppercase text-2xl ${hashiMode ? 'text-[#ffcc33]/10' : 'text-zinc-300'}`}>The resonance is quiet... but alive.</span>
+                                <span className={`font-black italic uppercase text-2xl ${hashiMode ? 'text-[#c20000]/20 hashi-font' : 'text-zinc-300'}`}>{hashiMode ? 'The abyss stares back.' : 'The resonance is quiet... but alive.'}</span>
                             </div>
                         ) : (
                             messages.map((msg) => (
                                 <div key={msg.id} className={`flex flex-col ${msg.type === 'enemy' ? 'items-end' : 'items-start'}`}>
                                     <div className="flex items-center gap-3 mb-2 px-2">
                                         <span className={`text-xs font-black uppercase tracking-widest ${hashiMode
-                                            ? (msg.type === 'enemy' ? 'text-[#9d00ff]' : msg.type === 'ally' ? 'text-[#00f2ff]' : 'text-[#e2e2e7]/30')
+                                            ? (msg.type === 'enemy' ? 'text-[#c20000]' : msg.type === 'ally' ? 'text-[#8a0303]' : 'text-[#d3ccc0]/50')
                                             : (msg.type === 'enemy' ? 'text-marvel-red' : msg.type === 'ally' ? 'text-hero-blue' : 'text-zinc-400')
                                             }`}>
                                             {msg.sender}
                                         </span>
-                                        <span className={`text-[10px] font-bold ${hashiMode ? 'text-[#e2e2e7]/20' : 'text-zinc-400'}`}>{msg.time}</span>
+                                        <span className={`text-[10px] font-bold ${hashiMode ? 'text-[#d3ccc0]/30 hashi-font' : 'text-zinc-400 font-black italic'}`}>{msg.time}</span>
                                     </div>
 
                                     <div className={`${comicMode
@@ -200,18 +200,18 @@ export default function CommsPage() {
                                         : japaneseMode
                                             ? `max-w-md p-4 border-l-2 ${msg.type === 'enemy' ? 'border-l-[#1A2639] bg-[#FAF8F5]' : msg.type === 'system' ? 'border-l-[#E0D8C8] bg-transparent' : 'border-l-[#BE1E2D] bg-[#FDFBF7]'}`
                                             : hashiMode
-                                                ? `max-w-md p-5 border ${msg.type === 'enemy' ? 'bg-[#9d00ff]/5 border-[#9d00ff]/20 text-[#e2e2e7]/80' : msg.type === 'system' ? 'bg-transparent border-[#e2e2e7]/10 text-[#e2e2e7]/30 text-center italic' : 'bg-[#00f2ff]/5 border-[#00f2ff]/20 text-[#e2e2e7]/80'}`
+                                                ? `max-w-md p-5 border ${msg.type === 'enemy' ? 'bg-[#1a0b1f]/60 border-[#8a0303]/30 text-[#d3ccc0]/90' : msg.type === 'system' ? 'bg-transparent border-[#d3ccc0]/10 text-[#8a0303]/60 text-center italic font-black' : 'bg-[#8a0303]/10 border-[#8a0303]/30 text-[#d3ccc0]'}`
                                                 : `max-w-md p-4 rounded-2xl ${msg.type === 'enemy' ? 'bg-zinc-900 text-white' : 'bg-zinc-100 text-black'}`
                                         }`}>
                                         <div className="flex gap-4">
-                                            {msg.type === 'enemy' && (hashiMode ? <Compass className="text-[#ffcc33] h-6 w-6 shrink-0 mt-1" /> : <Skull className={`${comicMode ? 'text-marvel-red' : 'text-white'} h-6 w-6 shrink-0 mt-1`} />)}
-                                            {msg.type === 'ally' && <Sparkles className={`${hashiMode ? 'text-[#00f2ff]' : 'text-comic-yellow'} h-6 w-6 shrink-0 mt-1`} />}
-                                            {msg.type === 'system' && <Terminal className={`${hashiMode ? 'text-[#e2e2e7]/30' : 'text-hero-blue'} h-6 w-6 shrink-0 mt-1`} />}
+                                            {msg.type === 'enemy' && (hashiMode ? <Skull className="text-[#8a0303] h-6 w-6 shrink-0 mt-1" /> : <Skull className={`${comicMode ? 'text-marvel-red' : 'text-white'} h-6 w-6 shrink-0 mt-1`} />)}
+                                            {msg.type === 'ally' && <Compass className={`${hashiMode ? 'text-[#c20000]' : 'text-comic-yellow'} h-6 w-6 shrink-0 mt-1`} />}
+                                            {msg.type === 'system' && <Terminal className={`${hashiMode ? 'text-[#d3ccc0]/30' : 'text-hero-blue'} h-6 w-6 shrink-0 mt-1`} />}
                                             <div className="flex flex-col gap-4">
-                                                <p className={`text-xl leading-tight ${japaneseMode ? 'font-serif not-italic text-[#1A2639]' : hashiMode ? 'font-medium tracking-wide text-[#e2e2e7]/90' : 'font-bold italic'}`}>{msg.content}</p>
+                                                <p className={`text-xl leading-tight ${japaneseMode ? 'japanese-font not-italic text-[#1A2639]' : hashiMode ? 'hashi-font font-medium tracking-wide text-[#d3ccc0]' : comicMode ? 'comic-font font-black italic' : 'font-bold italic'}`}>{msg.content}</p>
                                                 {msg.image && (
-                                                    <div className={`${hashiMode ? 'border border-[#00f2ff]/20' : 'border-4 border-black'} bg-white overflow-hidden shadow-[4px_4px_0px_rgba(0,0,0,1)] -ml-2 -rotate-1 hover:rotate-0 transition-transform w-[280px]`}>
-                                                        <img src={msg.image} alt="Transmission" className="w-full h-auto object-cover" />
+                                                    <div className={`${hashiMode ? 'border border-[#8a0303]/30' : 'border-4 border-black'} bg-white overflow-hidden shadow-[4px_4px_0px_rgba(0,0,0,1)] -ml-2 -rotate-1 hover:rotate-0 transition-transform w-[280px]`}>
+                                                        <img src={msg.image} alt="Transmission" className="w-full h-auto object-cover opacity-80" />
                                                     </div>
                                                 )}
                                             </div>
@@ -223,28 +223,28 @@ export default function CommsPage() {
                     </div>
 
                     {/* Input Area */}
-                    <div className={`p-6 relative z-10 border-t ${comicMode ? 'bg-zinc-100 border-black border-t-4' : japaneseMode ? 'bg-[#FAF8F5] border-[#E0D8C8]' : hashiMode ? 'bg-[#050508]/60 border-[#00f2ff]/10 backdrop-blur-xl' : 'bg-zinc-50 border-zinc-200'}`}>
+                    <div className={`p-6 relative z-10 border-t ${comicMode ? 'bg-zinc-100 border-black border-t-4' : japaneseMode ? 'bg-[#FAF8F5] border-[#E0D8C8]' : hashiMode ? 'bg-[#030304]/80 border-[#8a0303]/30 backdrop-blur-xl' : 'bg-zinc-50 border-zinc-200'}`}>
                         <div className="flex gap-4 items-center">
                             <input
                                 type="text"
-                                placeholder={hashiMode ? `RESONATE WITH ${currentProject?.channels.find(c => c.id === activeChannel)?.name.toUpperCase()}...` : `BROADCAST INTEL TO ${currentProject?.channels.find(c => c.id === activeChannel)?.name.toUpperCase()}...`}
+                                placeholder={hashiMode ? `WHISPER INTO ${currentProject?.channels.find(c => c.id === activeChannel)?.name.toUpperCase()}...` : `BROADCAST INTEL TO ${currentProject?.channels.find(c => c.id === activeChannel)?.name.toUpperCase()}...`}
                                 className={`flex-1 px-6 py-4 focus:outline-none focus:ring-2 ${comicMode
-                                    ? 'bg-white border-4 border-black font-black italic uppercase tracking-widest placeholder:text-zinc-400 focus:ring-comic-yellow/30'
+                                    ? 'bg-white border-4 border-black font-black italic uppercase tracking-widest placeholder:text-zinc-400 focus:ring-comic-yellow/30 comic-font'
                                     : japaneseMode
-                                        ? 'bg-transparent border-b border-[#1A2639]/30 font-serif text-[#1A2639] placeholder:text-[#1A2639]/30 focus:ring-[#BE1E2D]/20 focus:border-[#BE1E2D]'
+                                        ? 'bg-transparent border-b border-[#1A2639]/30 japanese-font text-[#1A2639] placeholder:text-[#1A2639]/30 focus:ring-[#BE1E2D]/20 focus:border-[#BE1E2D]'
                                         : hashiMode
-                                            ? 'bg-[#00f2ff]/5 border border-[#00f2ff]/20 font-black text-[#00f2ff] placeholder:text-[#00f2ff]/20 focus:ring-[#00f2ff]/10 tracking-[0.2em] text-xs'
+                                            ? 'bg-[#8a0303]/5 border border-[#8a0303]/30 font-black text-[#c20000] placeholder:text-[#8a0303]/40 focus:ring-[#8a0303]/20 tracking-[0.2em] text-xs hashi-font'
                                             : 'bg-white border border-zinc-200 rounded-full font-medium placeholder:text-zinc-400 focus:ring-zinc-200'
                                     }`}
                             />
                             <Button className={comicMode
-                                ? "bg-marvel-red text-white font-black italic uppercase border-4 border-black px-10 h-16 rounded-none shadow-[6px_6px_0px_rgba(0,0,0,0.2)] text-2xl hover:bg-red-700 hover:shadow-none hover:translate-y-1 transition-all"
+                                ? "bg-marvel-red text-white font-black italic uppercase border-4 border-black px-10 h-16 rounded-none shadow-[6px_6px_0px_rgba(0,0,0,0.2)] text-2xl hover:bg-red-700 hover:shadow-none hover:translate-y-1 transition-all comic-font"
                                 : japaneseMode
-                                    ? "bg-[#BE1E2D] text-white border-none rounded-none hover:bg-[#1A2639] h-12 px-6 font-serif tracking-[0.2em] transition-colors"
+                                    ? "bg-[#BE1E2D] text-white border-none rounded-none hover:bg-[#1A2639] h-12 px-6 japanese-font tracking-[0.2em] transition-colors"
                                     : hashiMode
-                                        ? "bg-[#00f2ff] text-[#050508] border-none rounded-none hover:shadow-[0_0_20px_rgba(0,242,255,0.4)] h-14 px-8 font-black tracking-[0.2em] text-xs transition-all"
+                                        ? "bg-[#8a0303] text-[#d3ccc0] border-none rounded-none hover:shadow-[0_0_20px_rgba(138,3,3,0.6)] hover:bg-[#c20000] h-14 px-8 font-black tracking-[0.2em] text-xs transition-all hashi-font"
                                         : "rounded-full h-16 px-10"}>
-                                SEND <Send size={japaneseMode || hashiMode ? 16 : 24} className="ml-2" />
+                                {hashiMode ? 'SACRIFICE' : 'SEND'} <Send size={japaneseMode || hashiMode ? 16 : 24} className="ml-2" />
                             </Button>
                         </div>
                     </div>

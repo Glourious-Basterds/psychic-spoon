@@ -1,8 +1,12 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@400..900&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Noto+Serif+JP:wght@200..900&display=swap');
 
 @theme {
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-comic: 'Bangers', cursive;
+  --font-hashi: 'Orbitron', sans-serif;
+  --font-neon: 'Exo 2', sans-serif;
+  --font-japanese: 'Noto Serif JP', serif;
   --color-marvel-red: #e62429;
   --color-hero-blue: #003399;
   --color-comic-yellow: #fde802;
@@ -160,59 +164,84 @@ body {
   }
 }
 
-/* HASHI THEME (Dark Fantasy x Cyberpunk) */
+/* HASHI THEME (Pure Dark Fantasy 70s Vintage) */
 .hashi-theme {
-  --background: #050508;
-  --foreground: #e2e2e7;
-  --accent-cyan: #00f2ff;
-  --accent-purple: #9d00ff;
-  --accent-gold: #ffcc33;
-  --accent-aura: rgba(255, 204, 51, 0.15);
-  --glass-bg: rgba(8, 8, 12, 0.6);
-  --glass-border: rgba(0, 242, 255, 0.2);
+  --background: #030304;
+  /* Abyssal Black */
+  --foreground: #d3ccc0;
+  /* Aged parchment/bone */
+  --accent-cyan: #8a0303;
+  /* Deep Crimson Blood */
+  --accent-purple: #1a0b1f;
+  /* Dark Melancholic Indigo */
+  --accent-gold: #c20000;
+  /* Bright Blood Red for highlights */
+  --accent-aura: rgba(138, 3, 3, 0.25);
+  /* Ominous Crimson glow */
+  --glass-bg: rgba(5, 5, 8, 0.7);
+  /* Dark gothic transparent */
+  --glass-border: rgba(138, 3, 3, 0.3);
+  /* Bleeding border */
+}
+
+/* 70s Vintage Film Grain Overlay */
+.hashi-theme::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.15;
+  mix-blend-mode: overlay;
 }
 
 .hashi-theme body {
   background-color: var(--background);
   color: var(--foreground);
   background-image:
-    radial-gradient(circle at 50% -20%, rgba(255, 204, 51, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 0% 50%, rgba(0, 242, 255, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 100% 100%, rgba(157, 0, 255, 0.05) 0%, transparent 40%);
+    radial-gradient(circle at 50% -20%, rgba(138, 3, 3, 0.15) 0%, transparent 60%),
+    radial-gradient(circle at 0% 50%, rgba(26, 11, 31, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(138, 3, 3, 0.1) 0%, transparent 40%);
 }
 
 .hashi-theme .sidebar {
   background: var(--glass-bg);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(10px);
   border-right: 1px solid var(--glass-border);
-  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.8);
 }
 
 .hashi-theme .card {
-  background: rgba(15, 15, 25, 0.4);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 242, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  background: rgba(8, 8, 12, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(138, 3, 3, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 0, 0, 0.9);
   transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .hashi-theme .card:hover {
-  border-color: rgba(255, 204, 51, 0.3);
-  box-shadow: 0 0 40px rgba(255, 204, 51, 0.05);
-  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(194, 0, 0, 0.4);
+  box-shadow: 0 0 40px rgba(138, 3, 3, 0.15), inset 0 0 30px rgba(0, 0, 0, 0.9);
+  transform: translateY(-2px) scale(1.01);
 }
 
 .hashi-theme .neon-text {
-  text-shadow: 0 0 10px rgba(255, 204, 51, 0.4), 0 0 20px rgba(0, 242, 255, 0.2);
+  text-shadow: 0 0 15px rgba(194, 0, 0, 0.5), 2px 2px 4px rgba(0, 0, 0, 1);
+  color: #c20000;
 }
 
 .hashi-theme .gothic-shadow {
-  filter: drop-shadow(0 0 20px var(--accent-aura));
+  filter: drop-shadow(0 0 30px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 10px rgba(138, 3, 3, 0.3));
 }
 
 .hashi-theme .cyber-border {
   position: relative;
-  border: 1px solid rgba(255, 204, 51, 0.3);
+  border: 1px solid rgba(138, 3, 3, 0.4);
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
 }
 
 .hashi-theme .cyber-border::before {
@@ -222,8 +251,8 @@ body {
   left: -4px;
   right: -4px;
   bottom: -4px;
-  border: 1px solid rgba(255, 204, 51, 0.1);
-  opacity: 0.5;
+  border: 1px solid rgba(138, 3, 3, 0.1);
+  opacity: 0.3;
   pointer-events: none;
   border-radius: inherit;
 }

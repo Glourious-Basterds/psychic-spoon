@@ -97,7 +97,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 }`}>
                 <div className="flex flex-col gap-6">
                     {/* Logo */}
-                    <Link href="/dashboard" className={`${comicMode ? 'marvel-logo scale-75 origin-left' : japaneseMode ? 'text-3xl font-serif text-[#BE1E2D] tracking-widest' : neonMode ? 'text-2xl font-black tracking-tight text-[#F5A623]' : hashiMode ? 'text-2xl font-black tracking-[0.2em] text-[#00f2ff] drop-shadow-[0_0_8px_rgba(0,242,255,0.4)]' : 'text-2xl font-black tracking-tight'} hover:opacity-80 transition-all`}>
+                    <Link href="/dashboard" className={`${comicMode ? 'comic-font marvel-logo scale-75 origin-left' : japaneseMode ? 'text-3xl japanese-font text-[#BE1E2D] tracking-widest' : neonMode ? 'text-2xl font-black tracking-tight text-[#F5A623] neon-font' : hashiMode ? 'text-2xl font-black tracking-[0.2em] text-[#00f2ff] drop-shadow-[0_0_8px_rgba(0,242,255,0.4)] hashi-font' : 'text-2xl font-black tracking-tight'} hover:opacity-80 transition-all`}>
                         {comicMode ? 'HASHI' : 'hashi.'}
                     </Link>
 
@@ -106,13 +106,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         <button
                             onClick={() => setDropdownOpen(prev => !prev)}
                             className={`w-full py-3 px-4 flex items-center justify-between gap-2 transition-all ${comicMode
-                                ? 'bg-comic-yellow text-black border-4 border-black font-black uppercase italic shadow-[4px_4px_0px_#000] rotate-1 active:scale-95'
+                                ? 'comic-font bg-comic-yellow text-black border-4 border-black font-black uppercase italic shadow-[4px_4px_0px_#000] rotate-1 active:scale-95'
                                 : japaneseMode
-                                    ? 'bg-[#1A2639] text-[#FDFBF7] font-serif tracking-[0.15em] border border-[#1A2639] hover:bg-[#BE1E2D]'
+                                    ? 'japanese-font bg-[#1A2639] text-[#FDFBF7] tracking-[0.15em] border border-[#1A2639] hover:bg-[#BE1E2D]'
                                     : neonMode
-                                        ? 'bg-[#F5A623]/10 text-[#F5A623] border border-[#F5A623]/30 hover:bg-[#F5A623]/15 hover:border-[#F5A623]/50 font-medium tracking-wide'
+                                        ? 'neon-font bg-[#F5A623]/10 text-[#F5A623] border border-[#F5A623]/30 hover:bg-[#F5A623]/15 hover:border-[#F5A623]/50 font-medium tracking-wide'
                                         : hashiMode
-                                            ? 'bg-[#9d00ff]/10 text-[#9d00ff] border border-[#9d00ff]/30 hover:bg-[#9d00ff]/20 hover:border-[#9d00ff]/50 font-medium tracking-[0.1em]'
+                                            ? 'hashi-font bg-[#9d00ff]/10 text-[#9d00ff] border border-[#9d00ff]/30 hover:bg-[#9d00ff]/20 hover:border-[#9d00ff]/50 font-medium tracking-[0.1em]'
                                             : 'bg-zinc-900 text-white font-black uppercase rounded-lg hover:bg-black'
                                 }`}
                         >
@@ -143,8 +143,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                         key={t.value}
                                         onClick={() => { selectTheme(t.value); setDropdownOpen(false); }}
                                         className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-all ${theme === t.value
-                                            ? (comicMode ? 'bg-marvel-red text-white font-black uppercase italic' : japaneseMode ? 'bg-[#BE1E2D] text-white font-serif' : neonMode ? 'bg-[#F5A623]/15 text-[#F5A623] font-medium' : hashiMode ? 'bg-[#9d00ff]/20 text-[#9d00ff] font-bold' : 'bg-zinc-900 text-white font-bold')
-                                            : (comicMode ? 'hover:bg-comic-yellow hover:text-black font-black uppercase italic' : japaneseMode ? 'hover:bg-[#F0EBE1] text-[#1A2639] font-serif tracking-[0.1em]' : neonMode ? 'text-[#FAF0E6]/60 hover:text-[#FAF0E6] hover:bg-[#F5A623]/5' : hashiMode ? 'text-[#e2e2e7]/60 hover:text-[#e2e2e7] hover:bg-[#9d00ff]/10' : 'hover:bg-zinc-50 text-zinc-700 font-medium')
+                                            ? (comicMode ? 'comic-font bg-marvel-red text-white font-black uppercase italic' : japaneseMode ? 'japanese-font bg-[#BE1E2D] text-white' : neonMode ? 'neon-font bg-[#F5A623]/15 text-[#F5A623] font-medium' : hashiMode ? 'hashi-font bg-[#9d00ff]/20 text-[#9d00ff] font-bold' : 'bg-zinc-900 text-white font-bold')
+                                            : (comicMode ? 'comic-font hover:bg-comic-yellow hover:text-black font-black uppercase italic' : japaneseMode ? 'japanese-font hover:bg-[#F0EBE1] text-[#1A2639] tracking-[0.1em]' : neonMode ? 'neon-font text-[#FAF0E6]/60 hover:text-[#FAF0E6] hover:bg-[#F5A623]/5' : hashiMode ? 'hashi-font text-[#e2e2e7]/60 hover:text-[#e2e2e7] hover:bg-[#9d00ff]/10' : 'hover:bg-zinc-50 text-zinc-700 font-medium')
                                             }`}
                                     >
                                         <span>{t.icon}</span>
@@ -169,13 +169,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                 onClick={() => setDropdownOpen(false)}
                                 className={`flex items-center gap-3 px-4 py-3 transition-all transform border-2 border-transparent group ${isActive
                                     ? (comicMode
-                                        ? 'bg-marvel-red text-white comic-border border-none shadow-none -rotate-2 italic font-black uppercase tracking-tighter'
+                                        ? 'comic-font bg-marvel-red text-white comic-border border-none shadow-none -rotate-2 italic font-black uppercase tracking-tighter'
                                         : japaneseMode
-                                            ? 'bg-transparent text-[#BE1E2D] border-l-4 border-l-[#BE1E2D] rounded-none font-serif tracking-[0.1em]'
+                                            ? 'japanese-font bg-transparent text-[#BE1E2D] border-l-4 border-l-[#BE1E2D] rounded-none tracking-[0.1em]'
                                             : neonMode
-                                                ? 'bg-[#F5A623]/10 text-[#F5A623] border-l-2 border-l-[#F5A623] rounded-none shadow-[0_0_12px_rgba(245,166,35,0.15)]'
+                                                ? 'neon-font bg-[#F5A623]/10 text-[#F5A623] border-l-2 border-l-[#F5A623] rounded-none shadow-[0_0_12px_rgba(245,166,35,0.15)]'
                                                 : hashiMode
-                                                    ? 'bg-[#00f2ff]/10 text-[#00f2ff] border-l-2 border-l-[#00f2ff] rounded-none shadow-[0_0_15px_rgba(0,242,255,0.15)]'
+                                                    ? 'hashi-font bg-[#00f2ff]/10 text-[#00f2ff] border-l-2 border-l-[#00f2ff] rounded-none shadow-[0_0_15px_rgba(0,242,255,0.15)]'
                                                     : 'bg-zinc-100 text-zinc-900 rounded-lg font-bold')
                                     : (comicMode
                                         ? 'text-zinc-600 hover:text-hero-blue hover:border-black font-black uppercase tracking-widest'
@@ -199,13 +199,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <button
                         onClick={() => signOut({ callbackUrl: '/' })}
                         className={`flex items-center gap-3 px-4 py-3 transition-all w-full text-left ${comicMode
-                            ? 'text-red-600 hover:bg-black hover:text-white border-2 border-transparent hover:border-black font-black uppercase tracking-tighter italic'
+                            ? 'comic-font text-red-600 hover:bg-black hover:text-white border-2 border-transparent hover:border-black font-black uppercase tracking-tighter italic'
                             : japaneseMode
-                                ? 'text-[#BE1E2D] font-serif tracking-[0.1em] hover:bg-[#F0EBE1]'
+                                ? 'japanese-font text-[#BE1E2D] tracking-[0.1em] hover:bg-[#F0EBE1]'
                                 : neonMode
-                                    ? 'text-[#FAF0E6]/30 hover:text-[#E8547A] hover:bg-[#E8547A]/5'
+                                    ? 'neon-font text-[#FAF0E6]/30 hover:text-[#E8547A] hover:bg-[#E8547A]/5'
                                     : hashiMode
-                                        ? 'text-[#e2e2e7]/30 hover:text-[#9d00ff] hover:bg-[#9d00ff]/5'
+                                        ? 'hashi-font text-[#e2e2e7]/30 hover:text-[#9d00ff] hover:bg-[#9d00ff]/5'
                                         : 'text-zinc-400 hover:text-red-600'
                             }`}
                     >
