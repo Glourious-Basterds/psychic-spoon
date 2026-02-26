@@ -52,18 +52,18 @@ export default function MissionsPage() {
                     : japaneseMode
                         ? 'text-6xl font-serif text-[#BE1E2D] tracking-[0.05em]'
                         : hashiMode
-                            ? 'text-8xl font-black uppercase tracking-[0.1em] text-[#e2e2e7] neon-text'
+                            ? 'text-8xl font-black uppercase tracking-[0.1em] text-[#e2e2e7] neon-text italic'
                             : 'text-8xl font-black uppercase italic tracking-tighter'}`}>
-                    {hashiMode ? 'Tactical Ops' : 'Active Operations'}
+                    {hashiMode ? 'Grand Voyages' : 'Active Operations'}
                 </h1>
                 <p className={`text-xs uppercase ${comicMode
                     ? 'text-zinc-600 font-black tracking-[0.3em]'
                     : japaneseMode
                         ? 'text-[#1A2639]/60 font-serif tracking-[0.3em]'
                         : hashiMode
-                            ? 'text-[#00f2ff]/60 tracking-[0.4em] border-l-2 border-[#00f2ff] pl-3'
+                            ? 'text-[#ffcc33]/60 tracking-[0.4em] border-l-2 border-[#ffcc33] pl-3'
                             : 'text-zinc-600 font-black tracking-[0.3em]'}`}>
-                    Strategic deployment &amp; mission monitoring
+                    {hashiMode ? 'Radiant pathfinding through the astral realms' : 'Strategic deployment & mission monitoring'}
                 </p>
             </header>
 
@@ -102,10 +102,10 @@ export default function MissionsPage() {
                                             : hashiMode
                                                 ? `border ${priorityColors[mission.priority as keyof typeof priorityColors].hashi} tracking-[0.2em] px-3`
                                                 : `font-bold rounded-full ${priorityColors[mission.priority as keyof typeof priorityColors].boring}`}`}>
-                                        {mission.priority}
+                                        {hashiMode ? 'PATHWAY ASCENDING' : mission.priority}
                                     </div>
-                                    <span className={`text-[10px] uppercase tracking-widest ${japaneseMode ? 'text-[#1A2639]/50 font-serif' : hashiMode ? 'text-[#e2e2e7]/30 tracking-[0.3em]' : 'text-zinc-400 font-bold'}`}>
-                                        ID: {mission.id.toUpperCase()}
+                                    <span className={`text-[10px] uppercase tracking-widest ${japaneseMode ? 'text-[#1A2639]/50 font-serif' : hashiMode ? 'text-[#ffcc33]/30 tracking-[0.3em]' : 'text-zinc-400 font-bold'}`}>
+                                        RESONANCE: {mission.id.toUpperCase()}
                                     </span>
                                 </div>
 
@@ -118,8 +118,8 @@ export default function MissionsPage() {
                                             : 'text-4xl font-black uppercase'}`}>
                                     {mission.title}
                                 </h2>
-                                <p className={`max-w-xl mb-8 ${japaneseMode ? 'text-[#1A2639]/70 font-serif text-base' : hashiMode ? 'text-[#e2e2e7]/50 text-base leading-relaxed' : 'text-zinc-500 font-bold italic text-lg'}`}>
-                                    Deploying intellectual assets for rapid expansion and coordination.
+                                <p className={`max-w-xl mb-8 ${japaneseMode ? 'text-[#1A2639]/70 font-serif text-base' : hashiMode ? 'text-[#e2e2e7]/70 text-base leading-relaxed italic' : 'text-zinc-500 font-bold italic text-lg'}`}>
+                                    {hashiMode ? 'Exploring the vast boundaries of magical logic and digital dreams.' : 'Deploying intellectual assets for rapid expansion and coordination.'}
                                 </p>
 
                                 <div className={`w-full max-w-md relative overflow-hidden ${comicMode
@@ -135,7 +135,7 @@ export default function MissionsPage() {
                                     />
                                     {comicMode && (
                                         <span className="absolute inset-0 flex items-center justify-center font-black text-[10px] italic uppercase tracking-widest mix-blend-difference text-white">
-                                            {mission.progress}% Synchronized
+                                            {hashiMode ? 'Alignment' : 'Synchronized'} {mission.progress}%
                                         </span>
                                     )}
                                 </div>
@@ -155,11 +155,11 @@ export default function MissionsPage() {
                                             : hashiMode
                                                 ? 'bg-[#00f2ff]/5 text-[#00f2ff] border border-[#00f2ff]/20 hover:bg-[#00f2ff]/15 hover:border-[#00f2ff]/50 rounded-none tracking-[0.15em] uppercase h-14 px-10 text-[10px] font-black'
                                                 : 'bg-zinc-900 text-white hover:bg-black rounded-full px-8'}`}>
-                                        ENTER INTEL <ChevronRight className={`ml-2 group-hover:translate-x-1 transition-transform ${comicMode ? 'h-10 w-10 ml-4' : 'h-4 w-4'}`} />
+                                        {hashiMode ? 'BEGIN JOURNEY' : 'ENTER INTEL'} <ChevronRight className={`ml-2 group-hover:translate-x-1 transition-transform ${comicMode ? 'h-10 w-10 ml-4' : 'h-4 w-4'}`} />
                                     </Button>
                                 </Link>
-                                <div className={`flex items-center gap-3 text-xs ${japaneseMode ? 'text-[#1A2639]/50 font-serif' : hashiMode ? 'text-[#e2e2e7]/20 tracking-[0.1em]' : 'text-zinc-400 font-black italic uppercase'}`}>
-                                    <Target size={14} strokeWidth={japaneseMode || hashiMode ? 1.5 : 2} /> 24 Collaborators Assigned
+                                <div className={`flex items-center gap-3 text-xs ${japaneseMode ? 'text-[#1A2639]/50 font-serif' : hashiMode ? 'text-[#ffcc33]/40 tracking-[0.1em]' : 'text-zinc-400 font-black italic uppercase'}`}>
+                                    <Target size={14} strokeWidth={japaneseMode || hashiMode ? 1.5 : 2} /> {hashiMode ? 'Fellow Travelers' : '24 Collaborators Assigned'}
                                 </div>
                             </div>
                         </div>
@@ -168,23 +168,27 @@ export default function MissionsPage() {
             </div>
 
             {/* Footer Banner */}
-            {comicMode && (
-                <div className="mt-32 border-t-8 border-black pt-16 flex flex-col md:flex-row justify-between items-center gap-8 bg-comic-yellow p-12 border-4 rotate-1">
-                    <div>
-                        <h3 className="text-5xl font-black uppercase italic tracking-tighter mb-2">Nexus Terminal</h3>
-                        <p className="text-black/60 font-bold italic text-xl">Warning: All transmissions are monitored by The Watcher.</p>
+            {
+                comicMode && (
+                    <div className="mt-32 border-t-8 border-black pt-16 flex flex-col md:flex-row justify-between items-center gap-8 bg-comic-yellow p-12 border-4 rotate-1">
+                        <div>
+                            <h3 className="text-5xl font-black uppercase italic tracking-tighter mb-2">Nexus Terminal</h3>
+                            <p className="text-black/60 font-bold italic text-xl">Warning: All transmissions are monitored by The Watcher.</p>
+                        </div>
+                        <div className="onomatopoeia boom text-7xl animate-bounce">Boom!</div>
                     </div>
-                    <div className="onomatopoeia boom text-7xl animate-bounce">Boom!</div>
-                </div>
-            )}
-            {japaneseMode && (
-                <div className="mt-24 border-t border-[#E0D8C8] pt-10 text-center">
-                    <p className="font-serif text-[#1A2639]/40 tracking-[0.4em] text-sm uppercase">Silence is strength</p>
-                </div>
-            )}
+                )
+            }
+            {
+                japaneseMode && (
+                    <div className="mt-24 border-t border-[#E0D8C8] pt-10 text-center">
+                        <p className="font-serif text-[#1A2639]/40 tracking-[0.4em] text-sm uppercase">Silence is strength</p>
+                    </div>
+                )
+            }
             {hashiMode && (
-                <div className="mt-24 border-t border-[#00f2ff]/10 pt-10 text-center">
-                    <p className="font-black text-[#e2e2e7]/10 tracking-[1em] text-[10px] uppercase">Shadows never sleep</p>
+                <div className="mt-24 border-t border-[#ffcc33]/10 pt-10 text-center">
+                    <p className="font-black text-[#ffcc33]/20 tracking-[1em] text-[10px] uppercase italic">The Horizon awaits your arrival</p>
                 </div>
             )}
         </div>

@@ -20,10 +20,10 @@ export default function DashboardPage() {
             <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-16 relative">
                 {comicMode && <div className="onomatopoeia boom absolute -top-10 -right-10 text-8xl opacity-20 pointer-events-none uppercase">Boom!</div>}
                 <div>
-                    <h1 className={`text-6xl font-black uppercase italic tracking-tighter ${comicMode ? 'marvel-font drop-shadow-[6px_6px_0px_rgba(230,36,41,0.2)]' : japaneseMode ? 'font-serif not-italic text-[#BE1E2D] tracking-[0.1em] drop-shadow-sm' : neonMode ? 'text-[#FAF0E6] tracking-tight drop-shadow-[0_0_20px_rgba(245,166,35,0.3)]' : hashiMode ? 'text-[#e2e2e7] tracking-[0.2em] font-black drop-shadow-[0_0_15px_rgba(0,242,255,0.3)] neon-text' : 'tracking-tight'}`}>
-                        {comicMode ? 'Command Center' : 'Dashboard Overview'}
+                    <h1 className={`text-6xl font-black uppercase italic tracking-tighter ${comicMode ? 'marvel-font drop-shadow-[6px_6px_0px_rgba(230,36,41,0.2)]' : japaneseMode ? 'font-serif not-italic text-[#BE1E2D] tracking-[0.1em] drop-shadow-sm' : neonMode ? 'text-[#FAF0E6] tracking-tight drop-shadow-[0_0_20px_rgba(245,166,35,0.3)]' : hashiMode ? 'text-[#e2e2e7] tracking-[0.2em] font-black drop-shadow-[0_0_15px_rgba(255,204,51,0.3)] neon-text' : 'tracking-tight'}`}>
+                        {hashiMode ? 'Horizon of Wonder' : comicMode ? 'Command Center' : 'Dashboard Overview'}
                     </h1>
-                    <p className={`mt-2 font-bold uppercase text-xs ${japaneseMode ? 'text-[#1A2639] tracking-[0.3em] font-serif not-italic' : neonMode ? 'text-[#F5A623]/60 tracking-widest' : hashiMode ? 'text-[#00f2ff]/60 tracking-[0.25em]' : 'text-zinc-600 tracking-widest'}`}>Ready for action, {session?.user?.name || 'Agent'}</p>
+                    <p className={`mt-2 font-bold uppercase text-xs ${japaneseMode ? 'text-[#1A2639] tracking-[0.3em] font-serif not-italic' : neonMode ? 'text-[#F5A623]/60 tracking-widest' : hashiMode ? 'text-[#ffcc33]/60 tracking-[0.25em]' : 'text-zinc-600 tracking-widest'}`}>The world awaits, {session?.user?.name || 'Traveler'}</p>
                 </div>
                 <div className={`${comicMode
                     ? 'bg-comic-yellow text-black border-4 border-black shadow-[6px_6px_0px_#000] transform rotate-2 italic font-black uppercase tracking-tighter'
@@ -35,7 +35,7 @@ export default function DashboardPage() {
                                 ? 'border border-[#00f2ff]/30 text-[#00f2ff] bg-[#00f2ff]/5 tracking-[0.2em] uppercase text-xs shadow-[0_0_12px_rgba(0,242,255,0.1)] px-6'
                                 : 'bg-zinc-100 text-zinc-900 rounded-full italic font-black uppercase tracking-tighter'
                     } px-8 py-3 text-2xl`}>
-                    {neonMode || hashiMode ? '● Active' : 'Status: Vigilant'}
+                    {hashiMode ? '✧ Resonant' : neonMode ? '● Active' : 'Status: Vigilant'}
                 </div>
             </header>
 
@@ -46,7 +46,7 @@ export default function DashboardPage() {
                         {japaneseMode && <div className="absolute -right-2 -bottom-3 opacity-5 font-serif text-8xl text-[#1A2639] pointer-events-none">I</div>}
                         {neonMode && <div className="absolute -right-2 -bottom-3 opacity-[0.04] font-black text-9xl text-[#F5A623] pointer-events-none">12</div>}
                         {hashiMode && <div className="absolute -right-2 -bottom-3 opacity-[0.06] font-black text-9xl text-[#00f2ff] pointer-events-none">12</div>}
-                        <h3 className={`text-[10px] font-black uppercase tracking-[0.2em] mb-4 ${comicMode ? 'text-white/60' : japaneseMode ? 'text-[#1A2639] font-serif tracking-[0.3em] not-italic' : neonMode ? 'text-[#F5A623]/50' : hashiMode ? 'text-[#00f2ff]/40 tracking-[0.25em]' : 'text-zinc-400'}`}>Active Operations</h3>
+                        <h3 className={`text-[10px] font-black uppercase tracking-[0.2em] mb-4 ${comicMode ? 'text-white/60' : japaneseMode ? 'text-[#1A2639] font-serif tracking-[0.3em] not-italic' : neonMode ? 'text-[#F5A623]/50' : hashiMode ? 'text-[#ffcc33]/50 tracking-[0.25em]' : 'text-zinc-400'}`}>{hashiMode ? 'Grand Voyages' : 'Active Operations'}</h3>
                         <div className={`text-6xl font-black italic ${comicMode ? 'text-white marvel-font' : japaneseMode ? 'font-serif not-italic text-[#BE1E2D]' : neonMode ? 'text-[#FAF0E6] drop-shadow-[0_0_10px_rgba(245,166,35,0.4)]' : hashiMode ? 'text-[#e2e2e7] tracking-tight neon-text' : ''}`}>12</div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@ export default function DashboardPage() {
                         {japaneseMode && <div className="absolute -right-2 -bottom-3 opacity-5 font-serif text-8xl text-[#1A2639] pointer-events-none">II</div>}
                         {neonMode && <div className="absolute -right-2 -bottom-3 opacity-[0.04] font-black text-9xl text-[#E8547A] pointer-events-none">03</div>}
                         {hashiMode && <div className="absolute -right-2 -bottom-3 opacity-[0.06] font-black text-9xl text-[#9d00ff] pointer-events-none">03</div>}
-                        <h3 className={`text-[10px] font-black uppercase tracking-[0.2em] mb-4 ${comicMode ? 'text-white/60' : japaneseMode ? 'text-[#1A2639] font-serif tracking-[0.3em] not-italic' : neonMode ? 'text-[#E8547A]/50' : hashiMode ? 'text-[#9d00ff]/40 tracking-[0.25em]' : 'text-zinc-400'}`}>Strategic Alerts</h3>
+                        <h3 className={`text-[10px] font-black uppercase tracking-[0.2em] mb-4 ${comicMode ? 'text-white/60' : japaneseMode ? 'text-[#1A2639] font-serif tracking-[0.3em] not-italic' : neonMode ? 'text-[#E8547A]/50' : hashiMode ? 'text-[#ffcc33]/50 tracking-[0.25em]' : 'text-zinc-400'}`}>{hashiMode ? 'Mystical Echoes' : 'Strategic Alerts'}</h3>
                         <div className={`text-6xl font-black italic ${comicMode ? 'text-white marvel-font' : japaneseMode ? 'font-serif not-italic text-[#BE1E2D]' : neonMode ? 'text-[#E8547A] drop-shadow-[0_0_10px_rgba(232,84,122,0.5)]' : hashiMode ? 'text-[#e2e2e7] tracking-tight' : 'text-marvel-red'}`}>03</div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@ export default function DashboardPage() {
                     <div className={`${comicMode ? 'bg-comic-yellow p-8' : japaneseMode ? 'bg-[#FAF8F5]/80 backdrop-blur-sm p-8 relative overflow-hidden' : neonMode || hashiMode ? 'p-8 relative overflow-hidden' : 'p-8'} text-black`}>
                         {japaneseMode && <div className="absolute -right-4 -bottom-3 opacity-5 font-serif text-8xl text-[#1A2639] pointer-events-none">III</div>}
                         {hashiMode && <div className="absolute -right-2 -bottom-3 opacity-[0.06] font-black text-9xl text-[#c5a059] pointer-events-none">V</div>}
-                        <h3 className={`text-[10px] font-black uppercase tracking-[0.2em] mb-4 ${comicMode ? 'text-black/50' : japaneseMode ? 'text-[#1A2639] font-serif tracking-[0.3em] not-italic' : neonMode ? 'text-[#F5A623]/50' : hashiMode ? 'text-[#c5a059]/40 tracking-[0.25em]' : 'text-zinc-400'}`}>Vault Security</h3>
+                        <h3 className={`text-[10px] font-black uppercase tracking-[0.2em] mb-4 ${comicMode ? 'text-black/50' : japaneseMode ? 'text-[#1A2639] font-serif tracking-[0.3em] not-italic' : neonMode ? 'text-[#F5A623]/50' : hashiMode ? 'text-[#ffcc33]/50 tracking-[0.25em]' : 'text-zinc-400'}`}>{hashiMode ? 'Ancient Wisdom' : 'Vault Security'}</h3>
                         <div className={`text-6xl font-black italic ${comicMode ? 'marvel-font' : japaneseMode ? 'font-serif not-italic text-[#1A2639]' : neonMode ? 'text-[#FAF0E6]/80 tracking-tight' : hashiMode ? 'text-[#e2e2e7] tracking-tight' : ''} tracking-tight`}>MAX</div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@ export default function DashboardPage() {
                                     ? 'text-xs text-[#00f2ff]/60 uppercase tracking-[0.4em] mb-4 border-l-2 border-[#00f2ff] pl-3'
                                     : 'text-xl font-bold font-black uppercase italic'
                         } mb-8 transition-all`}>
-                        High-Stakes Missions
+                        {hashiMode ? 'Legendary Paths' : 'High-Stakes Missions'}
                     </div>
                     <div className="grid grid-cols-1 gap-8">
                         {[
@@ -99,19 +99,17 @@ export default function DashboardPage() {
                                             <proj.icon size={14} className={comicMode ? (proj.id === 'bar-man' ? 'animate-pulse text-marvel-red' : `text-${proj.color}`) : neonMode ? 'text-[#F5A623]/50' : japaneseMode ? 'text-[#BE1E2D]' : hashiMode ? 'text-[#00f2ff]/70' : ''} /> {proj.status}
                                         </div>
                                     </div>
-                                    <Link href={`/missions/${proj.id}`}>
-                                        <Button className={comicMode
-                                            ? `bg-${proj.color} text-white border-4 border-black hover:bg-black hover:scale-110 font-black uppercase italic tracking-tighter text-xl h-16 px-10 rounded-none shadow-[8px_8px_0px_#000]`
-                                            : japaneseMode
-                                                ? 'bg-transparent text-[#BE1E2D] border border-[#BE1E2D] hover:bg-[#BE1E2D] hover:text-white rounded-none tracking-[0.2em] uppercase font-serif px-8 h-12'
-                                                : neonMode
-                                                    ? 'bg-[#F5A623]/10 text-[#F5A623] border border-[#F5A623]/20 hover:bg-[#F5A623]/15 hover:border-[#F5A623]/40 rounded-none px-6 h-10 tracking-widest text-xs uppercase'
-                                                    : hashiMode
-                                                        ? 'bg-[#00f2ff]/5 text-[#00f2ff] border border-[#00f2ff]/20 hover:bg-[#00f2ff]/15 hover:border-[#00f2ff]/50 rounded-none px-8 font-medium tracking-[0.15em] uppercase text-[10px]'
-                                                        : "rounded-full px-6"}>
-                                            ENTER INTEL
-                                        </Button>
-                                    </Link>
+                                    <Button className={comicMode
+                                        ? `bg-${proj.color} text-white border-4 border-black hover:bg-black hover:scale-110 font-black uppercase italic tracking-tighter text-xl h-16 px-10 rounded-none shadow-[8px_8px_0px_#000]`
+                                        : japaneseMode
+                                            ? 'bg-transparent text-[#BE1E2D] border border-[#BE1E2D] hover:bg-[#BE1E2D] hover:text-white rounded-none tracking-[0.2em] uppercase font-serif px-8 h-12'
+                                            : neonMode
+                                                ? 'bg-[#F5A623]/10 text-[#F5A623] border border-[#F5A623]/20 hover:bg-[#F5A623]/15 hover:border-[#F5A623]/40 rounded-none px-6 h-10 tracking-widest text-xs uppercase'
+                                                : hashiMode
+                                                    ? 'bg-[#ffcc33]/10 text-[#ffcc33] border border-[#ffcc33]/20 hover:bg-[#ffcc33]/20 hover:border-[#ffcc33]/50 rounded-none px-8 font-medium tracking-[0.15em] uppercase text-[10px]'
+                                                    : "rounded-full px-6"}>
+                                        {hashiMode ? 'BEGIN JOURNEY' : 'ENTER INTEL'}
+                                    </Button>
                                 </div>
                             </div>
                         ))}
@@ -130,7 +128,7 @@ export default function DashboardPage() {
                                     ? 'text-xs text-[#9d00ff]/60 uppercase tracking-[0.4em] mb-4 border-l-2 border-[#9d00ff] pl-3'
                                     : 'text-xl font-bold font-black uppercase italic'
                         } mb-8 transition-all`}>
-                        Live Comms
+                        {hashiMode ? 'Astral Frequency' : 'Live Comms'}
                     </div>
                     <div className={`${comicMode ? 'bg-white border-4 border-black rounded-none p-6 shadow-[12px_12px_0px_#000]' : japaneseMode ? 'bg-[#FAF8F5]/80 backdrop-blur-sm border border-[#E0D8C8] p-6' : neonMode ? 'bg-[#111118] border border-[#E8547A]/10 p-6 shadow-[0_0_30px_rgba(232,84,122,0.04)]' : hashiMode ? 'card p-6' : 'bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm'} space-y-6 relative overflow-hidden`}>
                         {comicMode && <div className="absolute top-0 right-0 onomatopoeia pow opacity-30 text-4xl -rotate-12">Click!</div>}
@@ -144,8 +142,8 @@ export default function DashboardPage() {
                             </div>
                         ))}
                         <Link href="/comms">
-                            <Button className={`${comicMode ? 'bg-black text-white border-4 border-black rounded-none h-14 hover:bg-marvel-red text-xl shadow-[4px_4px_0px_rgba(230,36,41,0.5)] font-black italic' : japaneseMode ? 'w-full bg-transparent text-[#1A2639] border border-[#1A2639] rounded-none hover:bg-[#1A2639] hover:text-white font-serif tracking-[0.2em]' : hashiMode ? 'w-full bg-[#9d00ff]/5 text-[#9d00ff] border border-[#9d00ff]/30 hover:bg-[#9d00ff]/10 rounded-none tracking-[0.2em] font-medium' : 'w-full rounded-xl font-black italic'} uppercase flex items-center justify-center gap-2 transition-all`}>
-                                OPEN WAR ROOM <ChevronRight size={20} />
+                            <Button className={`${comicMode ? 'bg-black text-white border-4 border-black rounded-none h-14 hover:bg-marvel-red text-xl shadow-[4px_4px_0px_rgba(230,36,41,0.5)] font-black italic' : japaneseMode ? 'w-full bg-transparent text-[#1A2639] border border-[#1A2639] rounded-none hover:bg-[#1A2639] hover:text-white font-serif tracking-[0.2em]' : hashiMode ? 'w-full bg-[#ffcc33]/5 text-[#ffcc33] border border-[#ffcc33]/30 hover:bg-[#ffcc33]/10 rounded-none tracking-[0.2em] font-medium' : 'w-full rounded-xl font-black italic'} uppercase flex items-center justify-center gap-2 transition-all`}>
+                                {hashiMode ? 'ENTER SANCTUARY' : 'OPEN WAR ROOM'} <ChevronRight size={20} />
                             </Button>
                         </Link>
                     </div>

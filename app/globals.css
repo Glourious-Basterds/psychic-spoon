@@ -166,60 +166,64 @@ body {
   --foreground: #e2e2e7;
   --accent-cyan: #00f2ff;
   --accent-purple: #9d00ff;
-  --accent-gold: #c5a059;
-  --glass-bg: rgba(10, 10, 15, 0.7);
-  --glass-border: rgba(0, 242, 255, 0.15);
+  --accent-gold: #ffcc33;
+  --accent-aura: rgba(255, 204, 51, 0.15);
+  --glass-bg: rgba(8, 8, 12, 0.6);
+  --glass-border: rgba(0, 242, 255, 0.2);
 }
 
 .hashi-theme body {
   background-color: var(--background);
   color: var(--foreground);
   background-image:
-    radial-gradient(circle at 50% -20%, rgba(157, 0, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 0% 50%, rgba(0, 242, 255, 0.05) 0%, transparent 40%);
+    radial-gradient(circle at 50% -20%, rgba(255, 204, 51, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 0% 50%, rgba(0, 242, 255, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 100% 100%, rgba(157, 0, 255, 0.05) 0%, transparent 40%);
 }
 
 .hashi-theme .sidebar {
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(20px);
   border-right: 1px solid var(--glass-border);
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
 }
 
 .hashi-theme .card {
-  background: rgba(15, 15, 25, 0.6);
-  backdrop-filter: blur(8px);
+  background: rgba(15, 15, 25, 0.4);
+  backdrop-filter: blur(16px);
   border: 1px solid rgba(0, 242, 255, 0.1);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .hashi-theme .card:hover {
-  border-color: rgba(0, 242, 255, 0.3);
-  box-shadow: 0 0 30px rgba(0, 242, 255, 0.1);
-  transform: translateY(-2px);
+  border-color: rgba(255, 204, 51, 0.3);
+  box-shadow: 0 0 40px rgba(255, 204, 51, 0.05);
+  transform: translateY(-4px) scale(1.01);
 }
 
 .hashi-theme .neon-text {
-  text-shadow: 0 0 10px rgba(0, 242, 255, 0.5), 0 0 20px rgba(0, 242, 255, 0.2);
+  text-shadow: 0 0 10px rgba(255, 204, 51, 0.4), 0 0 20px rgba(0, 242, 255, 0.2);
 }
 
 .hashi-theme .gothic-shadow {
-  filter: drop-shadow(0 0 15px rgba(157, 0, 255, 0.3));
+  filter: drop-shadow(0 0 20px var(--accent-aura));
 }
 
 .hashi-theme .cyber-border {
   position: relative;
-  border: 1px solid var(--accent-cyan);
+  border: 1px solid rgba(255, 204, 51, 0.3);
 }
 
 .hashi-theme .cyber-border::before {
   content: '';
   position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  border: 1px solid var(--accent-cyan);
-  opacity: 0.3;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border: 1px solid rgba(255, 204, 51, 0.1);
+  opacity: 0.5;
   pointer-events: none;
+  border-radius: inherit;
 }

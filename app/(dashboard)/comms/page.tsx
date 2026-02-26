@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Send, Terminal, Zap, Shield, Skull, Hash, User, Pin, ChevronRight } from 'lucide-react';
+import { Send, Terminal, Zap, Shield, Sparkles, Hash, User, Pin, ChevronRight, Compass, Skull } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useUI } from '@/context/UIContext';
 
@@ -11,7 +11,7 @@ const MOCK_PROJECTS = [
         id: 'bar-man',
         name: 'The Bar-man',
         channels: [
-            { id: 'group', name: 'War Room (Group)', isGroup: true },
+            { id: 'group', name: 'Celestial Hub', isGroup: true },
             { id: 'user-tony', name: 'Tony S.', isGroup: false },
             { id: 'user-bruce', name: 'Bruce W.', isGroup: false },
         ]
@@ -20,7 +20,7 @@ const MOCK_PROJECTS = [
         id: 'space-balls',
         name: 'Space-balls',
         channels: [
-            { id: 'group', name: 'Command Bridge (Group)', isGroup: true },
+            { id: 'group', name: 'Infinite Bridge', isGroup: true },
             { id: 'user-helmet', name: 'Lord Helmet', isGroup: false },
             { id: 'user-skroob', name: 'President Skroob', isGroup: false },
         ]
@@ -105,7 +105,7 @@ export default function CommsPage() {
                                     }}
                                     className={`w-full text-left font-black uppercase italic text-lg pb-1 border-b-2 flex items-center justify-between transition-colors
                                         ${activeProject === project.id
-                                            ? (hashiMode ? 'text-[#e2e2e7] border-[#00f2ff] border-b-4' : 'text-black border-black border-b-4')
+                                            ? (hashiMode ? 'text-[#e2e2e7] border-[#ffcc33] border-b-4' : 'text-black border-black border-b-4')
                                             : (hashiMode ? 'text-[#e2e2e7]/20 border-[#e2e2e7]/10 hover:text-[#e2e2e7]' : 'text-zinc-400 border-zinc-200 hover:text-black')}`}
                                 >
                                     {project.name}
@@ -180,7 +180,7 @@ export default function CommsPage() {
                     <div className="flex-1 p-8 space-y-12 overflow-y-auto relative z-10 scrollbar-hide">
                         {messages.length === 0 ? (
                             <div className="h-full flex items-center justify-center">
-                                <span className={`font-black italic uppercase text-2xl ${hashiMode ? 'text-[#00f2ff]/10' : 'text-zinc-300'}`}>No comms logged for this channel.</span>
+                                <span className={`font-black italic uppercase text-2xl ${hashiMode ? 'text-[#ffcc33]/10' : 'text-zinc-300'}`}>The resonance is quiet... but alive.</span>
                             </div>
                         ) : (
                             messages.map((msg) => (
@@ -204,8 +204,8 @@ export default function CommsPage() {
                                                 : `max-w-md p-4 rounded-2xl ${msg.type === 'enemy' ? 'bg-zinc-900 text-white' : 'bg-zinc-100 text-black'}`
                                         }`}>
                                         <div className="flex gap-4">
-                                            {msg.type === 'enemy' && <Skull className={`${hashiMode ? 'text-[#9d00ff]' : comicMode ? 'text-marvel-red' : 'text-white'} h-6 w-6 shrink-0 mt-1`} />}
-                                            {msg.type === 'ally' && <Zap className={`${hashiMode ? 'text-[#00f2ff]' : 'text-comic-yellow'} h-6 w-6 shrink-0 mt-1`} />}
+                                            {msg.type === 'enemy' && (hashiMode ? <Compass className="text-[#ffcc33] h-6 w-6 shrink-0 mt-1" /> : <Skull className={`${comicMode ? 'text-marvel-red' : 'text-white'} h-6 w-6 shrink-0 mt-1`} />)}
+                                            {msg.type === 'ally' && <Sparkles className={`${hashiMode ? 'text-[#00f2ff]' : 'text-comic-yellow'} h-6 w-6 shrink-0 mt-1`} />}
                                             {msg.type === 'system' && <Terminal className={`${hashiMode ? 'text-[#e2e2e7]/30' : 'text-hero-blue'} h-6 w-6 shrink-0 mt-1`} />}
                                             <div className="flex flex-col gap-4">
                                                 <p className={`text-xl leading-tight ${japaneseMode ? 'font-serif not-italic text-[#1A2639]' : hashiMode ? 'font-medium tracking-wide text-[#e2e2e7]/90' : 'font-bold italic'}`}>{msg.content}</p>
@@ -227,7 +227,7 @@ export default function CommsPage() {
                         <div className="flex gap-4 items-center">
                             <input
                                 type="text"
-                                placeholder={`BROADCAST INTEL TO ${currentProject?.channels.find(c => c.id === activeChannel)?.name.toUpperCase()}...`}
+                                placeholder={hashiMode ? `RESONATE WITH ${currentProject?.channels.find(c => c.id === activeChannel)?.name.toUpperCase()}...` : `BROADCAST INTEL TO ${currentProject?.channels.find(c => c.id === activeChannel)?.name.toUpperCase()}...`}
                                 className={`flex-1 px-6 py-4 focus:outline-none focus:ring-2 ${comicMode
                                     ? 'bg-white border-4 border-black font-black italic uppercase tracking-widest placeholder:text-zinc-400 focus:ring-comic-yellow/30'
                                     : japaneseMode
