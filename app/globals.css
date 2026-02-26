@@ -1,10 +1,10 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@400..900&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Noto+Serif+JP:wght@200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Cinzel:wght@400..900&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Noto+Serif+JP:wght@200..900&display=swap');
 
 @theme {
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-comic: 'Bangers', cursive;
-  --font-hashi: 'Orbitron', sans-serif;
+  --font-hashi: 'Cinzel', serif;
   --font-neon: 'Exo 2', sans-serif;
   --font-japanese: 'Noto Serif JP', serif;
   --color-marvel-red: #e62429;
@@ -202,6 +202,7 @@ body {
 .hashi-theme body {
   background-color: var(--background);
   color: var(--foreground);
+  font-family: var(--font-hashi);
   background-image:
     radial-gradient(circle at 50% -20%, rgba(138, 3, 3, 0.15) 0%, transparent 60%),
     radial-gradient(circle at 0% 50%, rgba(26, 11, 31, 0.2) 0%, transparent 50%),
