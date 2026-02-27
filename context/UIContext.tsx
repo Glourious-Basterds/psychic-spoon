@@ -36,6 +36,8 @@ type UIContextType = {
     togglePlayPause: () => void;
     playRandom: () => void;
     audioRef: React.RefObject<HTMLAudioElement | null>;
+    sidebarCollapsed: boolean;
+    toggleSidebar: () => void;
 };
 
 const UIContext = createContext<UIContextType | undefined>(undefined);
@@ -52,6 +54,10 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
     const japaneseMode = false;
     const neonMode = false;
     const hashiMode = true;
+
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+    const toggleSidebar = () => setSidebarCollapsed(prev => !prev);
 
     useEffect(() => {
         // Enforce hashi in localStorage
@@ -119,7 +125,9 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
             playTrack,
             togglePlayPause,
             playRandom,
-            audioRef
+            audioRef,
+            sidebarCollapsed,
+            toggleSidebar
         }}>
             <div className="theme-wrapper hashi-theme">
                 {children}
