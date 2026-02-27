@@ -33,22 +33,22 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
     // Determine specific background image based on route for Hashi mode
     const getHashiBg = () => {
-        if (pathname.includes('/dashboard')) return '/images/hashi/overview.png';
-        if (pathname.includes('/missions')) return '/images/hashi/missions.png';
-        if (pathname.includes('/comms')) return '/images/hashi/comms.png';
-        if (pathname.includes('/vault')) return '/images/hashi/vault.png';
-        return '/images/hashi/overview.png';
+        if (pathname.includes('/dashboard')) return '/bg-hashi-overview.jpg';
+        if (pathname.includes('/missions')) return '/bg-hashi-missions.jpg';
+        if (pathname.includes('/comms')) return '/bg-hashi-comms.jpg';
+        if (pathname.includes('/vault')) return '/bg-hashi-vault.jpg';
+        return '/bg-hashi-overview.jpg';
     };
 
     return (
-        <div className={`min-h-screen ${comicMode ? 'bg-[#f0f0f0]' : japaneseMode ? 'bg-[#FDFBF7]' : neonMode ? 'bg-[#0D0D12]' : hashiMode ? 'bg-[#050508]' : 'bg-gray-50'} text-black flex flex-col md:flex-row overflow-hidden relative transition-colors duration-500`}>
+        <div className={`min-h-screen ${comicMode ? 'bg-[#f0f0f0]' : japaneseMode ? 'bg-[#FDFBF7]' : neonMode ? 'bg-[#0D0D12]' : hashiMode ? 'bg-[#fafafa]' : 'bg-gray-50'} text-black flex flex-col md:flex-row overflow-hidden relative transition-colors duration-500`}>
             {/* Hashi Background */}
             {hashiMode && (
                 <>
-                    <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.25]"
+                    <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.4]"
                         style={{ backgroundImage: `url('${getHashiBg()}')`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
                     />
-                    <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-transparent via-[#050508]/40 to-[#050508]" />
+                    <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-transparent via-[#fafafa]/20 to-[#fafafa]/60" />
                 </>
             )}
 
@@ -92,12 +92,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     : neonMode
                         ? 'bg-[#0D0D12]/95 backdrop-blur-md border-r border-[#F5A623]/15 text-[#FAF0E6]'
                         : hashiMode
-                            ? 'bg-[#050508]/80 backdrop-blur-lg border-r border-[#00f2ff]/10 text-[#e2e2e7]'
+                            ? 'bg-rgba(255, 255, 255, 0.9) backdrop-blur-3xl border-r border-[#c20000]/10 text-[#1a1a1a] shadow-[10px_0_40px_rgba(0,0,0,0.02)]'
                             : 'bg-white border-r border-gray-200'
                 }`}>
                 <div className="flex flex-col gap-6">
                     {/* Logo */}
-                    <Link href="/dashboard" className={`${comicMode ? 'comic-font marvel-logo scale-75 origin-left' : japaneseMode ? 'text-3xl japanese-font text-[#BE1E2D] tracking-widest' : neonMode ? 'text-2xl font-black tracking-tight text-[#F5A623] neon-font' : hashiMode ? 'text-2xl font-black tracking-[0.2em] text-[#00f2ff] drop-shadow-[0_0_8px_rgba(0,242,255,0.4)] hashi-font' : 'text-2xl font-black tracking-tight'} hover:opacity-80 transition-all`}>
+                    <Link href="/dashboard" className={`${comicMode ? 'comic-font marvel-logo scale-75 origin-left' : japaneseMode ? 'text-3xl japanese-font text-[#BE1E2D] tracking-widest' : neonMode ? 'text-2xl font-black tracking-tight text-[#F5A623] neon-font' : hashiMode ? 'text-2xl font-black tracking-[0.2em] text-[#ff1a1a] drop-shadow-[0_0_12px_rgba(255,26,26,0.6)] hashi-font' : 'text-2xl font-black tracking-tight'} hover:opacity-80 transition-all`}>
                         {comicMode ? 'HASHI' : 'hashi.'}
                     </Link>
 
@@ -112,7 +112,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                     : neonMode
                                         ? 'neon-font bg-[#F5A623]/10 text-[#F5A623] border border-[#F5A623]/30 hover:bg-[#F5A623]/15 hover:border-[#F5A623]/50 font-medium tracking-wide'
                                         : hashiMode
-                                            ? 'hashi-font bg-[#9d00ff]/10 text-[#9d00ff] border border-[#9d00ff]/30 hover:bg-[#9d00ff]/20 hover:border-[#9d00ff]/50 font-medium tracking-[0.1em]'
+                                            ? 'hashi-font bg-[#c20000]/5 text-[#c20000] border border-[#c20000]/20 hover:bg-[#c20000]/10 hover:border-[#c20000]/40 font-bold tracking-[0.1em] shadow-[inset_0_0_10px_rgba(255,255,255,0.5)]'
                                             : 'bg-zinc-900 text-white font-black uppercase rounded-lg hover:bg-black'
                                 }`}
                         >
@@ -135,7 +135,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                     : neonMode
                                         ? 'bg-[#111118] border border-[#F5A623]/20 shadow-[0_8px_32px_rgba(245,166,35,0.1)]'
                                         : hashiMode
-                                            ? 'bg-[#111118] border border-[#9d00ff]/20 shadow-[0_8px_32px_rgba(157,0,255,0.15)]'
+                                            ? 'bg-[#ffffff] border border-[#c20000]/10 shadow-[0_8px_32px_rgba(0,0,0,0.05)]'
                                             : 'bg-white border border-zinc-200 rounded-lg shadow-xl'
                                 }`}>
                                 {THEMES.map(t => (
@@ -143,8 +143,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                         key={t.value}
                                         onClick={() => { selectTheme(t.value); setDropdownOpen(false); }}
                                         className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-all ${theme === t.value
-                                            ? (comicMode ? 'comic-font bg-marvel-red text-white font-black uppercase italic' : japaneseMode ? 'japanese-font bg-[#BE1E2D] text-white' : neonMode ? 'neon-font bg-[#F5A623]/15 text-[#F5A623] font-medium' : hashiMode ? 'hashi-font bg-[#9d00ff]/20 text-[#9d00ff] font-bold' : 'bg-zinc-900 text-white font-bold')
-                                            : (comicMode ? 'comic-font hover:bg-comic-yellow hover:text-black font-black uppercase italic' : japaneseMode ? 'japanese-font hover:bg-[#F0EBE1] text-[#1A2639] tracking-[0.1em]' : neonMode ? 'neon-font text-[#FAF0E6]/60 hover:text-[#FAF0E6] hover:bg-[#F5A623]/5' : hashiMode ? 'hashi-font text-[#e2e2e7]/60 hover:text-[#e2e2e7] hover:bg-[#9d00ff]/10' : 'hover:bg-zinc-50 text-zinc-700 font-medium')
+                                            ? (comicMode ? 'comic-font bg-marvel-red text-white font-black uppercase italic' : japaneseMode ? 'japanese-font bg-[#BE1E2D] text-white' : neonMode ? 'neon-font bg-[#F5A623]/15 text-[#F5A623] font-medium' : hashiMode ? 'hashi-font bg-[#9a0000]/20 text-[#ff1a1a] font-bold' : 'bg-zinc-900 text-white font-bold')
+                                            : (comicMode ? 'comic-font hover:bg-comic-yellow hover:text-black font-black uppercase italic' : japaneseMode ? 'japanese-font hover:bg-[#F0EBE1] text-[#1A2639] tracking-[0.1em]' : neonMode ? 'neon-font text-[#FAF0E6]/60 hover:text-[#FAF0E6] hover:bg-[#F5A623]/5' : hashiMode ? 'hashi-font text-[#1a1a1a]/60 hover:text-[#c20000] hover:bg-[#c20000]/5' : 'hover:bg-zinc-50 text-zinc-700 font-medium')
                                             }`}
                                     >
                                         <span>{t.icon}</span>
@@ -175,7 +175,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                             : neonMode
                                                 ? 'neon-font bg-[#F5A623]/10 text-[#F5A623] border-l-2 border-l-[#F5A623] rounded-none shadow-[0_0_12px_rgba(245,166,35,0.15)]'
                                                 : hashiMode
-                                                    ? 'hashi-font bg-[#00f2ff]/10 text-[#00f2ff] border-l-2 border-l-[#00f2ff] rounded-none shadow-[0_0_15px_rgba(0,242,255,0.15)]'
+                                                    ? 'hashi-font bg-[#c20000]/5 text-[#c20000] border-l-2 border-l-[#c20000] rounded-none shadow-[0_0_20px_rgba(194,0,0,0.1)]'
                                                     : 'bg-zinc-100 text-zinc-900 rounded-lg font-bold')
                                     : (comicMode
                                         ? 'text-zinc-600 hover:text-hero-blue hover:border-black font-black uppercase tracking-widest'
@@ -184,7 +184,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                             : neonMode
                                                 ? 'text-[#FAF0E6]/40 hover:text-[#FAF0E6]/80 hover:bg-[#F5A623]/5'
                                                 : hashiMode
-                                                    ? 'text-[#e2e2e7]/40 hover:text-[#e2e2e7] hover:bg-[#00f2ff]/5'
+                                                    ? 'text-[#1a1a1a]/40 hover:text-[#c20000] hover:bg-[#c20000]/5'
                                                     : 'text-zinc-500 hover:bg-zinc-50 rounded-lg')
                                     }`}
                             >
@@ -205,7 +205,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                 : neonMode
                                     ? 'neon-font text-[#FAF0E6]/30 hover:text-[#E8547A] hover:bg-[#E8547A]/5'
                                     : hashiMode
-                                        ? 'hashi-font text-[#e2e2e7]/30 hover:text-[#9d00ff] hover:bg-[#9d00ff]/5'
+                                        ? 'hashi-font text-[#1a1a1a]/30 hover:text-[#c20000] hover:bg-[#c20000]/5'
                                         : 'text-zinc-400 hover:text-red-600'
                             }`}
                     >

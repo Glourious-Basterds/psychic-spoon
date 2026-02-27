@@ -18,27 +18,27 @@ export default function MissionsPage() {
         CRITICAL: {
             comic: 'bg-marvel-red text-white',
             japanese: 'bg-[#BE1E2D] text-white',
-            hashi: 'bg-[#1a0b1f]/80 text-[#c20000] border-[#c20000]/40 cyber-border',
+            hashi: 'bg-[#c20000]/5 text-[#c20000] border-[#c20000]/20 cyber-border status-pulse',
             boring: 'bg-red-100 text-red-700'
         },
         HIGH: {
             comic: 'bg-hero-blue text-white',
             japanese: 'bg-[#1A2639] text-white',
-            hashi: 'bg-[#1a0b1f]/60 text-[#8a0303] border-[#8a0303]/50 cyber-border',
+            hashi: 'bg-[#c20000]/5 text-[#8a0000] border-[#c20000]/10 cyber-border',
             boring: 'bg-blue-100 text-blue-800'
         },
         LOW: {
             comic: 'bg-comic-yellow text-black',
             japanese: 'bg-[#E0D8C8] text-[#1A2639]',
-            hashi: 'bg-[#1a0b1f]/40 text-[#d3ccc0]/70 border-[#8a0303]/30 cyber-border',
+            hashi: 'bg-transparent text-[#1a1a1a]/40 border-[#c20000]/5 cyber-border',
             boring: 'bg-zinc-100 text-zinc-600'
         },
     };
 
     const progressColors = {
-        'bar-man': { comic: 'bg-marvel-red', japanese: 'bg-[#BE1E2D]', hashi: 'bg-gradient-to-r from-[#8a0303] to-[#c20000]', boring: 'bg-zinc-800' },
-        'space-balls': { comic: 'bg-hero-blue', japanese: 'bg-[#1A2639]', hashi: 'bg-gradient-to-r from-[#1a0b1f] to-[#8a0303]', boring: 'bg-zinc-600' },
-        nexus: { comic: 'bg-comic-yellow', japanese: 'bg-[#E0D8C8]', hashi: 'bg-gradient-to-r from-[#1a0b1f] to-[#030304]', boring: 'bg-zinc-300' },
+        'bar-man': { comic: 'bg-marvel-red', japanese: 'bg-[#BE1E2D]', hashi: 'bg-gradient-to-r from-[#8a0000] to-[#c20000]', boring: 'bg-zinc-800' },
+        'space-balls': { comic: 'bg-hero-blue', japanese: 'bg-[#1A2639]', hashi: 'bg-gradient-to-r from-[#ffffff] to-[#c20000]', boring: 'bg-zinc-600' },
+        nexus: { comic: 'bg-comic-yellow', japanese: 'bg-[#E0D8C8]', hashi: 'bg-gradient-to-r from-[#ffffff] to-[#1a1a1a]/20', boring: 'bg-zinc-300' },
     };
 
     const t = comicMode ? 'comic' : japaneseMode ? 'japanese' : hashiMode ? 'hashi' : 'boring';
@@ -52,16 +52,16 @@ export default function MissionsPage() {
                     : japaneseMode
                         ? 'text-6xl japanese-font text-[#BE1E2D] tracking-[0.05em]'
                         : hashiMode
-                            ? 'text-7xl font-normal uppercase tracking-[0.1em] text-[#d3ccc0] drop-shadow-[0_0_15px_rgba(138,3,3,0.8)] hashi-font italic'
+                            ? 'text-7xl font-normal uppercase tracking-[0.1em] text-[#1a1a1a] drop-shadow-[0_0_30px_rgba(0,0,0,0.05)] hashi-font italic transition-all duration-700'
                             : 'text-8xl font-black uppercase italic tracking-tighter'}`}>
-                    {hashiMode ? 'Neon Expeditions' : 'Active Operations'}
+                    {hashiMode ? 'IN PROGRESS' : 'Active Operations'}
                 </h1>
                 <p className={`text-xs uppercase ${comicMode
                     ? 'text-zinc-600 font-black tracking-[0.3em] comic-font'
                     : japaneseMode
                         ? 'text-[#1A2639]/60 japanese-font tracking-[0.3em]'
                         : hashiMode
-                            ? 'text-[#c20000] tracking-[0.4em] border-l-2 border-[#8a0303] pl-3 hashi-font font-normal'
+                            ? 'text-[#c20000] tracking-[0.4em] border-l-2 border-[#c20000] pl-3 hashi-font font-medium'
                             : 'text-zinc-600 font-black tracking-[0.3em]'}`}>
                     {hashiMode ? 'Navigating the digital abyss' : 'Strategic deployment & mission monitoring'}
                 </p>
@@ -76,7 +76,7 @@ export default function MissionsPage() {
                             : japaneseMode
                                 ? 'bg-[#FAF8F5]/70 border border-[#E0D8C8] hover:border-[#BE1E2D] backdrop-blur-sm'
                                 : hashiMode
-                                    ? 'card border-[#8a0303]/40 hover:border-[#c20000]/60 p-0'
+                                    ? 'card border-[#c20000]/10 hover:border-[#c20000]/30 p-0 shadow-sm'
                                     : 'bg-white border border-zinc-200 rounded-2xl shadow-sm hover:shadow-md'}`}
                     >
                         {comicMode && <div className="absolute top-0 right-0 onomatopoeia punch opacity-5 text-9xl -rotate-12 pointer-events-none">Hit!</div>}
@@ -86,7 +86,7 @@ export default function MissionsPage() {
                             </div>
                         )}
                         {hashiMode && (
-                            <div className="absolute right-6 top-1/2 -translate-y-1/2 text-9xl font-black opacity-[0.04] text-[#8a0303] pointer-events-none select-none tracking-tighter">
+                            <div className="absolute right-6 top-1/2 -translate-y-1/2 text-9xl font-black opacity-[0.02] text-[#c20000] pointer-events-none select-none tracking-tighter">
                                 {mission.id === 'bar-man' ? '01' : mission.id === 'space-balls' ? '02' : '03'}
                             </div>
                         )}
@@ -100,11 +100,11 @@ export default function MissionsPage() {
                                         : japaneseMode
                                             ? `japanese-font tracking-[0.2em] ${priorityColors[mission.priority as keyof typeof priorityColors].japanese}`
                                             : hashiMode
-                                                ? `${priorityColors[mission.priority as keyof typeof priorityColors].hashi} tracking-[0.2em] px-4 py-2 font-bold uppercase text-[10px]`
+                                                ? `${priorityColors[mission.priority as keyof typeof priorityColors].hashi} tracking-[0.2em] px-4 py-2 font-bold uppercase text-[10px] shadow-sm`
                                                 : `font-bold rounded-full ${priorityColors[mission.priority as keyof typeof priorityColors].boring}`}`}>
-                                        {hashiMode ? 'BLOOD PACT' : mission.priority}
+                                        {hashiMode ? 'IN PROGRESS' : mission.priority}
                                     </div>
-                                    <span className={`text-[10px] uppercase tracking-widest ${japaneseMode ? 'text-[#1A2639]/50 japanese-font' : hashiMode ? 'text-[#c20000]/80 tracking-[0.3em] font-normal' : 'text-zinc-400 font-bold'}`}>
+                                    <span className={`text-[10px] uppercase tracking-widest ${japaneseMode ? 'text-[#1A2639]/50 japanese-font' : hashiMode ? 'text-[#c20000]/80 tracking-[0.3em] font-medium' : 'text-zinc-400 font-bold'}`}>
                                         {hashiMode ? 'SYNC_ID' : 'RESONANCE'}: {mission.id.toUpperCase()}
                                     </span>
                                 </div>
@@ -114,12 +114,18 @@ export default function MissionsPage() {
                                     : japaneseMode
                                         ? 'text-4xl japanese-font text-[#1A2639] group-hover:text-[#BE1E2D] transition-colors'
                                         : hashiMode
-                                            ? 'text-5xl font-bold text-[#d3ccc0] group-hover:text-[#c20000] transition-colors tracking-[0.1em]'
+                                            ? 'text-5xl font-bold text-[#1a1a1a] group-hover:text-[#c20000] group-hover:translate-x-2 transition-all tracking-[0.1em]'
                                             : 'text-4xl font-black uppercase'}`}>
                                     {mission.title}
                                 </h2>
-                                <p className={`max-w-xl mb-8 ${japaneseMode ? 'text-[#1A2639]/70 japanese-font text-base' : hashiMode ? 'text-[#d3ccc0]/80 text-base leading-relaxed italic' : 'text-zinc-500 font-bold italic text-lg'}`}>
-                                    {hashiMode ? 'Executing magical logic loops in the shadow city.' : 'Deploying intellectual assets for rapid expansion and coordination.'}
+                                <p className={`max-w-xl mb-8 ${japaneseMode ? 'text-[#1A2639]/70 japanese-font text-base' : hashiMode ? 'text-[#1a1a1a]/70 text-base leading-relaxed italic' : 'text-zinc-500 font-bold italic text-lg'}`}>
+                                    {hashiMode
+                                        ? mission.id === 'bar-man'
+                                            ? 'Premium mixology platform for clandestine networking events.'
+                                            : mission.id === 'space-balls'
+                                                ? 'Sub-orbital logistics and high-speed asset recovery systems.'
+                                                : 'Distributed intelligence protocols for operation nexus.'
+                                        : 'Deploying intellectual assets for rapid expansion and coordination.'}
                                 </p>
 
                                 <div className={`w-full max-w-md relative overflow-hidden ${comicMode
@@ -127,21 +133,16 @@ export default function MissionsPage() {
                                     : japaneseMode
                                         ? 'h-1 bg-[#E0D8C8]'
                                         : hashiMode
-                                            ? 'h-1.5 bg-[#1a0b1f] border border-[#8a0303]/20'
+                                            ? 'h-2 bg-[#ffffff] border border-[#c20000]/10'
                                             : 'h-2 bg-zinc-100 rounded-full'}`}>
                                     <div
                                         className={`h-full transition-all duration-1000 ${progressColors[mission.id as keyof typeof progressColors]?.[t] || 'bg-zinc-400'} ${!japaneseMode && !comicMode && !hashiMode ? 'rounded-full' : ''}`}
                                         style={{ width: `${mission.progress}%` }}
                                     />
-                                    {comicMode && (
-                                        <span className="absolute inset-0 flex items-center justify-center font-black text-[10px] italic uppercase tracking-widest mix-blend-difference text-white">
-                                            {hashiMode ? 'Upload' : 'Synchronized'} {mission.progress}%
-                                        </span>
-                                    )}
                                 </div>
                                 {(japaneseMode || hashiMode) && (
-                                    <span className={`text-[10px] ${japaneseMode ? 'japanese-font' : 'font-bold'} tracking-[0.2em] mt-1 block ${japaneseMode ? 'text-[#1A2639]/60' : 'text-[#8a0303]/80'}`}>
-                                        Progress {mission.progress}%
+                                    <span className={`text-[10px] ${japaneseMode ? 'japanese-font' : 'font-bold'} tracking-[0.2em] mt-2 block ${japaneseMode ? 'text-[#1A2639]/60' : 'text-[#c20000]/60'}`}>
+                                        SYNC {mission.progress}%
                                     </span>
                                 )}
                             </div>
@@ -153,13 +154,13 @@ export default function MissionsPage() {
                                         : japaneseMode
                                             ? 'bg-transparent text-[#BE1E2D] border border-[#BE1E2D] hover:bg-[#BE1E2D] hover:text-white rounded-none japanese-font tracking-[0.3em] uppercase h-12 px-8'
                                             : hashiMode
-                                                ? 'bg-[#1a0b1f]/80 text-[#c20000] cyber-border hover:bg-[#8a0303]/40 hover:text-[#d3ccc0] rounded-none tracking-[0.15em] uppercase h-14 px-10 text-[10px] font-bold'
+                                                ? 'bg-transparent text-[#c20000] cyber-border hover:bg-[#c20000]/5 hover:text-[#1a1a1a] rounded-none tracking-[0.15em] uppercase h-14 px-10 text-[10px] font-bold shadow-[inset_0_0_15px_rgba(255,255,255,0.5)]'
                                                 : 'bg-zinc-900 text-white hover:bg-black rounded-full px-8'}`}>
-                                        {hashiMode ? 'JACK IN' : 'ENTER INTEL'} <ChevronRight className={`ml-2 group-hover:translate-x-1 transition-transform ${comicMode ? 'h-10 w-10 ml-4' : 'h-4 w-4'}`} />
+                                        {hashiMode ? 'JUMP IN' : 'ENTER INTEL'} <ChevronRight className={`ml-2 group-hover:translate-x-1 transition-transform ${comicMode ? 'h-10 w-10 ml-4' : 'h-4 w-4'}`} />
                                     </Button>
                                 </Link>
-                                <div className={`flex items-center gap-3 text-xs ${japaneseMode ? 'text-[#1A2639]/50 japanese-font' : hashiMode ? 'text-[#8a0303]/80 tracking-[0.1em]' : 'text-zinc-400 font-black italic uppercase'}`}>
-                                    <Target size={14} strokeWidth={japaneseMode || hashiMode ? 1.5 : 2} /> {hashiMode ? 'Cyber-Mercenaries' : '24 Collaborators Assigned'}
+                                <div className={`flex items-center gap-3 text-xs ${japaneseMode ? 'text-[#1A2639]/50 japanese-font' : hashiMode ? 'text-[#c20000]/60 tracking-[0.1em]' : 'text-zinc-400 font-black italic uppercase'}`}>
+                                    <Target size={14} strokeWidth={japaneseMode || hashiMode ? 1.5 : 2} /> {hashiMode ? '24 Collaborators Assigned' : '24 Collaborators Assigned'}
                                 </div>
                             </div>
                         </div>
@@ -187,12 +188,10 @@ export default function MissionsPage() {
                 )
             }
             {hashiMode && (
-                <div className="mt-24 border-t border-[#8a0303]/20 pt-10 text-center">
-                    <p className="font-black text-[#c20000]/30 tracking-[1em] text-[10px] uppercase italic hashi-font">The Eclipse demands sacrifice</p>
+                <div className="mt-24 border-t border-[#c20000]/10 pt-10 text-center">
+                    <p className="font-black text-[#c20000]/40 tracking-[1em] text-[10px] uppercase italic hashi-font">The Eclipse demands sacrifice</p>
                 </div>
             )}
         </div>
     );
 }
-
-
