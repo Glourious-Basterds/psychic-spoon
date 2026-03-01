@@ -141,14 +141,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <div className="flex flex-col gap-2 pt-8 z-10 border-t border-white/5">
                     <button
                         onClick={() => signOut({ callbackUrl: '/' })}
-                        className="flex items-center gap-3 px-4 py-3 transition-all w-full text-left hashi-font text-white/20 hover:text-white hover:bg-white/[0.02]"
+                        className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all w-full text-left text-white/40 hover:text-white hover:bg-white/[0.03]"
                     >
-                        <LogOut size={18} strokeWidth={1.5} />
-                        <span className="text-xs uppercase tracking-widest font-bold">Sign Out</span>
+                        <LogOut size={16} strokeWidth={1.5} />
+                        <span className="text-xs tracking-wide">Sign Out</span>
                     </button>
-                    <div className="mt-4 px-4 py-3 bg-white/[0.02] border border-white/5">
-                        <p className="text-[9px] font-black text-white/10 tracking-[0.3em] uppercase italic">Immortalize your IP.</p>
-                    </div>
+                    <Link href="/vault" className="mt-2 px-4 py-3 rounded-lg bg-white/[0.02] border border-white/5 hover:border-[rgba(163,230,53,0.2)] hover:bg-[rgba(163,230,53,0.04)] transition-all block">
+                        <p className="text-[9px] font-bold text-white/30 tracking-[0.25em] uppercase hover:text-[#a3e635] transition-colors">Immortalize your IP →</p>
+                    </Link>
                 </div>
             </aside>
 
