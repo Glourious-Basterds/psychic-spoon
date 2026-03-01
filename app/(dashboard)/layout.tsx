@@ -16,7 +16,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const navItems = [
         { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
         { href: '/missions', label: 'Missions', icon: FolderKanban },
-        { href: '/comms', label: 'WORKSPACE', icon: MessageSquare },
+        { href: '/comms', label: 'Workspace', icon: MessageSquare },
         { href: '/vault', label: 'IP Vault', icon: ShieldCheck },
     ];
 
@@ -125,13 +125,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`flex items-center gap-3 px-4 py-3 transition-all group border border-transparent ${isActive
-                                    ? 'bg-white/5 text-white border-white/5 shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]'
-                                    : 'text-white/40 hover:text-white hover:bg-white/[0.02]'
+                                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all group border ${isActive
+                                    ? 'border-[rgba(163,230,53,0.25)] text-[#a3e635]'
+                                    : 'border-transparent text-white/40 hover:text-white/80 hover:bg-white/[0.03]'
                                     }`}
+                                style={isActive ? { background: 'rgba(163,230,53,0.08)' } : undefined}
                             >
-                                <Icon size={18} className={isActive ? 'text-white' : 'text-white/30 group-hover:text-white transition-colors'} strokeWidth={1.5} />
-                                <span className={`text-xs uppercase tracking-widest hashi-font ${isActive ? 'font-black' : 'font-medium'}`}>{item.label}</span>
+                                <Icon size={16} strokeWidth={1.5} style={isActive ? { color: '#a3e635' } : undefined} />
+                                <span className={`text-xs tracking-wide ${isActive ? 'font-semibold' : 'font-normal'}`}>{item.label}</span>
                             </Link>
                         );
                     })}
