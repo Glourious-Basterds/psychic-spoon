@@ -38,7 +38,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ proj
     const channelId = searchParams.get('channelId');
     const status = searchParams.get('status');
 
-    let query = db.query.tasks.findMany({
+    const query = db.query.tasks.findMany({
         where: eq(tasks.projectId, projectId),
         with: { assignedUser: true },
         orderBy: (t, { asc }) => [asc(t.createdAt)],

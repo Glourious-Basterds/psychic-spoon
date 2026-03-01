@@ -64,6 +64,36 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('app_theme', 'hashi');
     }, []);
 
+    const playTrack = (track: Soundtrack) => {
+        setCurrentTrack(track);
+        if (audioRef.current) {
+            if (audioRef.current.src !== track.url) {
+                audioRef.current.src = track.url;
+            }
+            audioRef.current.play().catch(e => console.error("Audio playback failed:", e));
+        }
+    };
+
+    const playRandom = () => {
+        const available = CINEMATIC_TRACKS.filter(t => t.id !== currentTrack?.id);
+        const randomTrack = available[Math.floor(Math.random() * available.length)];
+        playTrack(randomTrack);
+    };
+
+    const togglePlayPause = () => {
+        if (!currentTrack) {
+            playRandom();
+            return;
+        }
+        if (audioRef.current) {
+            if (isPlaying) {
+                audioRef.current.pause();
+            } else {
+                audioRef.current.play().catch(e => console.error(e));
+            }
+        }
+    };
+
     // --- Audio Logic ---
     useEffect(() => {
         if (!audioRef.current) {
@@ -81,37 +111,8 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
                 audioRef.current.src = '';
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    const playTrack = (track: Soundtrack) => {
-        setCurrentTrack(track);
-        if (audioRef.current) {
-            if (audioRef.current.src !== track.url) {
-                audioRef.current.src = track.url;
-            }
-            audioRef.current.play().catch(e => console.error("Audio playback failed:", e));
-        }
-    };
-
-    const togglePlayPause = () => {
-        if (!currentTrack) {
-            playRandom();
-            return;
-        }
-        if (audioRef.current) {
-            if (isPlaying) {
-                audioRef.current.pause();
-            } else {
-                audioRef.current.play().catch(e => console.error(e));
-            }
-        }
-    };
-
-    const playRandom = () => {
-        const available = CINEMATIC_TRACKS.filter(t => t.id !== currentTrack?.id);
-        const randomTrack = available[Math.floor(Math.random() * available.length)];
-        playTrack(randomTrack);
-    };
 
     return (
         <UIContext.Provider value={{

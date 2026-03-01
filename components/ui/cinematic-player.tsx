@@ -51,7 +51,7 @@ export function CinematicTrigger() {
                                                 <Film size={12} className={currentTrack?.id === track.id ? 'text-[#c20000]' : 'text-[#1a1a1a]/30 group-hover:text-[#c20000]'} />
                                                 <p className="text-[10px] font-bold uppercase tracking-widest opacity-80 hashi-font">{track.movie}</p>
                                             </div>
-                                            <p className={`text-xl font-bold italic hashi-font not-italic ${currentTrack?.id === track.id ? 'text-[#1a1a1a]' : 'text-[#1a1a1a]/70'}`}>"{track.title}"</p>
+                                            <p className={`text-xl font-bold italic hashi-font not-italic ${currentTrack?.id === track.id ? 'text-[#1a1a1a]' : 'text-[#1a1a1a]/70'}`}>&quot;{track.title}&quot;</p>
                                             <p className="text-xs uppercase mt-1 opacity-60 hashi-font">by {track.composer}</p>
                                         </div>
                                         {currentTrack?.id === track.id && isPlaying && (

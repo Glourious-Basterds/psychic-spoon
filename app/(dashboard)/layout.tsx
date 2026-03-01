@@ -20,21 +20,32 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         { href: '/vault', label: 'IP Vault', icon: ShieldCheck },
     ];
 
-    // Determine specific background image based on route for Hashi mode
+    // Determine specific background for Pure Black mode (subtle)
     const getHashiBg = () => {
-        if (pathname.includes('/dashboard')) return '/images/hashi/overview.png';
-        if (pathname.includes('/missions')) return '/images/hashi/missions.png';
-        if (pathname.includes('/comms')) return '/images/hashi/comms.png';
-        if (pathname.includes('/vault')) return '/images/hashi/vault.png';
         return '/images/hashi/overview.png';
     };
 
-    const [notifications, setNotifications] = useState<any[]>([]);
+    type AppNotification = { id: number; title: string; message: string; time: string; projectId: string; channelId: string; };
+    const [notifications, setNotifications] = useState<AppNotification[]>([]);
 
     useEffect(() => {
         const demoNotifications = [
-            { id: 1, title: 'Bruce W.', message: 'The tactical tuxedo is ready for the demo.', time: 'Just now' },
-            { id: 2, title: 'Lord Helmet', message: 'Ludicrous speed reached. Spaghetti synced.', time: '2m ago' }
+            {
+                id: 1,
+                title: 'Bruce W.',
+                message: "How's the project going on so far? ... Idk, have a look around dumbass",
+                time: 'Just now',
+                projectId: 'bar-man',
+                channelId: 'general'
+            },
+            {
+                id: 2,
+                title: 'Lord Helmet',
+                message: "How's the food guys? ... Mamma Mia! It's the best cuisine in the world",
+                time: '2m ago',
+                projectId: 'space-balls',
+                channelId: 'kitchen'
+            }
         ];
 
         let index = 0;
@@ -44,76 +55,69 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 setNotifications(prev => [...prev, newNotif]);
                 index++;
 
-                // Auto-remove after 5s
+                // Auto-remove after 8s
                 setTimeout(() => {
                     setNotifications(prev => prev.filter(n => n.id !== newNotif.id));
-                }, 5000);
+                }, 8000);
             } else {
                 clearInterval(interval);
             }
-        }, 8000);
+        }, 12000);
 
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <div className="min-h-screen bg-[#fafafa] text-black flex flex-col md:flex-row overflow-hidden relative transition-colors duration-500">
-            {/* Hashi Background - 4K 16:9 Optimized */}
-            <div className="absolute inset-0 z-0 pointer-events-none opacity-100"
-                style={{
-                    backgroundImage: `url('${getHashiBg()}')`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat'
-                }}
-            />
-            <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-transparent via-[#fafafa]/20 to-[#fafafa]/60" />
+        <div className="min-h-screen bg-black text-white flex flex-col md:flex-row overflow-hidden relative selection:bg-white/10 selection:text-white">
+            {/* Pure Black Background - Subtle Gradients from CSS hashi-theme-bg */}
+            <div className="absolute inset-0 z-0 pointer-events-none hashi-theme-bg opacity-40" />
 
-            {/* Sidebar Toggle Button (Floating when collapsed) - Ergonomic Refresh */}
+            {/* Sidebar Toggle Button (Floating when collapsed) */}
             <button
                 onClick={toggleSidebar}
-                className={`fixed top-8 left-0 z-[100] group flex items-center gap-2 pl-2 pr-4 py-2 bg-white/60 backdrop-blur-xl border border-[#c20000]/20 text-[#c20000] shadow-[10px_0_30px_rgba(194,0,0,0.1)] hover:bg-[#c20000] hover:text-white transition-all duration-500 rounded-r-full
+                className={`fixed top-8 left-0 z-[100] group flex items-center gap-2 pl-2 pr-4 py-2 bg-[#0a0a0a] backdrop-blur-xl border border-white/5 text-white/40 shadow-[20px_0_50px_rgba(0,0,0,0.5)] hover:text-white transition-all duration-500 rounded-r-full
                     ${sidebarCollapsed ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0 pointer-events-none'}`}
             >
-                <PanelLeftOpen size={18} strokeWidth={2} />
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] hashi-font">Open Menu</span>
+                <PanelLeftOpen size={18} strokeWidth={1.5} />
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] hashi-font">Open Menu</span>
             </button>
 
             {/* Global Notification Container (Top Right) */}
             <div id="global-notifications" className="fixed top-6 right-6 z-[200] flex flex-col gap-4 pointer-events-none">
                 {notifications.map(notif => (
-                    <div key={notif.id} className="w-80 bg-white/80 backdrop-blur-2xl border-l-4 border-[#c20000] p-4 shadow-[20px_20px_60px_rgba(0,0,0,0.1)] pointer-events-auto animate-in slide-in-from-right duration-500">
-                        <div className="flex justify-between items-start mb-1">
-                            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#c20000] hashi-font">{notif.title}</h4>
-                            <span className="text-[9px] font-bold text-[#1a1a1a]/30 uppercase">{notif.time}</span>
+                    <Link
+                        key={notif.id}
+                        href={`/comms?project=${notif.projectId}&channel=${notif.channelId}`}
+                        className="w-80 bg-[#0a0a0a]/90 backdrop-blur-2xl border border-white/5 p-4 shadow-[30px_30px_70px_rgba(0,0,0,0.8)] pointer-events-auto animate-in slide-in-from-right duration-700 hover:border-white/20 transition-all group"
+                    >
+                        <div className="flex justify-between items-start mb-2">
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 group-hover:text-white transition-colors hashi-font">{notif.title}</h4>
+                            <span className="text-[9px] font-bold text-white/20 uppercase">{notif.time}</span>
                         </div>
-                        <p className="text-sm font-bold text-[#1a1a1a] hashi-font tracking-tight">{notif.message}</p>
-                    </div>
+                        <p className="text-sm font-medium text-white/80 hashi-font tracking-tight leading-relaxed line-clamp-2">{notif.message}</p>
+                    </Link>
                 ))}
             </div>
 
             {/* Sidebar */}
-            <aside className={`fixed md:relative top-0 bottom-0 left-0 z-40 p-6 flex flex-col gap-8 transition-all duration-500 ease-in-out bg-rgba(255, 255, 255, 0.9) backdrop-blur-3xl border-r border-[#c20000]/10 text-[#1a1a1a] shadow-[10px_0_40px_rgba(0,0,0,0.02)]
+            <aside className={`fixed md:relative top-0 bottom-0 left-0 z-40 p-6 flex flex-col gap-8 transition-all duration-500 ease-in-out bg-black border-r border-white/5 text-white/60 shadow-[20px_0_60px_rgba(0,0,0,0.3)]
                 ${sidebarCollapsed ? 'w-0 -translate-x-full opacity-0 p-0 overflow-hidden' : 'w-full md:w-64 translate-x-0 opacity-100'}`}>
 
                 <div className="flex flex-col gap-6">
                     {/* Logo & Close Toggle */}
                     <div className="flex items-center justify-between">
-                        <Link href="/dashboard" className="text-2xl font-black tracking-[0.2em] text-[#ff1a1a] drop-shadow-[0_0_12px_rgba(255,26,26,0.6)] hashi-font hover:opacity-80 transition-all">
+                        <Link href="/dashboard" className="text-2xl font-black tracking-[0.3em] text-white hover:opacity-80 transition-all hashi-font">
                             hashi.
                         </Link>
-                        <button onClick={toggleSidebar} className="text-[#1a1a1a]/20 hover:text-[#c20000] transition-colors md:hidden">
-                            <PanelLeftClose size={20} />
-                        </button>
-                        <button onClick={toggleSidebar} className="hidden md:block text-[#1a1a1a]/20 hover:text-[#c20000] transition-colors">
-                            <PanelLeftClose size={20} />
+                        <button onClick={toggleSidebar} className="text-white/20 hover:text-white transition-colors">
+                            <PanelLeftClose size={20} strokeWidth={1.5} />
                         </button>
                     </div>
 
                     <CinematicTrigger />
                 </div>
 
-                <nav className="flex flex-col gap-2 flex-1 relative z-10 overflow-x-hidden">
+                <nav className="flex flex-col gap-1 flex-1 relative z-10 overflow-x-hidden">
                     {navItems.map((item) => {
                         const isActive = pathname === item.href;
                         const Icon = item.icon;
@@ -121,34 +125,34 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`flex items-center gap-3 px-4 py-3 transition-all transform border-2 border-transparent group ${isActive
-                                    ? 'hashi-font bg-[#c20000]/5 text-[#c20000] border-l-2 border-l-[#c20000] rounded-none shadow-[0_0_20px_rgba(194,0,0,0.1)]'
-                                    : 'text-[#1a1a1a]/40 hover:text-[#c20000] hover:bg-[#c20000]/5'
+                                className={`flex items-center gap-3 px-4 py-3 transition-all group border border-transparent ${isActive
+                                    ? 'bg-white/5 text-white border-white/5 shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]'
+                                    : 'text-white/40 hover:text-white hover:bg-white/[0.02]'
                                     }`}
                             >
-                                <Icon size={20} className={isActive ? '' : 'group-hover:rotate-12 transition-transform'} strokeWidth={1.5} />
-                                <span className={isActive ? 'text-sm font-medium tracking-wide' : 'text-sm'}>{item.label}</span>
+                                <Icon size={18} className={isActive ? 'text-white' : 'text-white/30 group-hover:text-white transition-colors'} strokeWidth={1.5} />
+                                <span className={`text-xs uppercase tracking-widest hashi-font ${isActive ? 'font-black' : 'font-medium'}`}>{item.label}</span>
                             </Link>
                         );
                     })}
                 </nav>
 
-                <div className="flex flex-col gap-2 pt-8 z-10 border-t border-[#c20000]/10">
+                <div className="flex flex-col gap-2 pt-8 z-10 border-t border-white/5">
                     <button
                         onClick={() => signOut({ callbackUrl: '/' })}
-                        className="flex items-center gap-3 px-4 py-3 transition-all w-full text-left hashi-font text-[#1a1a1a]/30 hover:text-[#c20000] hover:bg-[#c20000]/5"
+                        className="flex items-center gap-3 px-4 py-3 transition-all w-full text-left hashi-font text-white/20 hover:text-white hover:bg-white/[0.02]"
                     >
-                        <LogOut size={20} strokeWidth={1.5} />
-                        <span>Sign Out</span>
+                        <LogOut size={18} strokeWidth={1.5} />
+                        <span className="text-xs uppercase tracking-widest font-bold">Sign Out</span>
                     </button>
-                    <div className="mt-4 px-4 py-2 bg-[#c20000]/5 border border-[#c20000]/10">
-                        <p className="text-[10px] font-bold text-[#c20000]/40 tracking-widest uppercase italic">The World Awaits.</p>
+                    <div className="mt-4 px-4 py-3 bg-white/[0.02] border border-white/5">
+                        <p className="text-[9px] font-black text-white/10 tracking-[0.3em] uppercase italic">Immortalize your IP.</p>
                     </div>
                 </div>
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 relative overflow-x-hidden overflow-y-auto z-10 p-0">
+            <main className="flex-1 relative overflow-x-hidden overflow-y-auto z-10 p-0 bg-black">
                 {children}
             </main>
 

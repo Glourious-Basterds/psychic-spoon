@@ -15,7 +15,10 @@ export default function MissionDetailPage() {
     const id = params.id as string;
     const [activeModule, setActiveModule] = useState<number | null>(null);
 
-    const missionDetails: Record<string, any> = {
+    type MissionModule = { id: number; title: string; icon: React.ElementType; status: string; desc: string; };
+    type MissionData = { title: string; status: string; desc: string; themeColor: string; modules: MissionModule[]; narrative?: string; };
+
+    const missionDetails: Record<string, MissionData> = {
         'bar-man': {
             title: 'The Bar-man',
             status: 'PROTOCOL: REINVENTION',
@@ -72,7 +75,7 @@ export default function MissionDetailPage() {
                     </div>
                 </div>
                 <div className="max-w-md italic text-lg text-[#1a1a1a]/60 leading-relaxed font-medium">
-                    "{mission.desc}"
+                    &quot;{mission.desc}&quot;
                 </div>
             </div>
 
@@ -84,7 +87,7 @@ export default function MissionDetailPage() {
                     <div className="space-y-6">
                         <h2 className="text-sm font-black uppercase tracking-[0.5em] text-[#c20000]">Active Modules</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {mission.modules.map((m: any) => (
+                            {mission.modules.map((m) => (
                                 <div
                                     key={m.id}
                                     onClick={() => setActiveModule(activeModule === m.id ? null : m.id)}
@@ -153,7 +156,7 @@ export default function MissionDetailPage() {
                             <span className="text-[10px] font-black uppercase tracking-widest">Encrypted Note</span>
                         </div>
                         <p className="text-xs font-bold text-[#1a1a1a]/60 leading-relaxed italic">
-                            "The transition from shadows to shakers is nearly complete. Ensure the martini mix matches the tactical specs."
+                            &quot;The transition from shadows to shakers is nearly complete. Ensure the martini mix matches the tactical specs.&quot;
                         </p>
                     </div>
                 </aside>

@@ -100,7 +100,7 @@ export default function DashboardPage() {
                                     <span className="hashi-font text-[#c20000] font-bold tracking-[0.2em] text-xs uppercase">{chat.user}</span>
                                     <span className="hashi-font text-[#1a1a1a]/40 text-[9px] font-bold">{chat.time}</span>
                                 </div>
-                                <p className="hashi-font text-[#1a1a1a] font-normal text-lg leading-tight">"{chat.message}"</p>
+                                <p className="hashi-font text-[#1a1a1a] font-normal text-lg leading-tight">&quot;{chat.message}&quot;</p>
                             </div>
                         ))}
                         <Link href="/comms" className="w-full">
