@@ -45,7 +45,7 @@ export default function LoginPage() {
             if (result?.error) {
                 setError('Credenziali non valide');
             } else {
-                router.push('/dashboard');
+                router.push('/feed');
                 router.refresh();
             }
         } catch (err) {
