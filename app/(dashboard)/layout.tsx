@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
-import { LayoutDashboard, FolderKanban, MessageSquare, ShieldCheck, LogOut, Menu, PanelLeftOpen, PanelLeftClose } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, MessageSquare, ShieldCheck, LogOut, Menu, PanelLeftOpen, PanelLeftClose, Globe } from 'lucide-react';
 import { useUI } from '@/context/UIContext';
 import { CinematicTrigger, GlobalMiniPlayer } from '@/components/ui/cinematic-player';
 
@@ -14,6 +14,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const { hashiMode, sidebarCollapsed, toggleSidebar } = useUI();
 
     const navItems = [
+        { href: '/feed', label: 'Feed', icon: Globe },
         { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
         { href: '/missions', label: 'Missions', icon: FolderKanban },
         { href: '/comms', label: 'Workspace', icon: MessageSquare },
