@@ -79,6 +79,31 @@ const MISSIONS: Mission[] = [
         projectNumber: '#0038',
         status: 'IN_PROGRESS',
         progress: 40,
+        summary: 'A space comedy in which Lord Helmet and his crew attempt to cook authentic Italian cuisine in zero gravity. Visual tone: vibrant, wide-angle, full of chaos. Animation pipeline in full swing.',
+        members: [
+            { initials: 'LH', color: '#3a1a3a', name: 'Lord Helmet' },
+            { initials: 'TS', color: '#3a1e1e', name: 'Tony S.' },
+            { initials: 'PM', color: '#1e3a5f', name: 'Pietro M.' },
+            { initials: 'EK', color: '#1a1a2a', name: 'Elena K.' },
+        ],
+        extraMembers: 3,
+        milestones: [
+            { label: 'Concept 10/15', state: 'done', tooltip: 'Completed Oct 15 · Concept approved by full cast' },
+            { label: 'Animatic 11/30', state: 'done', tooltip: 'Completed Nov 30 · All scenes storyboarded and timed' },
+            { label: 'Animation 01/20', state: 'active', tooltip: 'In progress — 40% of animation complete. Pasta cannon sequence pending.' },
+            { label: 'Post 02/28', state: 'future', tooltip: 'Post-production and VFX — Feb 28' },
+        ],
+        photos: [
+            { emoji: '🚀', bg: 'linear-gradient(135deg, #0d0f2a, #1a1d42)' },
+            { emoji: '🍝', bg: 'linear-gradient(135deg, #2a1a0d, #3d2c12)' },
+            { emoji: '🪖', bg: 'linear-gradient(135deg, #1a0d2a, #2d1a42)' },
+        ],
+        dueDates: [
+            { label: 'ANIMATIC', date: 'Nov 30', urgency: 'ok' as const, detail: 'Completed — Animatic delivered and approved.' },
+            { label: 'ANIMATION', date: 'Jan 20', urgency: 'soon' as const, detail: 'Due Jan 20 — 40% complete. Pasta cannon sequence is the critical path.' },
+            { label: 'VFX PASS', date: 'Feb 10', urgency: 'ok' as const, detail: 'On track — VFX team briefed. Zero-gravity pasta effects in production.' },
+            { label: 'FINAL CUT', date: 'Feb 28', urgency: 'ok' as const, detail: 'Final delivery — Feb 28. Distribution via Hashi IP Vault.' },
+        ],
     },
     {
         id: 'sweet-angel',
