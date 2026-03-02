@@ -309,7 +309,7 @@ function CommsInner() {
                 </div>
 
                 {/* Content area */}
-                <div style={{ flex: 1, overflow: 'auto', padding: activeTab === 'MESSAGES' ? 0 : '28px' }}>
+                <div style={{ flex: 1, overflow: activeTab === 'MESSAGES' ? 'hidden' : 'auto', padding: activeTab === 'MESSAGES' ? 0 : '28px', display: 'flex', flexDirection: 'column' }}>
 
                     {/* PHOTOS */}
                     {activeTab === 'PHOTOS' && (
