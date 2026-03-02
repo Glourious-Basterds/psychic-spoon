@@ -2,14 +2,14 @@
 
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
-import { ChevronRight, Layers, Bell, ShieldCheck } from 'lucide-react';
+import { ChevronRight, Layers, Bell, ShieldCheck, Globe } from 'lucide-react';
 
 export default function DashboardPage() {
     const { data: session } = useSession();
 
     const stats = [
         { label: 'HOME BASE', value: '12', sub: 'Active channels', href: '/comms', icon: Layers },
-        { label: 'ALERTS', value: '03', sub: 'Unread items', href: '/missions', icon: Bell },
+        { label: 'COMMUNITY', value: '150+', sub: 'Public posts', href: '/feed', icon: Globe },
         { label: 'VAULT SEC', value: 'MAX', sub: 'IP Protection', href: '/vault', icon: ShieldCheck },
     ];
 
