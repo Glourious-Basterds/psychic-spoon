@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Music, Play, Pause, SkipForward, X, Clapperboard, Film } from 'lucide-react';
 import { useUI, CINEMATIC_TRACKS } from '@/context/UIContext';
 
@@ -11,66 +10,167 @@ export function CinematicTrigger() {
 
     return (
         <>
-            <Button
+            {/* Trigger button — matches sidebar style */}
+            <button
                 onClick={() => setIsOpen(true)}
-                className="hashi-font cyber-border bg-[#c20000]/5 text-[#c20000] border-[#c20000]/20 hover:bg-[#c20000]/10 hover:text-[#1a1a1a] shadow-[inset_0_0_10px_rgba(255,255,255,0.5)] font-bold tracking-[0.1em] rounded-none px-4 py-2 uppercase text-xs transition-all flex items-center gap-2"
+                style={{
+                    display: 'flex', alignItems: 'center', gap: '8px',
+                    padding: '8px 12px',
+                    background: currentTrack && isPlaying ? 'rgba(163,230,53,0.08)' : 'rgba(255,255,255,0.03)',
+                    border: `1px solid ${currentTrack && isPlaying ? 'rgba(163,230,53,0.2)' : 'rgba(255,255,255,0.07)'}`,
+                    borderRadius: '8px',
+                    color: currentTrack && isPlaying ? '#a3e635' : 'rgba(255,255,255,0.35)',
+                    fontSize: '10px', fontFamily: 'Courier New, monospace', letterSpacing: '0.15em',
+                    textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.2s',
+                    width: '100%',
+                }}
+                onMouseEnter={e => {
+                    if (!(currentTrack && isPlaying)) {
+                        e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
+                        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)';
+                    }
+                }}
+                onMouseLeave={e => {
+                    if (!(currentTrack && isPlaying)) {
+                        e.currentTarget.style.color = 'rgba(255,255,255,0.35)';
+                        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)';
+                    }
+                }}
             >
-                <Clapperboard size={14} strokeWidth={1.5} /> SOUNDTRACKS
-            </Button>
+                {currentTrack && isPlaying ? (
+                    /* EQ bars when playing */
+                    <div style={{ display: 'flex', gap: '2px', alignItems: 'flex-end', height: '14px', flexShrink: 0 }}>
+                        {[8, 12, 10, 14, 9].map((h, j) => (
+                            <div key={j} style={{ width: '2px', background: '#a3e635', borderRadius: '1px', height: `${h}px`, animation: `eq-bar ${0.4 + j * 0.11}s infinite alternate ease-in-out` }} />
+                        ))}
+                    </div>
+                ) : (
+                    <Clapperboard size={13} strokeWidth={1.5} />
+                )}
+                <span style={{ flex: 1, textAlign: 'left', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {currentTrack ? currentTrack.title : 'SOUNDTRACKS'}
+                </span>
+            </button>
 
-            {/* Modal della Libreria Musicale */}
+            {/* Modal */}
             {isOpen && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-                    <div className="w-full max-w-md p-1 relative animate-in zoom-in-95 duration-200 card border-[#c20000]/20 shadow-2xl overflow-hidden">
-                        <button onClick={() => setIsOpen(false)} className="absolute -top-4 -right-4 p-2 border-4 transition-all z-10 bg-[#fafafa] text-[#c20000] border-[#c20000]/20 hover:text-[#1a1a1a]">
-                            <X size={20} />
-                        </button>
-
-                        <div className="bg-white/40 p-6 backdrop-blur-xl flex flex-col max-h-[70vh]">
-                            <div className="flex justify-between items-center mb-6 border-b-2 pb-4 border-[#c20000]/10">
-                                <h2 className="text-3xl font-black uppercase tracking-tighter text-[#c20000] hashi-font">
-                                    RELIQUARY
-                                </h2>
-                                <Button onClick={() => playRandom()} className="font-black uppercase text-xs p-2 h-auto rounded-none border flex items-center gap-1 bg-[#c20000]/5 text-[#c20000] border-[#c20000]/20 hover:bg-[#c20000]/10 hashi-font">
-                                    <SkipForward size={14} /> Mix
-                                </Button>
+                <div
+                    style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)', padding: '20px' }}
+                    onClick={() => setIsOpen(false)}
+                >
+                    <div
+                        style={{ width: '100%', maxWidth: '440px', background: '#0d0d0d', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 32px 80px rgba(0,0,0,0.8)' }}
+                        onClick={e => e.stopPropagation()}
+                    >
+                        {/* Header */}
+                        <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <div>
+                                <div style={{ fontSize: '9px', fontFamily: 'Courier New, monospace', color: '#374151', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '4px' }}>AUDIO.VAULT</div>
+                                <div style={{ fontSize: '18px', fontWeight: 700, color: '#f9fafb', letterSpacing: '-0.01em' }}>Soundtracks</div>
                             </div>
-
-                            <div className="flex-1 overflow-y-auto pr-4 space-y-4">
-                                {CINEMATIC_TRACKS.map((track) => (
-                                    <button
-                                        key={track.id}
-                                        onClick={() => playTrack(track)}
-                                        className={`w-full p-4 text-left border-2 transition-all flex items-center justify-between group 
-                                            ${currentTrack?.id === track.id
-                                                ? 'border-[#c20000]/40 bg-[#c20000]/5 shadow-[inset_0_0_20px_rgba(194,0,0,0.05)] text-[#1a1a1a]'
-                                                : 'border-[#c20000]/5 hover:border-[#c20000]/20 hover:bg-white text-[#1a1a1a]/60 hover:text-[#c20000]'}`}
-                                    >
-                                        <div>
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <Film size={12} className={currentTrack?.id === track.id ? 'text-[#c20000]' : 'text-[#1a1a1a]/30 group-hover:text-[#c20000]'} />
-                                                <p className="text-[10px] font-bold uppercase tracking-widest opacity-80 hashi-font">{track.movie}</p>
-                                            </div>
-                                            <p className={`text-xl font-bold italic hashi-font not-italic ${currentTrack?.id === track.id ? 'text-[#1a1a1a]' : 'text-[#1a1a1a]/70'}`}>&quot;{track.title}&quot;</p>
-                                            <p className="text-xs uppercase mt-1 opacity-60 hashi-font">by {track.composer}</p>
-                                        </div>
-                                        {currentTrack?.id === track.id && isPlaying && (
-                                            <div className="flex gap-1 items-end h-6">
-                                                <div className="w-1.5 h-full animate-pulse bg-[#c20000]" />
-                                                <div className="w-1.5 h-2/3 animate-pulse bg-[#c20000]" style={{ animationDelay: '0.1s' }} />
-                                                <div className="w-1.5 h-5/6 animate-pulse bg-[#c20000]" style={{ animationDelay: '0.2s' }} />
-                                            </div>
-                                        )}
-                                        {currentTrack?.id === track.id && !isPlaying && (
-                                            <Pause size={20} className="text-[#c20000]" />
-                                        )}
-                                        {currentTrack?.id !== track.id && (
-                                            <Play size={20} className="opacity-0 group-hover:opacity-100" />
-                                        )}
-                                    </button>
-                                ))}
+                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                <button
+                                    onClick={() => playRandom()}
+                                    style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '7px 13px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#9ca3af', fontSize: '10px', fontFamily: 'Courier New, monospace', letterSpacing: '0.1em', cursor: 'pointer', transition: 'all 0.15s' }}
+                                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.16)'; e.currentTarget.style.color = '#f9fafb'; }}
+                                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#9ca3af'; }}
+                                >
+                                    <SkipForward size={11} /> SHUFFLE
+                                </button>
+                                <button
+                                    onClick={() => setIsOpen(false)}
+                                    style={{ width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '8px', color: '#6b7280', cursor: 'pointer', transition: 'all 0.15s' }}
+                                    onMouseEnter={e => { e.currentTarget.style.color = '#f9fafb'; }}
+                                    onMouseLeave={e => { e.currentTarget.style.color = '#6b7280'; }}
+                                >
+                                    <X size={14} />
+                                </button>
                             </div>
                         </div>
+
+                        {/* Track list */}
+                        <div style={{ maxHeight: '65vh', overflowY: 'auto', padding: '12px' }}>
+                            {CINEMATIC_TRACKS.map((track, i) => {
+                                const active = currentTrack?.id === track.id;
+                                return (
+                                    <button
+                                        key={track.id}
+                                        onClick={() => { playTrack(track); }}
+                                        style={{
+                                            width: '100%', padding: '12px 14px', display: 'flex', alignItems: 'center', gap: '12px', textAlign: 'left',
+                                            background: active ? 'rgba(163,230,53,0.06)' : 'transparent',
+                                            border: `1px solid ${active ? 'rgba(163,230,53,0.18)' : 'rgba(255,255,255,0.04)'}`,
+                                            borderRadius: '10px', cursor: 'pointer', marginBottom: '6px',
+                                            transition: 'all 0.15s',
+                                        }}
+                                        onMouseEnter={e => { if (!active) { e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; } }}
+                                        onMouseLeave={e => { if (!active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.04)'; } }}
+                                    >
+                                        {/* Track number / play indicator */}
+                                        <div style={{ width: '28px', height: '28px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: active ? 'rgba(163,230,53,0.12)' : 'rgba(255,255,255,0.04)', border: `1px solid ${active ? 'rgba(163,230,53,0.2)' : 'rgba(255,255,255,0.06)'}`, borderRadius: '6px' }}>
+                                            {active && isPlaying ? (
+                                                <div style={{ display: 'flex', gap: '2px', alignItems: 'flex-end', height: '12px' }}>
+                                                    {[6, 10, 8].map((h, j) => (
+                                                        <div key={j} style={{ width: '2px', background: '#a3e635', borderRadius: '1px', height: `${h}px`, animation: `eq-bar ${0.4 + j * 0.13}s infinite alternate ease-in-out` }} />
+                                                    ))}
+                                                </div>
+                                            ) : active ? (
+                                                <Pause size={11} style={{ color: '#a3e635' }} />
+                                            ) : (
+                                                <span style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#374151' }}>{String(i + 1).padStart(2, '0')}</span>
+                                            )}
+                                        </div>
+
+                                        {/* Track info */}
+                                        <div style={{ flex: 1, minWidth: 0 }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
+                                                <Film size={9} style={{ color: active ? '#a3e635' : '#374151', flexShrink: 0 }} />
+                                                <span style={{ fontSize: '9px', fontFamily: 'Courier New, monospace', color: active ? '#6b7280' : '#374151', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{track.movie}</span>
+                                            </div>
+                                            <div style={{ fontSize: '14px', fontWeight: active ? 600 : 400, color: active ? '#f9fafb' : '#d1d5db', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{track.title}</div>
+                                            <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563', marginTop: '2px' }}>by {track.composer}</div>
+                                        </div>
+
+                                        {/* Right icon */}
+                                        <div style={{ color: active ? '#a3e635' : '#374151', opacity: active ? 1 : 0, transition: 'opacity 0.15s', flexShrink: 0 }}>
+                                            {active && isPlaying ? <Pause size={14} /> : <Play size={14} />}
+                                        </div>
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        {/* Now playing footer */}
+                        {currentTrack && (
+                            <div style={{ padding: '14px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                    <div style={{ fontSize: '9px', fontFamily: 'Courier New, monospace', color: '#374151', letterSpacing: '0.15em', marginBottom: '3px' }}>NOW PLAYING</div>
+                                    <div style={{ fontSize: '13px', fontWeight: 600, color: '#f9fafb', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{currentTrack.title}</div>
+                                    <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563' }}>{currentTrack.composer}</div>
+                                </div>
+                                <button
+                                    onClick={togglePlayPause}
+                                    style={{ width: '38px', height: '38px', borderRadius: '50%', background: isPlaying ? '#a3e635' : 'rgba(255,255,255,0.06)', border: `1px solid ${isPlaying ? '#a3e635' : 'rgba(255,255,255,0.1)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: isPlaying ? '#000' : '#9ca3af', cursor: 'pointer', transition: 'all 0.15s', flexShrink: 0 }}
+                                >
+                                    {isPlaying ? <Pause size={15} /> : <Play size={15} />}
+                                </button>
+                                <button
+                                    onClick={playRandom}
+                                    style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6b7280', cursor: 'pointer', transition: 'all 0.15s', flexShrink: 0 }}
+                                    onMouseEnter={e => { e.currentTarget.style.color = '#f9fafb'; }}
+                                    onMouseLeave={e => { e.currentTarget.style.color = '#6b7280'; }}
+                                >
+                                    <SkipForward size={13} />
+                                </button>
+                            </div>
+                        )}
+
+                        <style>{`
+                            @keyframes eq-bar {
+                                from { transform: scaleY(0.4); }
+                                to { transform: scaleY(1); }
+                            }
+                        `}</style>
                     </div>
                 </div>
             )}
@@ -78,41 +178,63 @@ export function CinematicTrigger() {
     );
 }
 
-// Persistent Mini Player placed in layout bottom right
+// ─── Global Mini Player (bottom-right persistent bar) ─────────────────────────
 export function GlobalMiniPlayer() {
     const { currentTrack, isPlaying, togglePlayPause, playRandom } = useUI();
 
-    if (!currentTrack) return null; // Non mostrare se non c'è nulla in coda
+    if (!currentTrack) return null;
 
     return (
-        <div className="fixed bottom-6 right-6 z-[90] flex items-center gap-4 p-3 animate-in fade-in slide-in-from-bottom-5 duration-300 card border-[#c20000]/20 bg-white shadow-2xl scale-100">
-
-            <div className="flex items-center gap-3 px-2 max-w-[200px] overflow-hidden">
-                <Music size={20} className="text-[#c20000] animate-pulse" />
-                <div className="flex flex-col truncate">
-                    <span className="text-sm font-bold truncate leading-none hashi-font text-[#1a1a1a]">
-                        {currentTrack.title}
-                    </span>
-                    <span className="text-[10px] text-zinc-400 font-bold uppercase truncate hashi-font opacity-60">
-                        {currentTrack.composer}
-                    </span>
+        <div style={{
+            position: 'fixed', bottom: '20px', right: '20px', zIndex: 90,
+            display: 'flex', alignItems: 'center', gap: '10px',
+            padding: '10px 14px',
+            background: '#0d0d0d',
+            border: '1px solid rgba(163,230,53,0.2)',
+            borderRadius: '12px',
+            boxShadow: '0 8px 40px rgba(0,0,0,0.7)',
+            animation: 'slide-up 0.3s ease',
+        }}>
+            {/* EQ indicator */}
+            {isPlaying && (
+                <div style={{ display: 'flex', gap: '2px', alignItems: 'flex-end', height: '14px', flexShrink: 0 }}>
+                    {[8, 12, 9, 14, 10].map((h, j) => (
+                        <div key={j} style={{ width: '2px', background: '#a3e635', borderRadius: '1px', height: `${h}px`, animation: `eq-bar ${0.4 + j * 0.11}s infinite alternate ease-in-out` }} />
+                    ))}
                 </div>
+            )}
+            {!isPlaying && <Music size={14} style={{ color: '#4b5563', flexShrink: 0 }} />}
+
+            {/* Track info */}
+            <div style={{ maxWidth: '160px', overflow: 'hidden' }}>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: '#f9fafb', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{currentTrack.title}</div>
+                <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{currentTrack.composer}</div>
             </div>
 
-            <div className="flex items-center gap-1 border-l-2 pl-3 border-[#c20000]/10">
-                <button
-                    onClick={togglePlayPause}
-                    className="p-2 rounded-full transition-colors hover:bg-[#c20000]/5 text-[#c20000]"
-                >
-                    {isPlaying ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" />}
+            {/* Controls */}
+            <div style={{ display: 'flex', gap: '4px', borderLeft: '1px solid rgba(255,255,255,0.06)', paddingLeft: '10px' }}>
+                <button onClick={togglePlayPause}
+                    style={{ width: '30px', height: '30px', borderRadius: '50%', background: isPlaying ? '#a3e635' : 'rgba(255,255,255,0.06)', border: `1px solid ${isPlaying ? '#a3e635' : 'rgba(255,255,255,0.1)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: isPlaying ? '#000' : '#9ca3af', cursor: 'pointer', transition: 'all 0.15s' }}>
+                    {isPlaying ? <Pause size={13} /> : <Play size={13} />}
                 </button>
-                <button
-                    onClick={playRandom}
-                    className="p-2 rounded-full transition-colors hover:bg-[#c20000]/5 text-[#c20000]"
-                >
-                    <SkipForward size={18} fill="currentColor" />
+                <button onClick={playRandom}
+                    style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6b7280', cursor: 'pointer', transition: 'all 0.15s' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = '#f9fafb')}
+                    onMouseLeave={e => (e.currentTarget.style.color = '#6b7280')}>
+                    <SkipForward size={13} />
                 </button>
             </div>
+
+            <style>{`
+                @keyframes eq-bar {
+                    from { transform: scaleY(0.4); }
+                    to { transform: scaleY(1); }
+                }
+                @keyframes slide-up {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `}</style>
         </div>
     );
 }
