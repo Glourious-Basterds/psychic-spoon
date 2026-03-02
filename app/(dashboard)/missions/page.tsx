@@ -115,6 +115,30 @@ const MISSIONS: Mission[] = [
         rating: 4,
         views: '2.4k',
         repPts: 18,
+        summary: 'An intimate short film about a musician who discovers her late grandmother\'s unreleased recordings. Atmospheric sound design — layered ambience, vinyl crackle, and live chamber reverb. Delivered on time and under budget.',
+        members: [
+            { initials: 'CL', color: '#2a1a3a', name: 'Clara L.' },
+            { initials: 'RD', color: '#1a3a2a', name: 'Ravi D.' },
+            { initials: 'PM', color: '#1e3a5f', name: 'Pietro M.' },
+        ],
+        extraMembers: 1,
+        milestones: [
+            { label: 'Pre-production 09/01', state: 'done', tooltip: 'Completed Sep 1 · All reference tracks approved' },
+            { label: 'Recording 09/20', state: 'done', tooltip: 'Completed Sep 20 · Live session recorded at Studio V' },
+            { label: 'Mix 10/05', state: 'done', tooltip: 'Completed Oct 5 · Final mix approved by director' },
+            { label: 'Delivery 10/15', state: 'done', tooltip: 'Delivered Oct 15 · Accepted by distributor' },
+        ],
+        photos: [
+            { emoji: '🎵', bg: 'linear-gradient(135deg, #1a0d2a, #2d1a42)' },
+            { emoji: '🎙', bg: 'linear-gradient(135deg, #0d1a2a, #1a2d42)' },
+            { emoji: '🎻', bg: 'linear-gradient(135deg, #2a1a0d, #3d2c12)' },
+        ],
+        dueDates: [
+            { label: 'RECORDING', date: 'Sep 20', urgency: 'ok' as const, detail: 'Completed — Live recording session delivered ahead of schedule.' },
+            { label: 'FINAL MIX', date: 'Oct 05', urgency: 'ok' as const, detail: 'Completed — Mix approved by director and Clara L.' },
+            { label: 'DELIVERY', date: 'Oct 15', urgency: 'ok' as const, detail: 'Completed — Delivered to distributor. 2.4k views in first week.' },
+            { label: 'ARCHIVE', date: 'Oct 20', urgency: 'ok' as const, detail: 'Archived in IP Vault. Rating: 4/5 stars. +18 rep pts.' },
+        ],
     },
     {
         id: 'project-nexus',
