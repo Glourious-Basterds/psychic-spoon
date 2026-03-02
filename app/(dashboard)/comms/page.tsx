@@ -162,6 +162,8 @@ function CommsInner() {
         'space-balls': { ...PROJECTS['space-balls'].messages },
     });
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    // Only auto-scroll when a new user message is sent — not on channel switch
+    const sentCountRef = useRef(0);
 
     useEffect(() => {
         if (projectParam !== activeProject) {
@@ -171,9 +173,13 @@ function CommsInner() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [projectParam]);
 
+    // Intentionally NOT depending on activeChannel/activeTab — only scroll on new sent messages
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [localMessages, activeChannel, activeProject, activeTab]);
+        if (sentCountRef.current > 0) {
+            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sentCountRef.current]);
 
     const proj = PROJECTS[activeProject];
     const currentMessages = localMessages[activeProject]?.[activeChannel] ?? [];
@@ -196,6 +202,7 @@ function CommsInner() {
                 [activeChannel]: [...(prev[activeProject]?.[activeChannel] ?? []), msg],
             },
         }));
+        sentCountRef.current += 1;
         setNewMessage('');
     };
 
@@ -328,39 +335,117 @@ function CommsInner() {
                     )}
 
                     {/* SOUNDTRACKS */}
-                    {activeTab === 'SOUNDTRACKS' && (
-                        <div>
-                            <div style={{ fontSize: '11px', fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '24px' }}>
-                                AUDIO.VAULT &nbsp; <span style={{ color: '#374151' }}>{proj.tracks.length} TRACKS</span>
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                {proj.tracks.map((t, i) => {
-                                    const isPlaying = playingTrack === t.id;
-                                    return (
-                                        <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '14px 18px', background: isPlaying ? 'rgba(163,230,53,0.06)' : '#111111', border: `1px solid ${isPlaying ? 'rgba(163,230,53,0.2)' : 'rgba(255,255,255,0.07)'}`, borderRadius: '10px', transition: 'all 0.15s' }}>
-                                            <span style={{ fontSize: '12px', fontFamily: 'Courier New, monospace', color: '#374151', minWidth: '24px', textAlign: 'center' }}>{String(i + 1).padStart(2, '0')}</span>
-                                            <button onClick={() => setPlayingTrack(isPlaying ? null : t.id)}
-                                                style={{ width: '32px', height: '32px', borderRadius: '50%', background: isPlaying ? '#a3e635' : 'rgba(255,255,255,0.06)', border: `1px solid ${isPlaying ? '#a3e635' : 'rgba(255,255,255,0.1)'}`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isPlaying ? '#000' : '#9ca3af', flexShrink: 0, transition: 'all 0.15s' }}>
-                                                {isPlaying ? <Pause size={14} /> : <Play size={14} />}
-                                            </button>
-                                            <div style={{ flex: 1 }}>
-                                                <div style={{ fontSize: '14px', fontWeight: isPlaying ? 600 : 400, color: isPlaying ? '#f9fafb' : '#d1d5db' }}>{t.title}</div>
-                                                <div style={{ fontSize: '11px', color: '#4b5563', fontFamily: 'Courier New, monospace' }}>{t.artist}</div>
+                    {activeTab === 'SOUNDTRACKS' && (() => {
+                        const nowPlaying = proj.tracks.find(t => t.id === playingTrack) ?? null;
+                        return (
+                            <div style={{ display: 'flex', gap: '20px', height: '100%' }}>
+
+                                {/* Now Playing card */}
+                                <div style={{ width: '220px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '0' }}>
+                                    <div style={{ fontSize: '9px', fontFamily: 'Courier New, monospace', color: '#374151', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '12px' }}>
+                                        {nowPlaying ? 'NOW PLAYING' : 'AUDIO.VAULT'}
+                                    </div>
+                                    <div style={{ background: '#111111', border: `1px solid ${nowPlaying ? 'rgba(163,230,53,0.25)' : 'rgba(255,255,255,0.07)'}`, borderRadius: '14px', overflow: 'hidden', transition: 'border-color 0.3s' }}>
+                                        {/* Album art area */}
+                                        <div style={{ height: '180px', background: nowPlaying ? 'linear-gradient(135deg, #0f1a0f, #1a2e0a)' : 'linear-gradient(135deg, #0d0d0d, #111111)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
+                                            {/* Vinyl record visual */}
+                                            <div style={{ width: '110px', height: '110px', borderRadius: '50%', background: 'radial-gradient(circle, #1a1a1a 30%, #111 31%, #222 40%, #111 41%, #222 60%, #111 61%, #222 80%, #111 81%)', border: `2px solid ${nowPlaying ? 'rgba(163,230,53,0.2)' : 'rgba(255,255,255,0.06)'}`, boxShadow: nowPlaying ? '0 0 30px rgba(163,230,53,0.1)' : 'none', animation: nowPlaying ? 'spin 4s linear infinite' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: nowPlaying ? '#a3e635' : '#333', transition: 'background 0.3s' }} />
                                             </div>
-                                            <span style={{ fontSize: '12px', fontFamily: 'Courier New, monospace', color: '#4b5563' }}>{t.duration}</span>
-                                            {isPlaying && (
-                                                <div style={{ display: 'flex', gap: '2px', alignItems: 'flex-end', height: '16px' }}>
-                                                    {[8, 12, 10, 14].map((h, j) => (
-                                                        <div key={j} style={{ width: '3px', background: '#a3e635', borderRadius: '2px', height: `${h}px`, animation: `eq-bar ${0.5 + j * 0.13}s infinite alternate ease-in-out` }} />
+                                            {/* EQ bars (visible when playing) */}
+                                            {nowPlaying && (
+                                                <div style={{ position: 'absolute', bottom: '12px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '3px', alignItems: 'flex-end', height: '20px' }}>
+                                                    {[10, 16, 12, 18, 14, 20, 10].map((h, j) => (
+                                                        <div key={j} style={{ width: '3px', background: '#a3e635', borderRadius: '2px', height: `${h}px`, animation: `eq-bar ${0.4 + j * 0.11}s infinite alternate ease-in-out` }} />
                                                     ))}
                                                 </div>
                                             )}
                                         </div>
-                                    );
-                                })}
+
+                                        {/* Track info */}
+                                        <div style={{ padding: '16px' }}>
+                                            <div style={{ fontSize: '14px', fontWeight: 600, color: nowPlaying ? '#f9fafb' : '#4b5563', marginBottom: '4px', transition: 'color 0.3s', minHeight: '20px' }}>
+                                                {nowPlaying ? nowPlaying.title : 'No track selected'}
+                                            </div>
+                                            <div style={{ fontSize: '11px', fontFamily: 'Courier New, monospace', color: '#4b5563', marginBottom: '16px' }}>
+                                                {nowPlaying ? nowPlaying.artist : '—'}
+                                            </div>
+
+                                            {/* Progress bar (decorative for now) */}
+                                            <div style={{ height: '3px', background: 'rgba(255,255,255,0.06)', borderRadius: '2px', marginBottom: '12px', overflow: 'hidden' }}>
+                                                {nowPlaying && <div style={{ height: '100%', background: '#a3e635', borderRadius: '2px', width: '40%', animation: 'progress-slide 8s linear infinite' }} />}
+                                            </div>
+
+                                            {/* Controls */}
+                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+                                                <button
+                                                    onClick={() => {
+                                                        if (!nowPlaying) return;
+                                                        const idx = proj.tracks.findIndex(t => t.id === nowPlaying.id);
+                                                        const prev = proj.tracks[Math.max(0, idx - 1)];
+                                                        setPlayingTrack(prev.id);
+                                                    }}
+                                                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#4b5563', padding: '4px', transition: 'color 0.15s', fontSize: '16px' }}
+                                                    onMouseEnter={e => (e.currentTarget.style.color = '#9ca3af')}
+                                                    onMouseLeave={e => (e.currentTarget.style.color = '#4b5563')}
+                                                >⏮</button>
+                                                <button
+                                                    onClick={() => setPlayingTrack(nowPlaying ? null : proj.tracks[0].id)}
+                                                    style={{ width: '40px', height: '40px', borderRadius: '50%', background: nowPlaying ? '#a3e635' : 'rgba(255,255,255,0.06)', border: `1px solid ${nowPlaying ? '#a3e635' : 'rgba(255,255,255,0.1)'}`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: nowPlaying ? '#000' : '#9ca3af', transition: 'all 0.15s' }}
+                                                >
+                                                    {nowPlaying ? <Pause size={16} /> : <Play size={16} />}
+                                                </button>
+                                                <button
+                                                    onClick={() => {
+                                                        const idx = proj.tracks.findIndex(t => t.id === playingTrack);
+                                                        const next = proj.tracks[Math.min(proj.tracks.length - 1, idx + 1)];
+                                                        setPlayingTrack(next.id);
+                                                    }}
+                                                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#4b5563', padding: '4px', transition: 'color 0.15s', fontSize: '16px' }}
+                                                    onMouseEnter={e => (e.currentTarget.style.color = '#9ca3af')}
+                                                    onMouseLeave={e => (e.currentTarget.style.color = '#4b5563')}
+                                                >⏭</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Track list */}
+                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0' }}>
+                                    <div style={{ fontSize: '9px', fontFamily: 'Courier New, monospace', color: '#374151', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '12px' }}>
+                                        TRACKLIST &nbsp; <span style={{ color: '#1f2937' }}>{proj.tracks.length} TRACKS</span>
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                        {proj.tracks.map((t, i) => {
+                                            const isPlaying = playingTrack === t.id;
+                                            return (
+                                                <div
+                                                    key={t.id}
+                                                    onClick={() => setPlayingTrack(isPlaying ? null : t.id)}
+                                                    style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '12px 16px', background: isPlaying ? 'rgba(163,230,53,0.06)' : '#111111', border: `1px solid ${isPlaying ? 'rgba(163,230,53,0.2)' : 'rgba(255,255,255,0.06)'}`, borderRadius: '10px', cursor: 'pointer', transition: 'all 0.15s' }}
+                                                    onMouseEnter={e => { if (!isPlaying) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'; }}
+                                                    onMouseLeave={e => { if (!isPlaying) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; }}
+                                                >
+                                                    <span style={{ fontSize: '11px', fontFamily: 'Courier New, monospace', color: isPlaying ? '#a3e635' : '#374151', minWidth: '20px' }}>
+                                                        {isPlaying ? '▶' : String(i + 1).padStart(2, '0')}
+                                                    </span>
+                                                    {/* Tiny album rect */}
+                                                    <div style={{ width: '36px', height: '36px', borderRadius: '6px', background: isPlaying ? 'linear-gradient(135deg, #1a2e0a, #0f1a0f)' : 'linear-gradient(135deg, #161616, #0d0d0d)', border: `1px solid ${isPlaying ? 'rgba(163,230,53,0.2)' : 'rgba(255,255,255,0.05)'}`, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Music size={14} style={{ color: isPlaying ? '#a3e635' : '#374151' }} />
+                                                    </div>
+                                                    <div style={{ flex: 1 }}>
+                                                        <div style={{ fontSize: '13px', fontWeight: isPlaying ? 600 : 400, color: isPlaying ? '#f9fafb' : '#d1d5db', marginBottom: '2px' }}>{t.title}</div>
+                                                        <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#374151' }}>{t.artist}</div>
+                                                    </div>
+                                                    <span style={{ fontSize: '11px', fontFamily: 'Courier New, monospace', color: '#374151', flexShrink: 0 }}>{t.duration}</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        );
+                    })()}
 
                     {/* CALLS */}
                     {activeTab === 'CALLS' && (
@@ -470,6 +555,14 @@ function CommsInner() {
                 @keyframes eq-bar {
                     from { transform: scaleY(0.4) }
                     to { transform: scaleY(1) }
+                }
+                @keyframes spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+                @keyframes progress-slide {
+                    from { width: 0%; }
+                    to { width: 100%; }
                 }
             `}</style>
         </div>
