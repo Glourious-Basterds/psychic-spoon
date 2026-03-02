@@ -218,7 +218,7 @@ function CommsInner() {
     const callStatusLabel = { incoming: '↙ Incoming', outgoing: '↗ Outgoing', missed: '✕ Missed' } as const;
 
     return (
-        <div style={{ display: 'flex', height: '100%', background: '#0a0a0a', color: '#e5e7eb', fontFamily: 'Inter, sans-serif', overflow: 'hidden' }}>
+        <div style={{ display: 'flex', height: '100vh', background: '#0a0a0a', color: '#e5e7eb', fontFamily: 'Inter, sans-serif', overflow: 'hidden' }}>
 
             {/* Project strip */}
             <div style={{ width: '64px', background: '#080808', borderRight: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px 0', gap: '12px', flexShrink: 0 }}>
