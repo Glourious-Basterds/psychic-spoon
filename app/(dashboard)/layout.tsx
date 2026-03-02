@@ -69,7 +69,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }, []);
 
     return (
-        <div className="min-h-screen bg-black text-white flex flex-col md:flex-row overflow-hidden relative selection:bg-white/10 selection:text-white">
+        <div className="h-screen bg-black text-white flex flex-col md:flex-row overflow-hidden relative selection:bg-white/10 selection:text-white">
             {/* Pure Black Background - Subtle Gradients from CSS hashi-theme-bg */}
             <div className="absolute inset-0 z-0 pointer-events-none hashi-theme-bg opacity-40" />
 
@@ -154,7 +154,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 relative overflow-x-hidden overflow-y-auto z-10 p-0 bg-black">
+            <main className="flex-1 relative overflow-hidden z-10 p-0 bg-black">
                 {children}
             </main>
 

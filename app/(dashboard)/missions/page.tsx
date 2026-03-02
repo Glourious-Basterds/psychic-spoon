@@ -466,7 +466,7 @@ export default function MissionsPage() {
             )}
 
             <style>{`
-                .missions-root { display: flex; flex-direction: column; height: 100%; background: #0a0a0a; color: #e5e7eb; font-family: 'Inter', sans-serif; }
+                .missions-root { display: flex; flex-direction: column; height: 100vh; overflow-y: auto; background: #0a0a0a; color: #e5e7eb; font-family: 'Inter', sans-serif; }
                 .missions-topbar { display: flex; align-items: center; gap: 16px; padding: 0 24px; height: 56px; background: #111111; border-bottom: 1px solid rgba(255,255,255,0.06); flex-shrink: 0; }
                 .missions-title { font-size: 15px; font-weight: 600; color: #f9fafb; margin: 0; white-space: nowrap; }
                 .missions-search-wrap { position: relative; flex: 1; max-width: 360px; }
