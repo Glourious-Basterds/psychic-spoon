@@ -442,7 +442,7 @@ export default function FeedPage() {
     );
 
     return (
-        <div style={{ minHeight: '100vh', background: '#080808', display: 'flex' }}>
+        <div style={{ height: '100vh', overflowY: 'auto', background: '#080808', display: 'flex' }}>
             {/* CSS animations */}
             <style>{`
                 @keyframes toast-in {
