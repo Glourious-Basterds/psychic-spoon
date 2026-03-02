@@ -47,6 +47,12 @@ const AUTHORS: Record<string, Author> = {
     'Pietro M.': { name: 'Pietro M.', initials: 'PM', color: '#1e3a5f', role: 'Creative Director · Producer' },
     'Lord Helmet': { name: 'Lord Helmet', initials: 'LH', color: '#3a1a3a', role: 'Actor · Executive Producer' },
     'Tony S.': { name: 'Tony S.', initials: 'TS', color: '#3a1e1e', role: 'R&D Engineer · Gadget Designer' },
+    // External creators
+    'Mia K.': { name: 'Mia K.', initials: 'MK', color: '#2a1a2e', role: 'Production Designer' },
+    'Rafael G.': { name: 'Rafael G.', initials: 'RG', color: '#1a2e20', role: 'Score Composer' },
+    'Yuki T.': { name: 'Yuki T.', initials: 'YT', color: '#1a1e3a', role: 'Concept Artist · Illustrator' },
+    'Dani M.': { name: 'Dani M.', initials: 'DM', color: '#2e1e14', role: 'Cinematographer · DP' },
+    'Ash V.': { name: 'Ash V.', initials: 'AV', color: '#141e2e', role: 'Creative Producer' },
 };
 
 const PROFILES: Record<string, UserProfile> = {
@@ -112,12 +118,20 @@ const PROFILES: Record<string, UserProfile> = {
 const INITIAL_POSTS: Post[] = [
     { id: 1, author: AUTHORS['Bruce W.'], content: 'Finished the storyboard for act 2. The silence before the reveal is going to destroy people.', time: '2h ago', image: '/images/storyboard_noir.png', likes: 14, replies: 3 },
     { id: 2, author: AUTHORS['Pietro M.'], content: 'Looking for a sound designer for a noir short film. Must understand silence as well as sound. Apply via Hashi.', time: '4h ago', badge: { label: 'OPEN ROLE', color: '#a3e635', bg: 'rgba(163,230,53,0.12)' }, likes: 28, replies: 7 },
+    { id: 11, author: AUTHORS['Mia K.'], content: 'Just dropped the complete set design for The Nighthawk Blues. Jazz bar, two floors, hidden backstage. Every surface tells a story. Blueprint attached.', time: '3h ago', image: '/images/set_design_blueprint.png', likes: 52, replies: 8 },
     { id: 3, author: AUTHORS['Lord Helmet'], content: 'The pasta cannon achieved orbit. Production on Space-Balls continues as planned.', time: '5h ago', likes: 67, replies: 12 },
+    { id: 12, author: AUTHORS['Rafael G.'], content: 'Recording the score for The Nightingale\'s Tale today. Steinway D, two mics, zero samples. If it doesn\'t sound human it doesn\'t go in.', time: '6h ago', image: '/images/studio_score_session.png', likes: 71, replies: 11 },
     { id: 4, author: AUTHORS['Tony S.'], content: 'New tool prototype: a zero-gravity fork. Patent pending. DM for licensing.', time: '8h ago', image: '/images/zerogravity_fork.png', likes: 45, replies: 9 },
+    { id: 13, author: AUTHORS['Ash V.'], content: 'Three pitches in one week. Two passed, one destroyed us. The one that destroyed us was the best idea. We are rebuilding it and coming back stronger.', time: '9h ago', likes: 93, replies: 17 },
     { id: 5, author: AUTHORS['Bruce W.'], content: 'The Bar-Man wrapped principal photography. Crew was exceptional. Full credits on Hashi.', time: '1d ago', badge: { label: 'PROJECT COMPLETE', color: '#f9fafb', bg: 'rgba(255,255,255,0.08)' }, likes: 103, replies: 21 },
+    { id: 14, author: AUTHORS['Yuki T.'], content: 'Concept art for the garden sequence in my new animated short. An astronaut finds a living ecosystem on a dead moon. Took 3 weeks to get the lighting right.', time: '1d ago', image: '/images/concept_art_moon.png', likes: 118, replies: 23 },
     { id: 6, author: AUTHORS['Pietro M.'], content: 'IP page for The Bar-Man is now live. If you want to pitch a sequel or spinoff, the door is open.', time: '1d ago', badge: { label: 'IP PAGE LIVE', color: '#93c5fd', bg: 'rgba(147,197,253,0.1)' }, likes: 56, replies: 4 },
+    { id: 15, author: AUTHORS['Dani M.'], content: 'Golden hour on set — the kind of light that makes you forget you have a call sheet. Shot on anamorphic glass. No grade yet. This is straight off the log.', time: '2d ago', image: '/images/bts_cinematographer.png', likes: 134, replies: 19 },
     { id: 7, author: AUTHORS['Tony S.'], content: 'The shaker exploded again. Fortunately I had already filed the patent. The Bar-Man production continues.', time: '2d ago', likes: 38, replies: 6 },
+    { id: 16, author: AUTHORS['Mia K.'], content: 'Reminder: production design is not decoration. It is the architecture of emotion. Every prop, every color temperature, every sight line is a decision that affects performance.', time: '2d ago', likes: 87, replies: 14 },
     { id: 8, author: AUTHORS['Lord Helmet'], content: 'In space, no one can hear you slurp spaghetti. But I can. I always can.', time: '02:33', likes: 89, replies: 14 },
+    { id: 17, author: AUTHORS['Rafael G.'], content: 'Unpopular opinion: the best film scores are the ones you only notice when they are gone.', time: '3d ago', likes: 203, replies: 41 },
+    { id: 18, author: AUTHORS['Ash V.'], content: 'Looking for an editor who can cut drama without losing the silence between the lines. Hashi profile required. Serious inquiries only.', time: '3d ago', badge: { label: 'OPEN ROLE', color: '#a3e635', bg: 'rgba(163,230,53,0.12)' }, likes: 47, replies: 6 },
     { id: 9, author: AUTHORS['Pietro M.'], content: 'Three projects. Two worlds. One platform. Hashi.', time: '3d ago', likes: 201, replies: 34 },
     { id: 10, author: AUTHORS['Bruce W.'], content: 'If you are serious about your craft, you commit. No excuses. No disappearing. Hashi holds you to that.', time: '4d ago', likes: 144, replies: 19 },
 ];
@@ -359,6 +373,24 @@ function RoleModal({ title, project, type, onClose, showToast }: {
     );
 }
 
+// ─── Lightbox ─────────────────────────────────────────────────────────────────
+function Lightbox({ src, onClose }: { src: string; onClose: () => void }) {
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+    }, [onClose]);
+    return (
+        <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 9000, background: 'rgba(0,0,0,0.95)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', cursor: 'zoom-out' }}>
+            <button onClick={onClose} style={{ position: 'absolute', top: '20px', right: '20px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '8px', color: '#9ca3af', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <X size={18} />
+            </button>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={src} alt="full view" onClick={e => e.stopPropagation()} style={{ maxWidth: '92vw', maxHeight: '90vh', objectFit: 'contain', borderRadius: '12px', cursor: 'default', boxShadow: '0 32px 80px rgba(0,0,0,0.8)' }} />
+        </div>
+    );
+}
+
 // ─── Main Page ─────────────────────────────────────────────────────────────────
 export default function FeedPage() {
     const { toasts, show: showToast, dismiss } = useToast();
@@ -370,6 +402,7 @@ export default function FeedPage() {
     const [openRole, setOpenRole] = useState<{ title: string; project: string; type: string } | null>(null);
     const [followed, setFollowed] = useState<Set<string>>(new Set());
     const [sharedPosts, setSharedPosts] = useState<Set<number>>(new Set());
+    const [lightbox, setLightbox] = useState<string | null>(null);
 
     const toggleLike = (id: number) => {
         setPosts(prev => prev.map(p => {
@@ -478,9 +511,12 @@ export default function FeedPage() {
                                     )}
 
                                     {post.image && (
-                                        <div style={{ marginBottom: '12px', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)' }}>
+                                        <div onClick={() => setLightbox(post.image!)} style={{ marginBottom: '12px', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', cursor: 'zoom-in', position: 'relative' }}
+                                            onMouseEnter={e => { (e.currentTarget.querySelector('img') as HTMLImageElement).style.transform = 'scale(1.02)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)'; }}
+                                            onMouseLeave={e => { (e.currentTarget.querySelector('img') as HTMLImageElement).style.transform = 'scale(1)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'; }}>
                                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                                            <img src={post.image} alt="attachment" style={{ width: '100%', maxHeight: '260px', objectFit: 'cover', display: 'block' }} />
+                                            <img src={post.image} alt="attachment" style={{ width: '100%', maxHeight: '260px', objectFit: 'cover', display: 'block', transition: 'transform 0.3s ease' }} />
+                                            <div style={{ position: 'absolute', bottom: '8px', right: '8px', background: 'rgba(0,0,0,0.6)', borderRadius: '6px', padding: '4px 8px', fontSize: '9px', fontFamily: 'Courier New, monospace', color: 'rgba(255,255,255,0.6)', letterSpacing: '0.1em', backdropFilter: 'blur(4px)' }}>CLICK TO EXPAND</div>
                                         </div>
                                     )}
 
@@ -591,6 +627,7 @@ export default function FeedPage() {
                 <RoleModal title={openRole.title} project={openRole.project} type={openRole.type}
                     onClose={() => setOpenRole(null)} showToast={showToast} />
             )}
+            {lightbox && <Lightbox src={lightbox} onClose={() => setLightbox(null)} />}
 
             {/* Toast notifications */}
             <ToastContainer toasts={toasts} onDismiss={dismiss} />
