@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Heart, MessageCircle, Share2, X, Users, Briefcase, Star, UserPlus, Check, Search } from 'lucide-react';
+import { Heart, MessageCircle, Share2, X, Users, Briefcase, Star, UserPlus, Check, Search, ChevronDown, ChevronUp, Layers, MousePointer2, BarChart3, Mail, Plus } from 'lucide-react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Post {
@@ -647,20 +647,84 @@ function PostModal({ post, onClose, onProfile }: { post: Post; onClose: () => vo
     );
 }
 
-// ─── Lightbox ─────────────────────────────────────────────────────────────────
-function Lightbox({ src, onClose }: { src: string; onClose: () => void }) {
-    useEffect(() => {
-        const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-        window.addEventListener('keydown', handler);
-        return () => window.removeEventListener('keydown', handler);
-    }, [onClose]);
+// ─── Project Focus ────────────────────────────────────────────────────────────
+function ProjectFocus({ isEditorSetting = false }: { isEditorSetting?: boolean }) {
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [isArticleHiddenByEditor] = useState(isEditorSetting); // simulating editor preference
+
     return (
-        <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 9000, background: 'rgba(0,0,0,0.95)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', cursor: 'zoom-out' }}>
-            <button onClick={onClose} style={{ position: 'absolute', top: '20px', right: '20px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '8px', color: '#9ca3af', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <X size={18} />
-            </button>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={src} alt="full view" onClick={e => e.stopPropagation()} style={{ maxWidth: '92vw', maxHeight: '90vh', objectFit: 'contain', borderRadius: '12px', cursor: 'default', boxShadow: '0 32px 80px rgba(0,0,0,0.8)' }} />
+        <div style={{ padding: '24px', background: 'linear-gradient(to bottom right, #0d0d0d, #080808)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', margin: '20px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', top: 0, right: 0, width: '100%', height: '100%', background: 'radial-gradient(circle at top right, rgba(163,230,53,0.03), transparent 70%)', pointerEvents: 'none' }} />
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
+                <div style={{ borderLeft: '3px solid #a3e635', paddingLeft: '16px' }}>
+                    <div style={{ fontSize: '11px', fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '4px' }}>Project Focus</div>
+                    <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#f9fafb', letterSpacing: '-0.02em', margin: 0 }}>THE SPAGHETTI MONSTER</h2>
+                </div>
+                <button style={{ padding: '10px 24px', background: '#a3e635', border: 'none', borderRadius: '10px', color: '#000', fontSize: '12px', fontWeight: 800, fontFamily: 'Courier New, monospace', letterSpacing: '0.05em', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 20px rgba(163,230,53,0.2)' }}
+                    onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
+                    onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}>
+                    COLLABORATE
+                </button>
+            </div>
+
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px' }}>
+                <div style={{ flex: '1 1 300px' }}>
+                    <h3 style={{ fontSize: '13px', fontWeight: 600, color: '#9ca3af', marginBottom: '12px' }}>Project Summary</h3>
+                    <p style={{ fontSize: '14px', color: '#d1d5db', lineHeight: 1.7, marginBottom: '20px' }}>
+                        An interactive installation using dynamic wire sculptures and generative audio.
+                        Aiming to debut at the next digital art biennial. This project explores the
+                        intersection of mechanical tension and organic chaos.
+                    </p>
+                </div>
+
+                <div style={{ flex: '0 0 auto', display: 'flex', gap: '10px' }}>
+                    <div style={{ width: '100px', height: '100px', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
+                        <img src="/images/sculpture_1.png" alt="Detail 1" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                    <div style={{ width: '100px', height: '100px', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
+                        <img src="/images/sculpture_2.png" alt="Detail 2" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                </div>
+            </div>
+
+            <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                <h3 style={{ fontSize: '13px', fontWeight: 600, color: '#9ca3af', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    Article
+                </h3>
+
+                <div style={{ position: 'relative' }}>
+                    <div style={{
+                        fontSize: '14px', color: '#9ca3af', lineHeight: 1.7,
+                        maxHeight: isExpanded ? '2000px' : '80px',
+                        overflow: 'hidden',
+                        transition: 'max-height 0.4s ease-in-out',
+                        maskImage: (!isExpanded && !isArticleHiddenByEditor) ? 'none' : !isExpanded ? 'linear-gradient(to bottom, black 20%, transparent 100%)' : 'none'
+                    }}>
+                        <p>The concept behind "The Spaghetti Monster" originated from exploring complexity theory and the chaotic beauty in interconnected systems. We wanted to create an experience where viewers could manipulate physical strands of carbon fiber that would, in turn, influence a real-time stochastic soundscape.</p>
+                        <p style={{ marginTop: '16px' }}>The technical challenge was mapping high-tension physical movements to low-frequency audio oscillations without introducing digital lag. By using custom-made piezoelectric sensors at the anchor points of the sculpture, we converted physical stress into a 24-bit control signal...</p>
+                        <p style={{ marginTop: '16px' }}>Ultimately, the piece serves as a commentary on our own digital entanglement—a mess of wires that we call "connectedness." It's a monster of our own making, beautifully tangled and impossibly deep.</p>
+                    </div>
+
+                    {(isArticleHiddenByEditor || !isExpanded) && (
+                        <button
+                            onClick={() => setIsExpanded(!isExpanded)}
+                            style={{
+                                marginTop: '16px', padding: '10px 0', width: '100%',
+                                background: 'rgba(163,230,53,0.08)', border: '1px solid rgba(163,230,53,0.2)',
+                                borderRadius: '10px', color: '#a3e635', fontSize: '11px', fontWeight: 700,
+                                fontFamily: 'Courier New, monospace', letterSpacing: '0.1em', cursor: 'pointer',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                                transition: 'all 0.2s'
+                            }}
+                            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(163,230,53,0.15)')}
+                            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(163,230,53,0.08)')}
+                        >
+                            {isExpanded ? 'HIDE DEEP CONTEXT' : 'SHOW DEEP CONTEXT'} {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                        </button>
+                    )}
+                </div>
+            </div>
         </div>
     );
 }
@@ -726,18 +790,62 @@ export default function FeedPage() {
                 }
             `}</style>
 
-            {/* ── 2-col layout (feed + sidebar) ─── */}
-            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 300px', maxWidth: '1000px', margin: '0 auto', width: '100%' }}>
+            {/* ── 3-col layout (nav + feed + sidebar) ─── */}
+            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '240px 1fr 300px', maxWidth: '1400px', margin: '0 auto', width: '100%', gap: '1px', background: 'rgba(255,255,255,0.03)' }}>
+
+                {/* ── Left Navigation ──────────────── */}
+                <div style={{ padding: '24px 16px', position: 'sticky', top: 0, height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '20px', background: '#080808' }}>
+                    {/* User Profile Summary */}
+                    <div style={{ padding: '16px', background: '#0d0d0d', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', textAlign: 'center' }}>
+                        <div style={{ margin: '0 auto 12px', width: '64px', height: '64px', borderRadius: '50%', background: '#1e3a5f', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 800, color: 'white' }}>PM</div>
+                        <div style={{ fontSize: '15px', fontWeight: 700, color: '#f9fafb' }}>Pietro Maggiotto</div>
+                        <div style={{ fontSize: '11px', color: '#6b7280', fontFamily: 'Courier New, monospace', marginTop: '4px' }}>Creative Technologist</div>
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#f3f4f6' }}>3.5k</div>
+                                <div style={{ fontSize: '9px', color: '#4b5563', textTransform: 'uppercase' }}>Followers</div>
+                            </div>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#f3f4f6' }}>120</div>
+                                <div style={{ fontSize: '9px', color: '#4b5563', textTransform: 'uppercase' }}>Connect</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        {[
+                            { icon: MousePointer2, label: 'Feed', active: true },
+                            { icon: Layers, label: 'Missions' },
+                            { icon: Briefcase, label: 'My Projects' },
+                            { icon: Users, label: 'Collaborations' },
+                            { icon: BarChart3, label: 'Insights' },
+                            { icon: Mail, label: 'Messages' },
+                        ].map((item, idx) => (
+                            <div key={idx} style={{
+                                display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 12px', borderRadius: '8px',
+                                cursor: 'pointer', transition: 'all 0.15s',
+                                background: item.active ? 'rgba(163,230,53,0.05)' : 'transparent',
+                                borderLeft: `2px solid ${item.active ? '#a3e635' : 'transparent'}`
+                            }}>
+                                <item.icon size={16} color={item.active ? '#a3e635' : '#4b5563'} />
+                                <span style={{ fontSize: '13px', fontWeight: item.active ? 600 : 400, color: item.active ? '#f9fafb' : '#6b7280' }}>{item.label}</span>
+                            </div>
+                        ))}
+                    </nav>
+
+                    <button style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', background: 'rgba(163,230,53,0.1)', border: '1px solid rgba(163,230,53,0.3)', borderRadius: '10px', color: '#a3e635', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>
+                        <Plus size={16} /> New Project
+                    </button>
+                </div>
 
                 {/* ── Center feed ──────────────────── */}
-                <div style={{ borderRight: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', background: '#080808' }}>
                     {/* Sticky search */}
                     <div style={{ position: 'sticky', top: 0, zIndex: 10, background: 'rgba(8,8,8,0.92)', backdropFilter: 'blur(12px)', padding: '14px 20px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                        <div style={{ fontSize: '11px', fontFamily: 'Courier New, monospace', color: '#374151', letterSpacing: '0.2em', marginBottom: '10px' }}>PUBLIC FEED</div>
                         <div style={{ position: 'relative' }}>
                             <Search size={13} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#4b5563' }} />
                             <input type="text" value={search} onChange={e => setSearch(e.target.value)}
-                                placeholder="Search posts, people, projects..."
+                                placeholder="Search creative focus..."
                                 style={{ width: '100%', padding: '9px 14px 9px 32px', background: '#111111', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', color: '#f9fafb', fontSize: '13px', outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s' }}
                                 onFocus={e => (e.target.style.borderColor = 'rgba(255,255,255,0.18)')}
                                 onBlur={e => (e.target.style.borderColor = 'rgba(255,255,255,0.07)')} />
@@ -845,6 +953,8 @@ export default function FeedPage() {
                             </div>
                         </div>
                     ))}
+
+                    <ProjectFocus isEditorSetting={true} />
                 </div>
 
                 <style>{`
@@ -857,7 +967,7 @@ export default function FeedPage() {
                  `}</style>
 
                 {/* ── Right sidebar ─────────────────── */}
-                <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'sticky', top: 0, height: '100vh', overflow: 'auto' }}>
+                <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'sticky', top: 0, height: '100vh', overflow: 'auto', background: '#080808' }}>
 
                     {/* Trending */}
                     <div style={{ background: '#0d0d0d', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '16px' }}>
