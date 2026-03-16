@@ -134,7 +134,7 @@ const INITIAL_POSTS: Post[] = [
         ]
     },
     {
-        id: 2, author: AUTHORS['Pietro M.'], content: 'Looking for a sound designer for a noir short film. Must understand silence as well as sound. Apply via Hashi.', time: '4h ago', badge: { label: 'OPEN ROLE', color: '#65a30d', bg: 'rgba(163,230,53,0.12)' }, likes: 28, replies: 7,
+        id: 2, author: AUTHORS['Pietro M.'], content: 'Early mood board for The Bar-Man sound design. Working on the frequency isolation of the ice cracking. It needs to sound like breaking glass in slow motion.', time: '4h ago', image: '/images/sound_design_console.png', likes: 28, replies: 7,
         comments: [
             { id: 1, author: AUTHORS['Dani M.'], content: 'Posted my showreel link on my profile. Noir is my comfort zone.', time: '3h ago', likes: 6 },
             { id: 2, author: AUTHORS['Rafael G.'], content: 'I work with sound designers regularly. Sara R. on Hashi is exceptional — check her out.', time: '3h ago', likes: 9 },
@@ -152,7 +152,7 @@ const INITIAL_POSTS: Post[] = [
         ]
     },
     {
-        id: 3, author: AUTHORS['Lord Helmet'], content: 'The pasta cannon achieved orbit. Production on Space-Balls continues as planned.', time: '5h ago', likes: 67, replies: 12,
+        id: 3, author: AUTHORS['Lord Helmet'], content: 'The pasta cannon achieved orbit. Production on Space-Balls continues as planned.', time: '5h ago', image: '/images/astronaut_pasta_space.png', likes: 67, replies: 12,
         comments: [
             { id: 1, author: AUTHORS['Tony S.'], content: 'For the record, the orbit was unplanned. The cannon had a minor calibration issue.', time: '4h ago', likes: 22 },
             { id: 2, author: AUTHORS['Pietro M.'], content: 'Minor.', time: '4h ago', likes: 34 },
@@ -179,7 +179,7 @@ const INITIAL_POSTS: Post[] = [
         ]
     },
     {
-        id: 13, author: AUTHORS['Ash V.'], content: 'Three pitches in one week. Two passed, one destroyed us. The one that destroyed us was the best idea. We are rebuilding it and coming back stronger.', time: '9h ago', likes: 93, replies: 17,
+        id: 13, author: AUTHORS['Ash V.'], content: 'Reviewing the pitch structure for our next project. The architecture of a good story needs a solid foundation before you start building.', time: '9h ago', image: '/images/abstract_hashi_overview.png', likes: 93, replies: 17,
         comments: [
             { id: 1, author: AUTHORS['Mia K.'], content: 'The pitch that breaks you is always the one worth rebuilding. I have been there twice.', time: '8h ago', likes: 12 },
             { id: 2, author: AUTHORS['Dani M.'], content: 'What was the concept? You don\'t have to share but now I\'m curious.', time: '9h ago', likes: 5 },
@@ -187,7 +187,7 @@ const INITIAL_POSTS: Post[] = [
         ]
     },
     {
-        id: 5, author: AUTHORS['Bruce W.'], content: 'The Bar-Man wrapped principal photography. Crew was exceptional. Full credits on Hashi.', time: '1d ago', badge: { label: 'PROJECT COMPLETE', color: '#f9fafb', bg: 'rgba(0,0,0,0.08)' }, likes: 103, replies: 21,
+        id: 5, author: AUTHORS['Bruce W.'], content: 'The Bar-Man wrapped principal photography. Crew was exceptional. Full credits on Hashi.', time: '1d ago', badge: { label: 'PROJECT COMPLETE', color: '#f9fafb', bg: 'rgba(0,0,0,0.08)' }, image: '/images/barman_noir_bartender.png', likes: 103, replies: 21,
         comments: [
             { id: 1, author: AUTHORS['Ash V.'], content: 'Congratulations. Wrapping principal is no small thing. Enjoy it for exactly one day then go to post.', time: '22h ago', likes: 14 },
             { id: 2, author: AUTHORS['Mia K.'], content: 'The bar set looked incredible in the BTS shots Pietro posted. Worth every hour of design work.', time: '22h ago', likes: 19 },
@@ -207,7 +207,7 @@ const INITIAL_POSTS: Post[] = [
         ]
     },
     {
-        id: 6, author: AUTHORS['Pietro M.'], content: 'IP page for The Bar-Man is now live. If you want to pitch a sequel or spinoff, the door is open.', time: '1d ago', badge: { label: 'IP PAGE LIVE', color: '#93c5fd', bg: 'rgba(147,197,253,0.1)' }, likes: 56, replies: 4,
+        id: 6, author: AUTHORS['Pietro M.'], content: 'IP page for The Bar-Man is now live. If you want to pitch a sequel or spinoff, the door is open.', time: '1d ago', badge: { label: 'IP PAGE LIVE', color: '#93c5fd', bg: 'rgba(147,197,253,0.1)' }, image: '/images/ethereal_hashi_vault_reliquary.png', likes: 56, replies: 4,
         comments: [
             { id: 1, author: AUTHORS['Mia K.'], content: 'I submitted a pitch for a spinoff set in the same universe. Check your inbox.', time: '20h ago', likes: 7 },
             { id: 2, author: AUTHORS['Ash V.'], content: 'Locking IP early is smart. Most people do it too late after the concept has already leaked.', time: '22h ago', likes: 12 },
@@ -225,7 +225,7 @@ const INITIAL_POSTS: Post[] = [
         ]
     },
     {
-        id: 7, author: AUTHORS['Tony S.'], content: 'The shaker exploded again. Fortunately I had already filed the patent. The Bar-Man production continues.', time: '2d ago', likes: 38, replies: 6,
+        id: 7, author: AUTHORS['Tony S.'], content: 'The shaker exploded again. Fortunately I had already filed the patent. The Bar-Man production continues.', time: '2d ago', image: '/images/shattered_glass_lab.png', likes: 38, replies: 6,
         comments: [
             { id: 1, author: AUTHORS['Lord Helmet'], content: 'I was there. The explosion was, at most, medium sized.', time: '1d ago', likes: 29 },
             { id: 2, author: AUTHORS['Bruce W.'], content: 'I have a close-up of the exact moment it happened. I will keep it as leverage.', time: '2d ago', likes: 31 },
@@ -233,7 +233,7 @@ const INITIAL_POSTS: Post[] = [
         ]
     },
     {
-        id: 16, author: AUTHORS['Mia K.'], content: 'Reminder: production design is not decoration. It is the architecture of emotion. Every prop, every color temperature, every sight line is a decision that affects performance.', time: '2d ago', likes: 87, replies: 14,
+        id: 16, author: AUTHORS['Mia K.'], content: 'Reviewing reference boards. Production design is the architecture of emotion. Every prop, every color temperature, every sight line is a decision that affects performance.', time: '2d ago', image: '/images/bg_hashi_overview.png', likes: 87, replies: 14,
         comments: [
             { id: 1, author: AUTHORS['Dani M.'], content: 'This needs to be printed and put in every production office. Framed.', time: '1d ago', likes: 19 },
             { id: 2, author: AUTHORS['Bruce W.'], content: 'Every director should have to read this before they get a crew. Non-negotiable.', time: '1d ago', likes: 25 },
@@ -242,7 +242,7 @@ const INITIAL_POSTS: Post[] = [
         ]
     },
     {
-        id: 8, author: AUTHORS['Lord Helmet'], content: 'In space, no one can hear you slurp spaghetti. But I can. I always can.', time: '02:33', likes: 89, replies: 14,
+        id: 8, author: AUTHORS['Lord Helmet'], content: 'In space, no one can hear you slurp spaghetti. But I can. I always can.', time: '02:33', image: '/images/astronaut_pasta_space.png', likes: 89, replies: 14,
         comments: [
             { id: 1, author: AUTHORS['Pietro M.'], content: 'This was said at 2:33am. We are choosing not to investigate further.', time: 'late night', likes: 67 },
             { id: 2, author: AUTHORS['Tony S.'], content: 'I heard it from the lab. Proceeded to eat spaghetti out of respect.', time: 'late night', likes: 44 },
@@ -250,7 +250,7 @@ const INITIAL_POSTS: Post[] = [
         ]
     },
     {
-        id: 17, author: AUTHORS['Rafael G.'], content: 'Unpopular opinion: the best film scores are the ones you only notice when they are gone.', time: '3d ago', likes: 203, replies: 41,
+        id: 17, author: AUTHORS['Rafael G.'], content: 'Unpopular opinion: the best film scores are the ones you only notice when they are gone.', time: '3d ago', image: '/images/studio_score_session.png', likes: 203, replies: 41,
         comments: [
             { id: 1, author: AUTHORS['Mia K.'], content: 'The best production design too. You only feel the space when it is gone and you\'re suddenly in a hotel ballroom.', time: '2d ago', likes: 22 },
             { id: 2, author: AUTHORS['Dani M.'], content: 'The same is true for cinematography. The shots that get remembered are the ones with invisible craft.', time: '3d ago', likes: 18 },
@@ -259,7 +259,7 @@ const INITIAL_POSTS: Post[] = [
         ]
     },
     {
-        id: 18, author: AUTHORS['Ash V.'], content: 'Looking for an editor who can cut drama without losing the silence between the lines. Hashi profile required. Serious inquiries only.', time: '3d ago', badge: { label: 'OPEN ROLE', color: '#65a30d', bg: 'rgba(163,230,53,0.12)' }, likes: 47, replies: 6,
+        id: 18, author: AUTHORS['Ash V.'], content: 'The editing timeline for Act 3 is finally locked. Cutting drama without losing the silence between the lines is the true challenge.', time: '3d ago', image: '/images/timeline_editor.png', likes: 47, replies: 6,
         comments: [
             { id: 1, author: AUTHORS['Mia K.'], content: 'Dropped you a DM. I know someone who edits like this.', time: '2d ago', likes: 4 },
             { id: 2, author: AUTHORS['Bruce W.'], content: 'The silence between lines is where the real performance lives. Any editor worth their salt knows this.', time: '3d ago', likes: 8 },
@@ -267,7 +267,7 @@ const INITIAL_POSTS: Post[] = [
         ]
     },
     {
-        id: 9, author: AUTHORS['Pietro M.'], content: 'Three projects. Two worlds. One platform. Hashi.', time: '3d ago', likes: 201, replies: 34,
+        id: 9, author: AUTHORS['Pietro M.'], content: 'Reviewing the multi-project architecture. Three projects, one ecosystem. Hashi.', time: '3d ago', image: '/images/abstract_hashi_overview.png', likes: 201, replies: 34,
         comments: [
             { id: 1, author: AUTHORS['Mia K.'], content: 'Joined specifically for The Bar-Man. Zero regrets.', time: '2d ago', likes: 14 },
             { id: 2, author: AUTHORS['Ash V.'], content: 'Two worlds is an understatement. The projects here feel like they\'re from different planets.', time: '2d ago', likes: 18 },
@@ -276,7 +276,7 @@ const INITIAL_POSTS: Post[] = [
         ]
     },
     {
-        id: 10, author: AUTHORS['Bruce W.'], content: 'If you are serious about your craft, you commit. No excuses. No disappearing. Hashi holds you to that.', time: '4d ago', likes: 144, replies: 19,
+        id: 10, author: AUTHORS['Bruce W.'], content: 'Reviewing the dailies on the monitor. If you are serious about your craft, you commit to every frame.', time: '4d ago', image: '/images/director_monitor_noir.png', likes: 144, replies: 19,
         comments: [
             { id: 1, author: AUTHORS['Ash V.'], content: 'Bookmarked. Sending to every collaborator who has ever ghosted me mid-project.', time: '3d ago', likes: 28 },
             { id: 2, author: AUTHORS['Mia K.'], content: 'This is the reason I only work with people who are already on Hashi.', time: '3d ago', likes: 22 },
@@ -893,17 +893,7 @@ export default function FeedPage() {
                                         </div>
                                     )}
 
-                                    <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <button onClick={e => { e.stopPropagation(); setOpenPost(post); }}
-                                            style={{ flex: 1, padding: '10px', background: 'rgba(163,230,53,0.06)', border: '1px solid rgba(163,230,53,0.2)', borderRadius: '10px', color: '#65a30d', fontSize: '11px', fontWeight: 700, fontFamily: 'Courier New, monospace', letterSpacing: '0.1em', cursor: 'pointer', transition: 'all 0.15s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-                                            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(163,230,53,0.12)'; e.currentTarget.style.borderColor = 'rgba(163,230,53,0.4)'; }}
-                                            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(163,230,53,0.06)'; e.currentTarget.style.borderColor = 'rgba(163,230,53,0.2)'; }}>
-                                            OPEN THREAD <MessageCircle size={14} />
-                                        </button>
-                                        <div className="view-thread-hint" style={{ fontSize: '10px', fontWeight: 600, fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.1em', opacity: 0.4, transition: 'all 0.2s ease' }}>
-                                            CLICK CARD TO VIEW
-                                        </div>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -917,8 +907,6 @@ export default function FeedPage() {
                          from { opacity: 0; transform: translateY(12px); }
                          to { opacity: 1; transform: translateY(0); }
                      }
-                     .view-thread-hint { opacity: 0; transform: translateY(4px); transition: all 0.2s ease; }
-                     .hoverable-post:hover .view-thread-hint { opacity: 0.8 !important; transform: translateY(0); }
                  `}</style>
 
                 {/* ── Right sidebar ─────────────────── */}
