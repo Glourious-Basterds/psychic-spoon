@@ -408,7 +408,7 @@ function ProfileModal({ name, onClose, onFollow, followed, showToast }: {
                         <div style={{ display: 'flex', gap: '8px', marginLeft: 'auto' }}>
                             <button onClick={() => { onFollow(name); showToast(isFollowing ? `Unfollowed ${name}` : `Now following ${name}`, 'success'); }}
                                 style={{ padding: '6px 16px', background: isFollowing ? 'rgba(163,230,53,0.1)' : 'rgba(0,0,0,0.04)', border: `1px solid ${isFollowing ? 'rgba(163,230,53,0.3)' : 'rgba(0,0,0,0.1)'}`, borderRadius: '20px', color: isFollowing ? '#65a30d' : '#6b7280', fontSize: '11px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', fontFamily: 'Courier New, monospace', letterSpacing: '0.06em', transition: 'all 0.15s' }}>
-                                {isFollowing ? <><Check size={10} /> FOLLOWING</> : <><UserPlus size={10} /> FOLLOW</>}
+                                {isFollowing ? <><Check size={10} /> CONNECTED</> : <><UserPlus size={10} /> CONNECT</>}
                             </button>
                             <button onClick={() => showToast(`Invite sent to ${name}`, 'success')}
                                 style={{ padding: '6px 16px', background: 'rgba(163,230,53,0.08)', border: '1px solid rgba(163,230,53,0.2)', borderRadius: '20px', color: '#65a30d', fontSize: '11px', cursor: 'pointer', fontFamily: 'Courier New, monospace', letterSpacing: '0.06em' }}>
@@ -765,8 +765,8 @@ export default function FeedPage() {
     const toggleFollow = (name: string) => {
         setFollowed(prev => {
             const next = new Set(prev);
-            if (next.has(name)) { next.delete(name); showToast(`Unfollowed ${name}`, 'info'); }
-            else { next.add(name); showToast(`Now following ${name}`, 'success'); }
+            if (next.has(name)) { next.delete(name); showToast(`Disconnected from ${name}`, 'info'); }
+            else { next.add(name); showToast(`Now connected with ${name}`, 'success'); }
             return next;
         });
     };
@@ -822,12 +822,12 @@ export default function FeedPage() {
                                 <div style={{ flex: 1, minWidth: 0 }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '5px', flexWrap: 'wrap' }}>
                                         <span onClick={(e: React.MouseEvent) => { e.stopPropagation(); setOpenProfile(post.author.name); }}
-                                            style={{ fontSize: '14px', fontWeight: 600, color: '#f9fafb', cursor: 'pointer', transition: 'color 0.15s' }}
+                                            style={{ fontSize: '14px', fontWeight: 600, color: '#030712', cursor: 'pointer', transition: 'color 0.15s' }}
                                             onMouseEnter={e => (e.currentTarget.style.color = '#65a30d')}
-                                            onMouseLeave={e => (e.currentTarget.style.color = '#f9fafb')}>
+                                            onMouseLeave={e => (e.currentTarget.style.color = '#030712')}>
                                             {post.author.name}
                                         </span>
-                                        <span style={{ fontSize: '10px', color: '#4b5563', fontFamily: 'Courier New, monospace' }}>{post.author.role}</span>
+                                        <span style={{ fontSize: '10px', color: '#1f2937', fontFamily: 'Courier New, monospace' }}>{post.author.role}</span>
                                         {['Mia K.', 'Rafael G.', 'Yuki T.', 'Dani M.', 'Ash V.'].includes(post.author.name) && (
                                             <span style={{ fontSize: '8px', padding: '1px 5px', background: 'rgba(163,230,53,0.1)', border: '1px solid rgba(163,230,53,0.3)', borderRadius: '4px', color: '#65a30d', fontFamily: 'Courier New, monospace', fontWeight: 600 }}>NEW</span>
                                         )}
@@ -1001,6 +1001,14 @@ export default function FeedPage() {
             )}
             {openPost && (
                 <PostModal key={openPost.id} post={openPost} onClose={() => setOpenPost(null)} onProfile={setOpenProfile} />
+            )}
+
+            {lightbox && (
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.9)', zIndex: 4000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px', cursor: 'zoom-out' }} onClick={() => setLightbox(null)}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={lightbox} alt="Full screen" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px', cursor: 'default' }} onClick={e => e.stopPropagation()} />
+                    <button onClick={() => setLightbox(null)} style={{ position: 'absolute', top: '24px', right: '24px', background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%', padding: '12px', color: 'white', cursor: 'pointer', display: 'flex', backdropFilter: 'blur(4px)', transition: 'background 0.2s' }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}><X size={24} /></button>
+                </div>
             )}
 
             {/* Toast notifications */}
