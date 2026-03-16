@@ -790,53 +790,8 @@ export default function FeedPage() {
                 }
             `}</style>
 
-            {/* ── 3-col layout (nav + feed + sidebar) ─── */}
-            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '240px 1fr 300px', maxWidth: '1400px', margin: '0 auto', width: '100%', gap: '1px', background: 'rgba(0,0,0,0.03)' }}>
-
-                {/* ── Left Navigation ──────────────── */}
-                <div style={{ padding: '24px 16px', position: 'sticky', top: 0, height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '20px', background: '#f9fafb' }}>
-                    {/* User Profile Summary */}
-                    <div style={{ padding: '16px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: '12px', textAlign: 'center' }}>
-                        <div style={{ margin: '0 auto 12px', width: '64px', height: '64px', borderRadius: '50%', background: '#1e3a5f', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 800, color: 'white' }}>PM</div>
-                        <div style={{ fontSize: '15px', fontWeight: 700, color: '#f9fafb' }}>Pietro Maggiotto</div>
-                        <div style={{ fontSize: '11px', color: '#6b7280', fontFamily: 'Courier New, monospace', marginTop: '4px' }}>Creative Technologist</div>
-                        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
-                            <div style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#ffffff' }}>3.5k</div>
-                                <div style={{ fontSize: '9px', color: '#4b5563', textTransform: 'uppercase' }}>Followers</div>
-                            </div>
-                            <div style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#ffffff' }}>120</div>
-                                <div style={{ fontSize: '9px', color: '#4b5563', textTransform: 'uppercase' }}>Connect</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        {[
-                            { icon: MousePointer2, label: 'Feed', active: true },
-                            { icon: Layers, label: 'Missions' },
-                            { icon: Briefcase, label: 'My Projects' },
-                            { icon: Users, label: 'Collaborations' },
-                            { icon: BarChart3, label: 'Insights' },
-                            { icon: Mail, label: 'Messages' },
-                        ].map((item, idx) => (
-                            <div key={idx} style={{
-                                display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 12px', borderRadius: '8px',
-                                cursor: 'pointer', transition: 'all 0.15s',
-                                background: item.active ? 'rgba(163,230,53,0.05)' : 'transparent',
-                                borderLeft: `2px solid ${item.active ? '#65a30d' : 'transparent'}`
-                            }}>
-                                <item.icon size={16} color={item.active ? '#65a30d' : '#4b5563'} />
-                                <span style={{ fontSize: '13px', fontWeight: item.active ? 600 : 400, color: item.active ? '#f9fafb' : '#6b7280' }}>{item.label}</span>
-                            </div>
-                        ))}
-                    </nav>
-
-                    <button style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', background: 'rgba(163,230,53,0.1)', border: '1px solid rgba(163,230,53,0.3)', borderRadius: '10px', color: '#65a30d', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>
-                        <Plus size={16} /> New Project
-                    </button>
-                </div>
+            {/* ── 2-col layout (feed + sidebar) ─── */}
+            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 320px', maxWidth: '1200px', margin: '0 auto', width: '100%', gap: '1px', background: 'rgba(0,0,0,0.03)' }}>
 
                 {/* ── Center feed ──────────────────── */}
                 <div style={{ display: 'flex', flexDirection: 'column', background: '#f9fafb' }}>
@@ -968,6 +923,23 @@ export default function FeedPage() {
 
                 {/* ── Right sidebar ─────────────────── */}
                 <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'sticky', top: 0, height: '100vh', overflow: 'auto', background: '#f9fafb' }}>
+
+                    {/* User Profile Summary */}
+                    <div style={{ padding: '16px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: '12px', textAlign: 'center' }}>
+                        <div style={{ margin: '0 auto 12px', width: '64px', height: '64px', borderRadius: '50%', background: '#1e3a5f', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 800, color: 'white' }}>PM</div>
+                        <div style={{ fontSize: '15px', fontWeight: 700, color: '#030712' }}>Pietro Maggiotto</div>
+                        <div style={{ fontSize: '11px', color: '#4b5563', fontFamily: 'Courier New, monospace', marginTop: '4px' }}>Creative Technologist</div>
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#1f2937' }}>3.5k</div>
+                                <div style={{ fontSize: '9px', color: '#6b7280', textTransform: 'uppercase' }}>Followers</div>
+                            </div>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#1f2937' }}>120</div>
+                                <div style={{ fontSize: '9px', color: '#6b7280', textTransform: 'uppercase' }}>Connect</div>
+                            </div>
+                        </div>
+                    </div>
 
                     {/* Trending */}
                     <div style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: '12px', padding: '16px' }}>
