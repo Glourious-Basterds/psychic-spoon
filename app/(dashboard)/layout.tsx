@@ -69,14 +69,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }, []);
 
     return (
-        <div className="h-screen bg-black text-white flex flex-col md:flex-row overflow-hidden relative selection:bg-white/10 selection:text-white">
+        <div className="h-screen bg-[#f9fafb] text-[#030712] flex flex-col md:flex-row overflow-hidden relative selection:bg-black/10 selection:text-[#030712]">
             {/* Pure Black Background - Subtle Gradients from CSS hashi-theme-bg */}
             <div className="absolute inset-0 z-0 pointer-events-none hashi-theme-bg opacity-40" />
 
             {/* Sidebar Toggle Button (Floating when collapsed) */}
             <button
                 onClick={toggleSidebar}
-                className={`fixed top-8 left-0 z-[100] group flex items-center gap-2 pl-2 pr-4 py-2 bg-[#0a0a0a] backdrop-blur-xl border border-white/5 text-white/40 shadow-[20px_0_50px_rgba(0,0,0,0.5)] hover:text-white transition-all duration-500 rounded-r-full
+                className={`fixed top-8 left-0 z-[100] group flex items-center gap-2 pl-2 pr-4 py-2 bg-[#ffffff] backdrop-blur-xl border border-black/5 text-black/40 shadow-[20px_0_50px_rgba(0,0,0,0.05)] hover:text-[#030712] transition-all duration-500 rounded-r-full
                     ${sidebarCollapsed ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0 pointer-events-none'}`}
             >
                 <PanelLeftOpen size={18} strokeWidth={1.5} />
@@ -89,28 +89,28 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <Link
                         key={notif.id}
                         href={`/comms?project=${notif.projectId}&channel=${notif.channelId}`}
-                        className="w-80 bg-[#0a0a0a]/90 backdrop-blur-2xl border border-white/5 p-4 shadow-[30px_30px_70px_rgba(0,0,0,0.8)] pointer-events-auto animate-in slide-in-from-right duration-700 hover:border-white/20 transition-all group"
+                        className="w-80 bg-[#ffffff]/90 backdrop-blur-2xl border border-black/5 p-4 shadow-[30px_30px_70px_rgba(0,0,0,0.05)] pointer-events-auto animate-in slide-in-from-right duration-700 hover:border-black/20 transition-all group"
                     >
                         <div className="flex justify-between items-start mb-2">
-                            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 group-hover:text-white transition-colors hashi-font">{notif.title}</h4>
-                            <span className="text-[9px] font-bold text-white/20 uppercase">{notif.time}</span>
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-black/40 group-hover:text-[#030712] transition-colors hashi-font">{notif.title}</h4>
+                            <span className="text-[9px] font-bold text-black/20 uppercase">{notif.time}</span>
                         </div>
-                        <p className="text-sm font-medium text-white/80 hashi-font tracking-tight leading-relaxed line-clamp-2">{notif.message}</p>
+                        <p className="text-sm font-medium text-black/80 hashi-font tracking-tight leading-relaxed line-clamp-2">{notif.message}</p>
                     </Link>
                 ))}
             </div>
 
             {/* Sidebar */}
-            <aside className={`fixed md:relative top-0 bottom-0 left-0 z-40 p-6 flex flex-col gap-8 transition-all duration-500 ease-in-out bg-black border-r border-white/5 text-white/60 shadow-[20px_0_60px_rgba(0,0,0,0.3)]
+            <aside className={`fixed md:relative top-0 bottom-0 left-0 z-40 p-6 flex flex-col gap-8 transition-all duration-500 ease-in-out bg-[#ffffff] border-r border-black/5 text-black/60 shadow-[20px_0_60px_rgba(0,0,0,0.05)]
                 ${sidebarCollapsed ? 'w-0 -translate-x-full opacity-0 p-0 overflow-hidden' : 'w-full md:w-64 translate-x-0 opacity-100'}`}>
 
                 <div className="flex flex-col gap-6">
                     {/* Logo & Close Toggle */}
                     <div className="flex items-center justify-between">
-                        <Link href="/dashboard" className="text-2xl font-black tracking-[0.3em] text-white hover:opacity-80 transition-all hashi-font">
+                        <Link href="/dashboard" className="text-2xl font-black tracking-[0.3em] text-[#030712] hover:opacity-80 transition-all hashi-font">
                             hashi.
                         </Link>
-                        <button onClick={toggleSidebar} className="text-white/20 hover:text-white transition-colors">
+                        <button onClick={toggleSidebar} className="text-black/40 hover:text-[#030712] transition-colors">
                             <PanelLeftClose size={20} strokeWidth={1.5} />
                         </button>
                     </div>
@@ -127,34 +127,34 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                 key={item.href}
                                 href={item.href}
                                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all group border ${isActive
-                                    ? 'border-[rgba(163,230,53,0.25)] text-[#a3e635]'
-                                    : 'border-transparent text-white/40 hover:text-white/80 hover:bg-white/[0.03]'
+                                    ? 'border-[rgba(163,230,53,0.5)] text-[#65a30d]'
+                                    : 'border-transparent text-black/60 hover:text-black/90 hover:bg-black/[0.03]'
                                     }`}
-                                style={isActive ? { background: 'rgba(163,230,53,0.08)' } : undefined}
+                                style={isActive ? { background: 'rgba(163,230,53,0.1)' } : undefined}
                             >
-                                <Icon size={16} strokeWidth={1.5} style={isActive ? { color: '#a3e635' } : undefined} />
+                                <Icon size={16} strokeWidth={1.5} style={isActive ? { color: '#65a30d' } : undefined} />
                                 <span className={`text-xs tracking-wide ${isActive ? 'font-semibold' : 'font-normal'}`}>{item.label}</span>
                             </Link>
                         );
                     })}
                 </nav>
 
-                <div className="flex flex-col gap-2 pt-8 z-10 border-t border-white/5">
+                <div className="flex flex-col gap-2 pt-8 z-10 border-t border-black/10">
                     <button
                         onClick={() => signOut({ callbackUrl: '/' })}
-                        className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all w-full text-left text-white/40 hover:text-white hover:bg-white/[0.03]"
+                        className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all w-full text-left text-black/60 hover:text-[#030712] hover:bg-black/[0.03]"
                     >
                         <LogOut size={16} strokeWidth={1.5} />
                         <span className="text-xs tracking-wide">Sign Out</span>
                     </button>
-                    <Link href="/vault" className="mt-2 px-4 py-3 rounded-lg bg-white/[0.02] border border-white/5 hover:border-[rgba(163,230,53,0.2)] hover:bg-[rgba(163,230,53,0.04)] transition-all block">
-                        <p className="text-[9px] font-bold text-white/30 tracking-[0.25em] uppercase hover:text-[#a3e635] transition-colors">Immortalize your IP →</p>
+                    <Link href="/vault" className="mt-2 px-4 py-3 rounded-lg bg-black/[0.02] border border-black/10 hover:border-[rgba(163,230,53,0.4)] hover:bg-[rgba(163,230,53,0.08)] transition-all block">
+                        <p className="text-[9px] font-bold text-black/50 tracking-[0.25em] uppercase hover:text-[#65a30d] transition-colors">Immortalize your IP →</p>
                     </Link>
                 </div>
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 relative overflow-hidden z-10 p-0 bg-black">
+            <main className="flex-1 relative overflow-hidden z-10 p-0 bg-[#f9fafb]">
                 {children}
             </main>
 

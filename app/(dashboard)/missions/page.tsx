@@ -293,7 +293,7 @@ export default function MissionsPage() {
                                             <div className="mission-rating-row">
                                                 <div className="mission-stars">
                                                     {[1, 2, 3, 4, 5].map(s => (
-                                                        <span key={s} style={{ color: s <= (mission.rating || 0) ? '#facc15' : '#374151' }}>★</span>
+                                                        <span key={s} style={{ color: s <= (mission.rating || 0) ? '#facc15' : '#1f2937' }}>★</span>
                                                     ))}
                                                 </div>
                                                 <span className="mission-rating-label">Your project rating</span>
@@ -389,9 +389,9 @@ export default function MissionsPage() {
                                                                             key={i}
                                                                             className="mission-due-box"
                                                                             onClick={() => setDueDateDetail(d.detail)}
-                                                                            style={{ cursor: 'pointer', background: '#111111', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '8px', padding: '10px 12px', textAlign: 'left', transition: 'border-color 0.15s' }}
+                                                                            style={{ cursor: 'pointer', background: '#ffffff', border: '1px solid rgba(0,0,0,0.07)', borderRadius: '8px', padding: '10px 12px', textAlign: 'left', transition: 'border-color 0.15s' }}
                                                                             onMouseEnter={e => (e.currentTarget.style.borderColor = `${URGENCY_COLOR[d.urgency]}40`)}
-                                                                            onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}
+                                                                            onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(0,0,0,0.07)')}
                                                                         >
                                                                             <div className="mission-due-label">{d.label}</div>
                                                                             <div className="mission-due-date" style={{ color: URGENCY_COLOR[d.urgency] }}>{d.date}</div>
@@ -409,7 +409,7 @@ export default function MissionsPage() {
                                         {isExpanded && mission.status === 'COMPLETED' && (
                                             <div className="mission-rating-row">
                                                 <div className="mission-stars">
-                                                    {[1, 2, 3, 4, 5].map(s => <span key={s} style={{ color: s <= (mission.rating || 0) ? '#facc15' : '#374151' }}>★</span>)}
+                                                    {[1, 2, 3, 4, 5].map(s => <span key={s} style={{ color: s <= (mission.rating || 0) ? '#facc15' : '#1f2937' }}>★</span>)}
                                                 </div>
                                                 <span className="mission-rating-label">Your project rating</span>
                                                 <span className="mission-views">👁 {mission.views} views</span>
@@ -438,11 +438,11 @@ export default function MissionsPage() {
                     top: tooltip.y,
                     transform: 'translate(-50%, -100%)',
                     background: '#1c1c1c',
-                    border: '1px solid rgba(255,255,255,0.12)',
+                    border: '1px solid rgba(0,0,0,0.12)',
                     borderRadius: '8px',
                     padding: '8px 12px',
                     fontSize: '11px',
-                    color: '#d1d5db',
+                    color: '#1f2937',
                     fontFamily: 'Courier New, monospace',
                     pointerEvents: 'none',
                     zIndex: 9999,
@@ -457,83 +457,83 @@ export default function MissionsPage() {
             {/* Due Date Detail Modal */}
             {dueDateDetail && (
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }} onClick={() => setDueDateDetail(null)}>
-                    <div style={{ background: '#111111', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', padding: '28px', maxWidth: '380px', width: '100%', position: 'relative' }} onClick={e => e.stopPropagation()}>
+                    <div style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '16px', padding: '28px', maxWidth: '380px', width: '100%', position: 'relative' }} onClick={e => e.stopPropagation()}>
                         <button onClick={() => setDueDateDetail(null)} style={{ position: 'absolute', top: '14px', right: '14px', background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280' }}><X size={16} /></button>
                         <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>Due Date Details</div>
-                        <p style={{ fontSize: '14px', color: '#d1d5db', lineHeight: 1.7, margin: 0 }}>{dueDateDetail}</p>
+                        <p style={{ fontSize: '14px', color: '#1f2937', lineHeight: 1.7, margin: 0 }}>{dueDateDetail}</p>
                     </div>
                 </div>
             )}
 
             <style>{`
-                .missions-root { display: flex; flex-direction: column; height: 100vh; overflow-y: auto; background: #0a0a0a; color: #e5e7eb; font-family: 'Inter', sans-serif; }
-                .missions-topbar { display: flex; align-items: center; gap: 16px; padding: 0 24px; height: 56px; background: #111111; border-bottom: 1px solid rgba(255,255,255,0.06); flex-shrink: 0; }
+                .missions-root { display: flex; flex-direction: column; height: 100vh; overflow-y: auto; background: #ffffff; color: #1f2937; font-family: 'Inter', sans-serif; }
+                .missions-topbar { display: flex; align-items: center; gap: 16px; padding: 0 24px; height: 56px; background: #ffffff; border-bottom: 1px solid rgba(0,0,0,0.06); flex-shrink: 0; }
                 .missions-title { font-size: 15px; font-weight: 600; color: #f9fafb; margin: 0; white-space: nowrap; }
                 .missions-search-wrap { position: relative; flex: 1; max-width: 360px; }
                 .missions-search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #4b5563; pointer-events: none; }
-                .missions-search { width: 100%; background: #0d0d0d; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 6px 30px 6px 32px; font-size: 12px; font-family: 'Courier New', monospace; color: #d1d5db; outline: none; transition: border-color 0.2s; box-sizing: border-box; }
+                .missions-search { width: 100%; background: #ffffff; border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; padding: 6px 30px 6px 32px; font-size: 12px; font-family: 'Courier New', monospace; color: #1f2937; outline: none; transition: border-color 0.2s; box-sizing: border-box; }
                 .missions-search::placeholder { color: #4b5563; }
-                .missions-search:focus { border-color: rgba(255,255,255,0.16); }
+                .missions-search:focus { border-color: rgba(0,0,0,0.16); }
                 .missions-filters { display: flex; gap: 4px; margin-left: auto; }
-                .missions-filter-tab { padding: 4px 12px; font-size: 10px; font-weight: 700; font-family: 'Courier New', monospace; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: #6b7280; cursor: pointer; transition: all 0.15s; }
-                .missions-filter-tab:hover { color: #d1d5db; border-color: rgba(255,255,255,0.2); }
-                .missions-filter-tab.active { background: rgba(163,230,53,0.12); color: #a3e635; border-color: rgba(163,230,53,0.3); }
+                .missions-filter-tab { padding: 4px 12px; font-size: 10px; font-weight: 700; font-family: 'Courier New', monospace; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 20px; border: 1px solid rgba(0,0,0,0.08); background: transparent; color: #6b7280; cursor: pointer; transition: all 0.15s; }
+                .missions-filter-tab:hover { color: #1f2937; border-color: rgba(0,0,0,0.2); }
+                .missions-filter-tab.active { background: rgba(163,230,53,0.12); color: #65a30d; border-color: rgba(163,230,53,0.3); }
                 .missions-content { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 32px; }
                 .missions-section { display: flex; flex-direction: column; gap: 8px; }
                 .missions-divider { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
                 .missions-divider-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'Courier New', monospace; color: #4b5563; white-space: nowrap; }
-                .missions-divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
-                .mission-card { background: #111111; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
-                .mission-card:hover { border-color: rgba(255,255,255,0.12); }
+                .missions-divider-line { flex: 1; height: 1px; background: rgba(0,0,0,0.06); }
+                .mission-card { background: #ffffff; border: 1px solid rgba(0,0,0,0.07); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
+                .mission-card:hover { border-color: rgba(0,0,0,0.12); }
                 .mission-card-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; cursor: pointer; gap: 16px; user-select: none; }
                 .mission-header-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
                 .mission-status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
                 .mission-title { font-size: 15px; font-weight: 600; color: #f9fafb; line-height: 1.2; }
                 .mission-sub { font-size: 11px; font-family: 'Courier New', monospace; color: #6b7280; margin-top: 2px; letter-spacing: 0.05em; }
                 .mission-header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-                .mission-mini-bar { width: 80px; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+                .mission-mini-bar { width: 80px; height: 4px; background: rgba(0,0,0,0.08); border-radius: 2px; overflow: hidden; }
                 .mission-mini-bar-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); border-radius: 2px; }
                 .mission-pct { font-size: 11px; font-family: 'Courier New', monospace; font-weight: 700; min-width: 32px; text-align: right; }
                 .mission-offer { font-size: 11px; font-family: 'Courier New', monospace; font-weight: 700; color: #fb923c; }
                 .mission-badge { font-size: 10px; font-weight: 700; font-family: 'Courier New', monospace; letter-spacing: 0.06em; padding: 3px 10px; border-radius: 20px; white-space: nowrap; transition: opacity 0.15s; }
                 .mission-badge:hover { opacity: 0.75; }
                 .mission-chevron { color: #4b5563; flex-shrink: 0; }
-                .mission-rating-row { display: flex; align-items: center; gap: 10px; padding: 10px 18px; background: #0e0e0e; border-top: 1px solid rgba(255,255,255,0.06); font-family: 'Courier New', monospace; font-size: 11px; }
+                .mission-rating-row { display: flex; align-items: center; gap: 10px; padding: 10px 18px; background: #0e0e0e; border-top: 1px solid rgba(0,0,0,0.06); font-family: 'Courier New', monospace; font-size: 11px; }
                 .mission-stars { font-size: 14px; letter-spacing: 1px; }
                 .mission-rating-label { color: #4b5563; flex: 1; }
                 .mission-views { color: #6b7280; }
                 .mission-rep { color: #4ade80; font-weight: 700; }
-                .mission-body-line { height: 1px; background: rgba(255,255,255,0.06); }
+                .mission-body-line { height: 1px; background: rgba(0,0,0,0.06); }
                 .mission-body-inner { display: flex; padding: 20px 18px; background: #0e0e0e; }
                 .mission-col-left { flex: 1; display: flex; flex-direction: column; gap: 20px; padding-right: 20px; }
-                .mission-col-divider { width: 1px; background: rgba(255,255,255,0.06); flex-shrink: 0; }
+                .mission-col-divider { width: 1px; background: rgba(0,0,0,0.06); flex-shrink: 0; }
                 .mission-col-right { flex: 1; display: flex; flex-direction: column; gap: 20px; padding-left: 20px; }
                 .mission-section-block { display: flex; flex-direction: column; gap: 8px; }
                 .mission-section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'Courier New', monospace; color: #4b5563; }
-                .mission-summary-text { font-size: 13px; line-height: 1.6; color: #9ca3af; margin: 0; }
+                .mission-summary-text { font-size: 13px; line-height: 1.6; color: #6b7280; margin: 0; }
                 .mission-members { display: flex; align-items: center; gap: 4px; margin-top: 4px; }
-                .mission-avatar { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #0e0e0e; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.8); margin-left: -4px; cursor: default; transition: transform 0.15s; }
+                .mission-avatar { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #0e0e0e; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: rgba(0,0,0,0.8); margin-left: -4px; cursor: default; transition: transform 0.15s; }
                 .mission-avatar:first-child { margin-left: 0; }
                 .mission-avatar:hover { transform: scale(1.2); z-index: 10; }
                 .mission-extra-members { font-size: 11px; font-family: 'Courier New', monospace; color: #6b7280; margin-left: 6px; }
-                .mission-progress-bar { height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+                .mission-progress-bar { height: 4px; background: rgba(0,0,0,0.08); border-radius: 2px; overflow: hidden; }
                 .mission-progress-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); border-radius: 2px; }
                 .mission-progress-meta { display: flex; justify-content: space-between; font-size: 11px; font-family: 'Courier New', monospace; color: #6b7280; }
                 .mission-milestones { display: flex; flex-wrap: wrap; gap: 6px; }
                 .mission-milestone { font-size: 11px; font-family: 'Courier New', monospace; padding: 3px 10px; border-radius: 20px; font-weight: 600; transition: opacity 0.15s; }
                 .mission-milestone:hover { opacity: 0.75; }
                 .mission-milestone-done { background: rgba(34,197,94,0.08); color: #4b5563; border: 1px solid rgba(34,197,94,0.15); }
-                .mission-milestone-active { background: rgba(163,230,53,0.1); color: #a3e635; border: 1px solid rgba(163,230,53,0.3); }
-                .mission-milestone-future { background: rgba(255,255,255,0.04); color: #4b5563; border: 1px solid rgba(255,255,255,0.06); }
+                .mission-milestone-active { background: rgba(163,230,53,0.1); color: #65a30d; border: 1px solid rgba(163,230,53,0.3); }
+                .mission-milestone-future { background: rgba(0,0,0,0.04); color: #4b5563; border: 1px solid rgba(0,0,0,0.06); }
                 .mission-photos-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 6px; height: 100px; }
-                .mission-photo { border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; }
+                .mission-photo { border-radius: 8px; border: 1px solid rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; }
                 .mission-photo-emoji { font-size: 20px; }
                 .mission-due-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
                 .mission-due-label { font-size: 9px; font-family: 'Courier New', monospace; letter-spacing: 0.1em; text-transform: uppercase; color: #4b5563; margin-bottom: 4px; }
                 .mission-due-date { font-size: 14px; font-weight: 700; font-family: 'Courier New', monospace; }
                 .missions-content::-webkit-scrollbar { width: 4px; }
                 .missions-content::-webkit-scrollbar-track { background: transparent; }
-                .missions-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+                .missions-content::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 2px; }
             `}</style>
         </div>
     );

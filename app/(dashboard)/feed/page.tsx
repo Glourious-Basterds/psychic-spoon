@@ -134,7 +134,7 @@ const INITIAL_POSTS: Post[] = [
         ]
     },
     {
-        id: 2, author: AUTHORS['Pietro M.'], content: 'Looking for a sound designer for a noir short film. Must understand silence as well as sound. Apply via Hashi.', time: '4h ago', badge: { label: 'OPEN ROLE', color: '#a3e635', bg: 'rgba(163,230,53,0.12)' }, likes: 28, replies: 7,
+        id: 2, author: AUTHORS['Pietro M.'], content: 'Looking for a sound designer for a noir short film. Must understand silence as well as sound. Apply via Hashi.', time: '4h ago', badge: { label: 'OPEN ROLE', color: '#65a30d', bg: 'rgba(163,230,53,0.12)' }, likes: 28, replies: 7,
         comments: [
             { id: 1, author: AUTHORS['Dani M.'], content: 'Posted my showreel link on my profile. Noir is my comfort zone.', time: '3h ago', likes: 6 },
             { id: 2, author: AUTHORS['Rafael G.'], content: 'I work with sound designers regularly. Sara R. on Hashi is exceptional — check her out.', time: '3h ago', likes: 9 },
@@ -187,7 +187,7 @@ const INITIAL_POSTS: Post[] = [
         ]
     },
     {
-        id: 5, author: AUTHORS['Bruce W.'], content: 'The Bar-Man wrapped principal photography. Crew was exceptional. Full credits on Hashi.', time: '1d ago', badge: { label: 'PROJECT COMPLETE', color: '#f9fafb', bg: 'rgba(255,255,255,0.08)' }, likes: 103, replies: 21,
+        id: 5, author: AUTHORS['Bruce W.'], content: 'The Bar-Man wrapped principal photography. Crew was exceptional. Full credits on Hashi.', time: '1d ago', badge: { label: 'PROJECT COMPLETE', color: '#f9fafb', bg: 'rgba(0,0,0,0.08)' }, likes: 103, replies: 21,
         comments: [
             { id: 1, author: AUTHORS['Ash V.'], content: 'Congratulations. Wrapping principal is no small thing. Enjoy it for exactly one day then go to post.', time: '22h ago', likes: 14 },
             { id: 2, author: AUTHORS['Mia K.'], content: 'The bar set looked incredible in the BTS shots Pietro posted. Worth every hour of design work.', time: '22h ago', likes: 19 },
@@ -259,7 +259,7 @@ const INITIAL_POSTS: Post[] = [
         ]
     },
     {
-        id: 18, author: AUTHORS['Ash V.'], content: 'Looking for an editor who can cut drama without losing the silence between the lines. Hashi profile required. Serious inquiries only.', time: '3d ago', badge: { label: 'OPEN ROLE', color: '#a3e635', bg: 'rgba(163,230,53,0.12)' }, likes: 47, replies: 6,
+        id: 18, author: AUTHORS['Ash V.'], content: 'Looking for an editor who can cut drama without losing the silence between the lines. Hashi profile required. Serious inquiries only.', time: '3d ago', badge: { label: 'OPEN ROLE', color: '#65a30d', bg: 'rgba(163,230,53,0.12)' }, likes: 47, replies: 6,
         comments: [
             { id: 1, author: AUTHORS['Mia K.'], content: 'Dropped you a DM. I know someone who edits like this.', time: '2d ago', likes: 4 },
             { id: 2, author: AUTHORS['Bruce W.'], content: 'The silence between lines is where the real performance lives. Any editor worth their salt knows this.', time: '3d ago', likes: 8 },
@@ -316,15 +316,15 @@ function ToastContainer({ toasts, onDismiss }: { toasts: Toast[]; onDismiss: (id
                     pointerEvents: 'auto',
                     display: 'flex', alignItems: 'center', gap: '10px',
                     padding: '11px 16px',
-                    background: '#0d0d0d',
-                    border: `1px solid ${t.type === 'success' ? 'rgba(163,230,53,0.35)' : 'rgba(255,255,255,0.1)'}`,
+                    background: '#ffffff',
+                    border: `1px solid ${t.type === 'success' ? 'rgba(163,230,53,0.35)' : 'rgba(0,0,0,0.1)'}`,
                     borderRadius: '12px',
                     boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
                     animation: 'toast-in 0.3s ease',
                     minWidth: '200px',
                 }}>
                     <span style={{ fontSize: '14px' }}>{t.type === 'success' ? '✓' : 'ℹ'}</span>
-                    <span style={{ fontSize: '13px', color: t.type === 'success' ? '#a3e635' : '#d1d5db', fontFamily: 'Courier New, monospace', letterSpacing: '0.04em' }}>{t.message}</span>
+                    <span style={{ fontSize: '13px', color: t.type === 'success' ? '#65a30d' : '#1f2937', fontFamily: 'Courier New, monospace', letterSpacing: '0.04em' }}>{t.message}</span>
                     <button onClick={() => onDismiss(t.id)} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#4b5563', cursor: 'pointer', padding: '0 2px' }}>
                         <X size={12} />
                     </button>
@@ -356,9 +356,9 @@ function Avatar({ author, size = 36, onClick }: { author: Author; size?: number;
         <div onClick={onClick} title={author.name} style={{
             width: size, height: size, borderRadius: '50%', background: author.color,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: size * 0.28, fontWeight: 700, color: 'rgba(255,255,255,0.85)',
+            fontSize: size * 0.28, fontWeight: 700, color: 'rgba(0,0,0,0.85)',
             flexShrink: 0, cursor: onClick ? 'pointer' : 'default',
-            border: '1px solid rgba(255,255,255,0.08)', transition: 'opacity 0.15s',
+            border: '1px solid rgba(0,0,0,0.08)', transition: 'opacity 0.15s',
         }}
             onMouseEnter={e => onClick && (e.currentTarget.style.opacity = '0.8')}
             onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
@@ -389,29 +389,29 @@ function ProfileModal({ name, onClose, onFollow, followed, showToast }: {
 
     return (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 3000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={onClose}>
-            <div style={{ background: '#0d0d0d', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', width: '100%', maxWidth: '520px', maxHeight: '85vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }} onClick={e => e.stopPropagation()}>
-                <div style={{ padding: '20px 24px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.08)', borderRadius: '16px', width: '100%', maxWidth: '520px', maxHeight: '85vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }} onClick={e => e.stopPropagation()}>
+                <div style={{ padding: '20px 24px 0', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', marginBottom: '16px' }}>
                         <Avatar author={profile} size={56} />
                         <div style={{ flex: 1 }}>
                             <div style={{ fontSize: '17px', fontWeight: 700, color: '#f9fafb', marginBottom: '2px' }}>{profile.name}</div>
                             <div style={{ fontSize: '11px', color: '#6b7280', fontFamily: 'Courier New, monospace', letterSpacing: '0.06em', marginBottom: '8px' }}>{profile.role}</div>
-                            <div style={{ fontSize: '13px', color: '#9ca3af', lineHeight: 1.5 }}>{profile.bio}</div>
+                            <div style={{ fontSize: '13px', color: '#6b7280', lineHeight: 1.5 }}>{profile.bio}</div>
                         </div>
                         <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#4b5563', cursor: 'pointer', padding: '4px' }}><X size={18} /></button>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
                         <div style={{ display: 'flex', gap: '3px' }}>
-                            {[1, 2, 3, 4, 5].map(s => <span key={s} style={{ fontSize: '14px', color: s <= Math.round(profile.rating) ? '#a3e635' : '#374151' }}>★</span>)}
+                            {[1, 2, 3, 4, 5].map(s => <span key={s} style={{ fontSize: '14px', color: s <= Math.round(profile.rating) ? '#65a30d' : '#1f2937' }}>★</span>)}
                         </div>
                         <span style={{ fontSize: '12px', fontFamily: 'Courier New, monospace', color: '#6b7280' }}>{profile.rating}/5</span>
                         <div style={{ display: 'flex', gap: '8px', marginLeft: 'auto' }}>
                             <button onClick={() => { onFollow(name); showToast(isFollowing ? `Unfollowed ${name}` : `Now following ${name}`, 'success'); }}
-                                style={{ padding: '6px 16px', background: isFollowing ? 'rgba(163,230,53,0.1)' : 'rgba(255,255,255,0.04)', border: `1px solid ${isFollowing ? 'rgba(163,230,53,0.3)' : 'rgba(255,255,255,0.1)'}`, borderRadius: '20px', color: isFollowing ? '#a3e635' : '#9ca3af', fontSize: '11px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', fontFamily: 'Courier New, monospace', letterSpacing: '0.06em', transition: 'all 0.15s' }}>
+                                style={{ padding: '6px 16px', background: isFollowing ? 'rgba(163,230,53,0.1)' : 'rgba(0,0,0,0.04)', border: `1px solid ${isFollowing ? 'rgba(163,230,53,0.3)' : 'rgba(0,0,0,0.1)'}`, borderRadius: '20px', color: isFollowing ? '#65a30d' : '#6b7280', fontSize: '11px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', fontFamily: 'Courier New, monospace', letterSpacing: '0.06em', transition: 'all 0.15s' }}>
                                 {isFollowing ? <><Check size={10} /> FOLLOWING</> : <><UserPlus size={10} /> FOLLOW</>}
                             </button>
                             <button onClick={() => showToast(`Invite sent to ${name}`, 'success')}
-                                style={{ padding: '6px 16px', background: 'rgba(163,230,53,0.08)', border: '1px solid rgba(163,230,53,0.2)', borderRadius: '20px', color: '#a3e635', fontSize: '11px', cursor: 'pointer', fontFamily: 'Courier New, monospace', letterSpacing: '0.06em' }}>
+                                style={{ padding: '6px 16px', background: 'rgba(163,230,53,0.08)', border: '1px solid rgba(163,230,53,0.2)', borderRadius: '20px', color: '#65a30d', fontSize: '11px', cursor: 'pointer', fontFamily: 'Courier New, monospace', letterSpacing: '0.06em' }}>
                                 INVITE
                             </button>
                         </div>
@@ -419,7 +419,7 @@ function ProfileModal({ name, onClose, onFollow, followed, showToast }: {
                     <div style={{ display: 'flex' }}>
                         {tabs.map(t => (
                             <button key={t.id} onClick={() => setActiveTab(t.id)}
-                                style={{ padding: '8px 16px', background: 'none', border: 'none', borderBottom: `2px solid ${activeTab === t.id ? '#a3e635' : 'transparent'}`, color: activeTab === t.id ? '#f9fafb' : '#4b5563', fontSize: '12px', fontWeight: activeTab === t.id ? 600 : 400, cursor: 'pointer', transition: 'all 0.15s', fontFamily: 'Courier New, monospace', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                                style={{ padding: '8px 16px', background: 'none', border: 'none', borderBottom: `2px solid ${activeTab === t.id ? '#65a30d' : 'transparent'}`, color: activeTab === t.id ? '#f9fafb' : '#4b5563', fontSize: '12px', fontWeight: activeTab === t.id ? 600 : 400, cursor: 'pointer', transition: 'all 0.15s', fontFamily: 'Courier New, monospace', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
                                 {t.label}
                             </button>
                         ))}
@@ -429,9 +429,9 @@ function ProfileModal({ name, onClose, onFollow, followed, showToast }: {
                     {activeTab === 'posts' && (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                             {INITIAL_POSTS.filter(p => p.author.name === profile.name).map(p => (
-                                <div key={p.id} style={{ padding: '12px', background: '#111111', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px' }}>
-                                    <div style={{ fontSize: '12px', color: '#9ca3af', lineHeight: 1.55 }}>{p.content}</div>
-                                    <div style={{ marginTop: '8px', display: 'flex', gap: '12px', fontSize: '11px', fontFamily: 'Courier New, monospace', color: '#374151' }}>
+                                <div key={p.id} style={{ padding: '12px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: '10px' }}>
+                                    <div style={{ fontSize: '12px', color: '#6b7280', lineHeight: 1.55 }}>{p.content}</div>
+                                    <div style={{ marginTop: '8px', display: 'flex', gap: '12px', fontSize: '11px', fontFamily: 'Courier New, monospace', color: '#1f2937' }}>
                                         <span>♥ {p.likes}</span><span>◎ {p.replies}</span><span>{p.time}</span>
                                     </div>
                                 </div>
@@ -441,16 +441,16 @@ function ProfileModal({ name, onClose, onFollow, followed, showToast }: {
                     {activeTab === 'projects' && (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             {profile.projects.map((p, i) => (
-                                <div key={i} style={{ padding: '14px 16px', background: '#111111', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px', cursor: 'pointer', transition: 'border-color 0.15s' }}
-                                    onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)')}
-                                    onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)')}>
+                                <div key={i} style={{ padding: '14px 16px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: '10px', cursor: 'pointer', transition: 'border-color 0.15s' }}
+                                    onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(0,0,0,0.14)')}
+                                    onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(0,0,0,0.06)')}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                         <div>
                                             <div style={{ fontSize: '14px', fontWeight: 600, color: '#f9fafb', marginBottom: '3px' }}>{p.title}</div>
                                             <div style={{ fontSize: '11px', fontFamily: 'Courier New, monospace', color: '#6b7280' }}>{p.role} · {p.date}</div>
                                         </div>
                                         <div style={{ display: 'flex', gap: '2px' }}>
-                                            {[1, 2, 3, 4, 5].map(s => <span key={s} style={{ fontSize: '12px', color: s <= p.stars ? '#a3e635' : '#374151' }}>★</span>)}
+                                            {[1, 2, 3, 4, 5].map(s => <span key={s} style={{ fontSize: '12px', color: s <= p.stars ? '#65a30d' : '#1f2937' }}>★</span>)}
                                         </div>
                                     </div>
                                 </div>
@@ -460,11 +460,11 @@ function ProfileModal({ name, onClose, onFollow, followed, showToast }: {
                     {activeTab === 'ip' && (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             {profile.ips.map((ip, i) => (
-                                <div key={i} style={{ padding: '14px 16px', background: '#111111', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+                                <div key={i} style={{ padding: '14px 16px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
                                     onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(163,230,53,0.2)')}
-                                    onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)')}>
-                                    <div style={{ fontSize: '14px', fontWeight: 500, color: '#d1d5db' }}>{ip.title}</div>
-                                    <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '9px', fontFamily: 'Courier New, monospace', letterSpacing: '0.1em', background: ip.status === 'Public' ? 'rgba(163,230,53,0.1)' : ip.status === 'Private' ? 'rgba(255,255,255,0.04)' : 'rgba(147,197,253,0.1)', color: ip.status === 'Public' ? '#a3e635' : ip.status === 'Private' ? '#6b7280' : '#93c5fd', border: `1px solid ${ip.status === 'Public' ? 'rgba(163,230,53,0.2)' : ip.status === 'Private' ? 'rgba(255,255,255,0.08)' : 'rgba(147,197,253,0.2)'}` }}>
+                                    onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(0,0,0,0.06)')}>
+                                    <div style={{ fontSize: '14px', fontWeight: 500, color: '#1f2937' }}>{ip.title}</div>
+                                    <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '9px', fontFamily: 'Courier New, monospace', letterSpacing: '0.1em', background: ip.status === 'Public' ? 'rgba(163,230,53,0.1)' : ip.status === 'Private' ? 'rgba(0,0,0,0.04)' : 'rgba(147,197,253,0.1)', color: ip.status === 'Public' ? '#65a30d' : ip.status === 'Private' ? '#6b7280' : '#93c5fd', border: `1px solid ${ip.status === 'Public' ? 'rgba(163,230,53,0.2)' : ip.status === 'Private' ? 'rgba(0,0,0,0.08)' : 'rgba(147,197,253,0.2)'}` }}>
                                         {ip.status.toUpperCase()}
                                     </span>
                                 </div>
@@ -475,13 +475,13 @@ function ProfileModal({ name, onClose, onFollow, followed, showToast }: {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             {Object.entries(profile.ratingBreakdown).map(([cat, val]) => (
                                 <div key={cat} onMouseEnter={() => setHoverStar(cat)} onMouseLeave={() => setHoverStar(null)}
-                                    style={{ padding: '12px 16px', background: hoverStar === cat ? 'rgba(255,255,255,0.03)' : '#111111', border: `1px solid ${hoverStar === cat ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.06)'}`, borderRadius: '10px', transition: 'all 0.15s' }}>
+                                    style={{ padding: '12px 16px', background: hoverStar === cat ? 'rgba(0,0,0,0.03)' : '#ffffff', border: `1px solid ${hoverStar === cat ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,0.06)'}`, borderRadius: '10px', transition: 'all 0.15s' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                                        <span style={{ fontSize: '12px', color: '#9ca3af', fontFamily: 'Courier New, monospace', letterSpacing: '0.06em' }}>{cat.toUpperCase()}</span>
-                                        <span style={{ fontSize: '12px', color: '#a3e635', fontFamily: 'Courier New, monospace' }}>{val}/5</span>
+                                        <span style={{ fontSize: '12px', color: '#6b7280', fontFamily: 'Courier New, monospace', letterSpacing: '0.06em' }}>{cat.toUpperCase()}</span>
+                                        <span style={{ fontSize: '12px', color: '#65a30d', fontFamily: 'Courier New, monospace' }}>{val}/5</span>
                                     </div>
-                                    <div style={{ height: '3px', background: 'rgba(255,255,255,0.06)', borderRadius: '2px', overflow: 'hidden' }}>
-                                        <div style={{ height: '100%', width: `${(val / 5) * 100}%`, background: '#a3e635', borderRadius: '2px', transition: 'width 0.4s ease' }} />
+                                    <div style={{ height: '3px', background: 'rgba(0,0,0,0.06)', borderRadius: '2px', overflow: 'hidden' }}>
+                                        <div style={{ height: '100%', width: `${(val / 5) * 100}%`, background: '#65a30d', borderRadius: '2px', transition: 'width 0.4s ease' }} />
                                     </div>
                                 </div>
                             ))}
@@ -501,7 +501,7 @@ function RoleModal({ title, project, type, onClose, showToast }: {
     const [applied, setApplied] = useState(false);
     return (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 3000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={onClose}>
-            <div style={{ background: '#0d0d0d', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', width: '100%', maxWidth: '420px', padding: '28px' }} onClick={e => e.stopPropagation()}>
+            <div style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.08)', borderRadius: '16px', width: '100%', maxWidth: '420px', padding: '28px' }} onClick={e => e.stopPropagation()}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
                     <div>
                         <div style={{ fontSize: '18px', fontWeight: 700, color: '#f9fafb', marginBottom: '4px' }}>{title}</div>
@@ -509,17 +509,17 @@ function RoleModal({ title, project, type, onClose, showToast }: {
                     </div>
                     <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#4b5563', cursor: 'pointer' }}><X size={18} /></button>
                 </div>
-                <div style={{ padding: '16px', background: '#111111', borderRadius: '10px', marginBottom: '20px', border: '1px solid rgba(255,255,255,0.06)' }}>
-                    <div style={{ fontSize: '13px', color: '#9ca3af', lineHeight: 1.7 }}>
+                <div style={{ padding: '16px', background: '#ffffff', borderRadius: '10px', marginBottom: '20px', border: '1px solid rgba(0,0,0,0.06)' }}>
+                    <div style={{ fontSize: '13px', color: '#6b7280', lineHeight: 1.7 }}>
                         We are looking for a talented {title} to join the {project} production team. If you have the skills and the drive, apply via Hashi and let your work speak for itself.
                     </div>
                 </div>
                 <div style={{ display: 'flex', gap: '10px' }}>
                     <button onClick={() => { if (!applied) { setApplied(true); showToast(`Application sent for ${title}`, 'success'); } }}
-                        style={{ flex: 1, padding: '12px', background: applied ? 'rgba(163,230,53,0.06)' : 'rgba(163,230,53,0.15)', border: '1px solid rgba(163,230,53,0.3)', borderRadius: '10px', color: '#a3e635', fontSize: '12px', fontFamily: 'Courier New, monospace', letterSpacing: '0.1em', cursor: applied ? 'default' : 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                        style={{ flex: 1, padding: '12px', background: applied ? 'rgba(163,230,53,0.06)' : 'rgba(163,230,53,0.15)', border: '1px solid rgba(163,230,53,0.3)', borderRadius: '10px', color: '#65a30d', fontSize: '12px', fontFamily: 'Courier New, monospace', letterSpacing: '0.1em', cursor: applied ? 'default' : 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
                         {applied ? <><Check size={12} /> APPLIED</> : 'APPLY NOW'}
                     </button>
-                    <button onClick={onClose} style={{ padding: '12px 20px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', color: '#6b7280', fontSize: '12px', cursor: 'pointer' }}>CLOSE</button>
+                    <button onClick={onClose} style={{ padding: '12px 20px', background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)', borderRadius: '10px', color: '#6b7280', fontSize: '12px', cursor: 'pointer' }}>CLOSE</button>
                 </div>
             </div>
         </div>
@@ -557,15 +557,15 @@ function PostModal({ post, onClose, onProfile }: { post: Post; onClose: () => vo
             {/* Dark backdrop */}
             <div style={{ flex: 1, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }} />
             {/* Drawer */}
-            <div style={{ width: '480px', maxWidth: '100vw', height: '100%', background: '#0a0a0a', borderLeft: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', animation: 'drawer-in 0.25s ease' }}
+            <div style={{ width: '480px', maxWidth: '100vw', height: '100%', background: '#ffffff', borderLeft: '1px solid rgba(0,0,0,0.07)', display: 'flex', flexDirection: 'column', animation: 'drawer-in 0.25s ease' }}
                 onClick={e => e.stopPropagation()}>
 
                 {/* Header */}
-                <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+                <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
                     <div style={{ fontSize: '11px', fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
                         Thread · {localComments.length} {localComments.length === 1 ? 'reply' : 'replies'}
                     </div>
-                    <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '8px', padding: '6px', color: '#6b7280', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'color 0.15s' }}
+                    <button onClick={onClose} style={{ background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.07)', borderRadius: '8px', padding: '6px', color: '#6b7280', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'color 0.15s' }}
                         onMouseEnter={e => (e.currentTarget.style.color = '#f9fafb')}
                         onMouseLeave={e => (e.currentTarget.style.color = '#6b7280')}>
                         <X size={16} />
@@ -576,10 +576,10 @@ function PostModal({ post, onClose, onProfile }: { post: Post; onClose: () => vo
                 <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
 
                     {/* Original post */}
-                    <div style={{ padding: '16px', background: '#111111', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', marginBottom: '24px' }}>
+                    <div style={{ padding: '16px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.07)', borderRadius: '12px', marginBottom: '24px' }}>
                         <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
                             <div onClick={() => { onClose(); setTimeout(() => onProfile(post.author.name), 100); }}
-                                style={{ width: '36px', height: '36px', borderRadius: '50%', background: post.author.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 700, color: 'rgba(255,255,255,0.85)', flexShrink: 0, cursor: 'pointer', border: '1px solid rgba(255,255,255,0.08)' }}>
+                                style={{ width: '36px', height: '36px', borderRadius: '50%', background: post.author.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 700, color: 'rgba(0,0,0,0.85)', flexShrink: 0, cursor: 'pointer', border: '1px solid rgba(0,0,0,0.08)' }}>
                                 {post.author.initials}
                             </div>
                             <div>
@@ -587,7 +587,7 @@ function PostModal({ post, onClose, onProfile }: { post: Post; onClose: () => vo
                                 <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563' }}>{post.author.role} · {post.time}</div>
                             </div>
                         </div>
-                        <p style={{ fontSize: '14px', color: '#d1d5db', lineHeight: 1.65, marginBottom: post.image ? '12px' : 0 }}>{post.content}</p>
+                        <p style={{ fontSize: '14px', color: '#1f2937', lineHeight: 1.65, marginBottom: post.image ? '12px' : 0 }}>{post.content}</p>
                         {post.image && (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img src={post.image} alt="" style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '8px' }} />
@@ -601,22 +601,22 @@ function PostModal({ post, onClose, onProfile }: { post: Post; onClose: () => vo
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                         {localComments.map(comment => (
                             <div key={comment.id} style={{ display: 'flex', gap: '10px' }}>
-                                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: comment.author.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: 700, color: 'rgba(255,255,255,0.85)', flexShrink: 0, border: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer' }}
+                                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: comment.author.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: 700, color: 'rgba(0,0,0,0.85)', flexShrink: 0, border: '1px solid rgba(0,0,0,0.08)', cursor: 'pointer' }}
                                     onClick={() => { onClose(); setTimeout(() => onProfile(comment.author.name), 100); }}>
                                     {comment.author.initials}
                                 </div>
                                 <div style={{ flex: 1, minWidth: 0 }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                                        <span style={{ fontSize: '13px', fontWeight: 600, color: '#d1d5db', cursor: 'pointer' }}
+                                        <span style={{ fontSize: '13px', fontWeight: 600, color: '#1f2937', cursor: 'pointer' }}
                                             onClick={() => { onClose(); setTimeout(() => onProfile(comment.author.name), 100); }}>
                                             {comment.author.name}
                                         </span>
-                                        <span style={{ fontSize: '9px', fontFamily: 'Courier New, monospace', color: '#374151' }}>{comment.author.role}</span>
-                                        <span style={{ marginLeft: 'auto', fontSize: '9px', fontFamily: 'Courier New, monospace', color: '#374151' }}>{comment.time}</span>
+                                        <span style={{ fontSize: '9px', fontFamily: 'Courier New, monospace', color: '#1f2937' }}>{comment.author.role}</span>
+                                        <span style={{ marginLeft: 'auto', fontSize: '9px', fontFamily: 'Courier New, monospace', color: '#1f2937' }}>{comment.time}</span>
                                     </div>
-                                    <p style={{ fontSize: '13px', color: '#9ca3af', lineHeight: 1.6, marginBottom: '6px' }}>{comment.content}</p>
+                                    <p style={{ fontSize: '13px', color: '#6b7280', lineHeight: 1.6, marginBottom: '6px' }}>{comment.content}</p>
                                     <button onClick={() => toggleCommentLike(comment.id)}
-                                        style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'none', border: 'none', cursor: 'pointer', color: likedComments.has(comment.id) ? '#fb923c' : '#374151', fontSize: '11px', fontFamily: 'Courier New, monospace', padding: 0, transition: 'color 0.15s' }}>
+                                        style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'none', border: 'none', cursor: 'pointer', color: likedComments.has(comment.id) ? '#fb923c' : '#1f2937', fontSize: '11px', fontFamily: 'Courier New, monospace', padding: 0, transition: 'color 0.15s' }}>
                                         <Heart size={11} fill={likedComments.has(comment.id) ? '#fb923c' : 'none'} />
                                         {comment.likes + (likedComments.has(comment.id) ? 1 : 0)}
                                     </button>
@@ -627,16 +627,16 @@ function PostModal({ post, onClose, onProfile }: { post: Post; onClose: () => vo
                 </div>
 
                 {/* Reply input */}
-                <div style={{ padding: '14px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', gap: '10px', background: '#0a0a0a', flexShrink: 0 }}>
-                    <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: '#1e3a5f', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: 700, color: 'rgba(255,255,255,0.85)', flexShrink: 0 }}>PM</div>
+                <div style={{ padding: '14px 20px', borderTop: '1px solid rgba(0,0,0,0.06)', display: 'flex', gap: '10px', background: '#ffffff', flexShrink: 0 }}>
+                    <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: '#1e3a5f', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: 700, color: 'rgba(0,0,0,0.85)', flexShrink: 0 }}>PM</div>
                     <input type="text" value={replyText} onChange={e => setReplyText(e.target.value)}
                         onKeyDown={e => { if (e.key === 'Enter') sendReply(); if (e.key === 'Escape') onClose(); }}
                         placeholder={`Reply to ${post.author.name}...`}
-                        style={{ flex: 1, padding: '8px 14px', background: '#111111', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px', color: '#f9fafb', fontSize: '13px', outline: 'none', transition: 'border-color 0.15s' }}
-                        onFocus={e => (e.target.style.borderColor = 'rgba(255,255,255,0.2)')}
-                        onBlur={e => (e.target.style.borderColor = 'rgba(255,255,255,0.08)')} />
+                        style={{ flex: 1, padding: '8px 14px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.08)', borderRadius: '20px', color: '#f9fafb', fontSize: '13px', outline: 'none', transition: 'border-color 0.15s' }}
+                        onFocus={e => (e.target.style.borderColor = 'rgba(0,0,0,0.2)')}
+                        onBlur={e => (e.target.style.borderColor = 'rgba(0,0,0,0.08)')} />
                     <button onClick={sendReply}
-                        style={{ padding: '8px 16px', background: replyText.trim() ? 'rgba(163,230,53,0.1)' : 'rgba(255,255,255,0.03)', border: `1px solid ${replyText.trim() ? 'rgba(163,230,53,0.25)' : 'rgba(255,255,255,0.06)'}`, borderRadius: '20px', color: replyText.trim() ? '#a3e635' : '#374151', cursor: replyText.trim() ? 'pointer' : 'default', fontSize: '11px', fontFamily: 'Courier New, monospace', transition: 'all 0.15s' }}>SEND</button>
+                        style={{ padding: '8px 16px', background: replyText.trim() ? 'rgba(163,230,53,0.1)' : 'rgba(0,0,0,0.03)', border: `1px solid ${replyText.trim() ? 'rgba(163,230,53,0.25)' : 'rgba(0,0,0,0.06)'}`, borderRadius: '20px', color: replyText.trim() ? '#65a30d' : '#1f2937', cursor: replyText.trim() ? 'pointer' : 'default', fontSize: '11px', fontFamily: 'Courier New, monospace', transition: 'all 0.15s' }}>SEND</button>
                 </div>
 
                 <style>{`
@@ -653,15 +653,15 @@ function ProjectFocus({ isEditorSetting = false }: { isEditorSetting?: boolean }
     const [isArticleHiddenByEditor] = useState(isEditorSetting); // simulating editor preference
 
     return (
-        <div style={{ padding: '24px', background: 'linear-gradient(to bottom right, #0d0d0d, #080808)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', margin: '20px', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ padding: '24px', background: 'linear-gradient(to bottom right, #ffffff, #f9fafb)', border: '1px solid rgba(0,0,0,0.08)', borderRadius: '16px', margin: '20px', position: 'relative', overflow: 'hidden' }}>
             <div style={{ position: 'absolute', top: 0, right: 0, width: '100%', height: '100%', background: 'radial-gradient(circle at top right, rgba(163,230,53,0.03), transparent 70%)', pointerEvents: 'none' }} />
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
-                <div style={{ borderLeft: '3px solid #a3e635', paddingLeft: '16px' }}>
+                <div style={{ borderLeft: '3px solid #65a30d', paddingLeft: '16px' }}>
                     <div style={{ fontSize: '11px', fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '4px' }}>Project Focus</div>
-                    <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#f9fafb', letterSpacing: '-0.02em', margin: 0 }}>THE SPAGHETTI MONSTER</h2>
+                    <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#030712', letterSpacing: '-0.02em', margin: 0 }}>THE SPAGHETTI MONSTER</h2>
                 </div>
-                <button style={{ padding: '10px 24px', background: '#a3e635', border: 'none', borderRadius: '10px', color: '#000', fontSize: '12px', fontWeight: 800, fontFamily: 'Courier New, monospace', letterSpacing: '0.05em', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 20px rgba(163,230,53,0.2)' }}
+                <button style={{ padding: '10px 24px', background: '#65a30d', border: 'none', borderRadius: '10px', color: '#ffffff', fontSize: '12px', fontWeight: 800, fontFamily: 'Courier New, monospace', letterSpacing: '0.05em', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 20px rgba(163,230,53,0.2)' }}
                     onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
                     onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}>
                     COLLABORATE
@@ -670,8 +670,8 @@ function ProjectFocus({ isEditorSetting = false }: { isEditorSetting?: boolean }
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px' }}>
                 <div style={{ flex: '1 1 300px' }}>
-                    <h3 style={{ fontSize: '13px', fontWeight: 600, color: '#9ca3af', marginBottom: '12px' }}>Project Summary</h3>
-                    <p style={{ fontSize: '14px', color: '#d1d5db', lineHeight: 1.7, marginBottom: '20px' }}>
+                    <h3 style={{ fontSize: '13px', fontWeight: 600, color: '#6b7280', marginBottom: '12px' }}>Project Summary</h3>
+                    <p style={{ fontSize: '14px', color: '#1f2937', lineHeight: 1.7, marginBottom: '20px' }}>
                         An interactive installation using dynamic wire sculptures and generative audio.
                         Aiming to debut at the next digital art biennial. This project explores the
                         intersection of mechanical tension and organic chaos.
@@ -679,23 +679,23 @@ function ProjectFocus({ isEditorSetting = false }: { isEditorSetting?: boolean }
                 </div>
 
                 <div style={{ flex: '0 0 auto', display: 'flex', gap: '10px' }}>
-                    <div style={{ width: '100px', height: '100px', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
+                    <div style={{ width: '100px', height: '100px', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(0,0,0,0.08)' }}>
                         <img src="/images/sculpture_1.png" alt="Detail 1" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
-                    <div style={{ width: '100px', height: '100px', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
+                    <div style={{ width: '100px', height: '100px', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(0,0,0,0.08)' }}>
                         <img src="/images/sculpture_2.png" alt="Detail 2" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                 </div>
             </div>
 
-            <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-                <h3 style={{ fontSize: '13px', fontWeight: 600, color: '#9ca3af', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+                <h3 style={{ fontSize: '13px', fontWeight: 600, color: '#6b7280', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     Article
                 </h3>
 
                 <div style={{ position: 'relative' }}>
                     <div style={{
-                        fontSize: '14px', color: '#9ca3af', lineHeight: 1.7,
+                        fontSize: '14px', color: '#6b7280', lineHeight: 1.7,
                         maxHeight: isExpanded ? '2000px' : '80px',
                         overflow: 'hidden',
                         transition: 'max-height 0.4s ease-in-out',
@@ -712,7 +712,7 @@ function ProjectFocus({ isEditorSetting = false }: { isEditorSetting?: boolean }
                             style={{
                                 marginTop: '16px', padding: '10px 0', width: '100%',
                                 background: 'rgba(163,230,53,0.08)', border: '1px solid rgba(163,230,53,0.2)',
-                                borderRadius: '10px', color: '#a3e635', fontSize: '11px', fontWeight: 700,
+                                borderRadius: '10px', color: '#65a30d', fontSize: '11px', fontWeight: 700,
                                 fontFamily: 'Courier New, monospace', letterSpacing: '0.1em', cursor: 'pointer',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                                 transition: 'all 0.2s'
@@ -781,7 +781,7 @@ export default function FeedPage() {
     );
 
     return (
-        <div style={{ height: '100vh', overflowY: 'auto', background: '#080808', display: 'flex' }}>
+        <div style={{ height: '100vh', overflowY: 'auto', background: '#f9fafb', display: 'flex' }}>
             {/* CSS animations */}
             <style>{`
                 @keyframes toast-in {
@@ -791,22 +791,22 @@ export default function FeedPage() {
             `}</style>
 
             {/* ── 3-col layout (nav + feed + sidebar) ─── */}
-            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '240px 1fr 300px', maxWidth: '1400px', margin: '0 auto', width: '100%', gap: '1px', background: 'rgba(255,255,255,0.03)' }}>
+            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '240px 1fr 300px', maxWidth: '1400px', margin: '0 auto', width: '100%', gap: '1px', background: 'rgba(0,0,0,0.03)' }}>
 
                 {/* ── Left Navigation ──────────────── */}
-                <div style={{ padding: '24px 16px', position: 'sticky', top: 0, height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '20px', background: '#080808' }}>
+                <div style={{ padding: '24px 16px', position: 'sticky', top: 0, height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '20px', background: '#f9fafb' }}>
                     {/* User Profile Summary */}
-                    <div style={{ padding: '16px', background: '#0d0d0d', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', textAlign: 'center' }}>
+                    <div style={{ padding: '16px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: '12px', textAlign: 'center' }}>
                         <div style={{ margin: '0 auto 12px', width: '64px', height: '64px', borderRadius: '50%', background: '#1e3a5f', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 800, color: 'white' }}>PM</div>
                         <div style={{ fontSize: '15px', fontWeight: 700, color: '#f9fafb' }}>Pietro Maggiotto</div>
                         <div style={{ fontSize: '11px', color: '#6b7280', fontFamily: 'Courier New, monospace', marginTop: '4px' }}>Creative Technologist</div>
-                        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
                             <div style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#f3f4f6' }}>3.5k</div>
+                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#ffffff' }}>3.5k</div>
                                 <div style={{ fontSize: '9px', color: '#4b5563', textTransform: 'uppercase' }}>Followers</div>
                             </div>
                             <div style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#f3f4f6' }}>120</div>
+                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#ffffff' }}>120</div>
                                 <div style={{ fontSize: '9px', color: '#4b5563', textTransform: 'uppercase' }}>Connect</div>
                             </div>
                         </div>
@@ -825,42 +825,42 @@ export default function FeedPage() {
                                 display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 12px', borderRadius: '8px',
                                 cursor: 'pointer', transition: 'all 0.15s',
                                 background: item.active ? 'rgba(163,230,53,0.05)' : 'transparent',
-                                borderLeft: `2px solid ${item.active ? '#a3e635' : 'transparent'}`
+                                borderLeft: `2px solid ${item.active ? '#65a30d' : 'transparent'}`
                             }}>
-                                <item.icon size={16} color={item.active ? '#a3e635' : '#4b5563'} />
+                                <item.icon size={16} color={item.active ? '#65a30d' : '#4b5563'} />
                                 <span style={{ fontSize: '13px', fontWeight: item.active ? 600 : 400, color: item.active ? '#f9fafb' : '#6b7280' }}>{item.label}</span>
                             </div>
                         ))}
                     </nav>
 
-                    <button style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', background: 'rgba(163,230,53,0.1)', border: '1px solid rgba(163,230,53,0.3)', borderRadius: '10px', color: '#a3e635', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>
+                    <button style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', background: 'rgba(163,230,53,0.1)', border: '1px solid rgba(163,230,53,0.3)', borderRadius: '10px', color: '#65a30d', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>
                         <Plus size={16} /> New Project
                     </button>
                 </div>
 
                 {/* ── Center feed ──────────────────── */}
-                <div style={{ display: 'flex', flexDirection: 'column', background: '#080808' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', background: '#f9fafb' }}>
                     {/* Sticky search */}
-                    <div style={{ position: 'sticky', top: 0, zIndex: 10, background: 'rgba(8,8,8,0.92)', backdropFilter: 'blur(12px)', padding: '14px 20px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div style={{ position: 'sticky', top: 0, zIndex: 10, background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(12px)', padding: '14px 20px', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
                         <div style={{ position: 'relative' }}>
-                            <Search size={13} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#4b5563' }} />
+                            <Search size={13} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
                             <input type="text" value={search} onChange={e => setSearch(e.target.value)}
                                 placeholder="Search creative focus..."
-                                style={{ width: '100%', padding: '9px 14px 9px 32px', background: '#111111', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', color: '#f9fafb', fontSize: '13px', outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s' }}
-                                onFocus={e => (e.target.style.borderColor = 'rgba(255,255,255,0.18)')}
-                                onBlur={e => (e.target.style.borderColor = 'rgba(255,255,255,0.07)')} />
+                                style={{ width: '100%', padding: '9px 14px 9px 32px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.07)', borderRadius: '20px', color: '#030712', fontSize: '13px', outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s' }}
+                                onFocus={e => (e.target.style.borderColor = 'rgba(0,0,0,0.18)')}
+                                onBlur={e => (e.target.style.borderColor = 'rgba(0,0,0,0.07)')} />
                         </div>
                     </div>
 
                     {/* Posts */}
                     {filteredPosts.length === 0 && (
-                        <div style={{ padding: '48px', textAlign: 'center', color: '#374151', fontFamily: 'Courier New, monospace', fontSize: '12px', letterSpacing: '0.1em' }}>NO POSTS FOUND</div>
+                        <div style={{ padding: '48px', textAlign: 'center', color: '#1f2937', fontFamily: 'Courier New, monospace', fontSize: '12px', letterSpacing: '0.1em' }}>NO POSTS FOUND</div>
                     )}
                     {filteredPosts.map(post => (
                         <div key={post.id} onClick={() => setOpenPost(post)}
                             className="hoverable-post"
-                            style={{ padding: '18px 20px', borderBottom: '1px solid rgba(255,255,255,0.05)', transition: 'background 0.15s', cursor: 'pointer', position: 'relative' }}
-                            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.01)')}
+                            style={{ padding: '18px 20px', borderBottom: '1px solid rgba(0,0,0,0.05)', transition: 'background 0.15s', cursor: 'pointer', position: 'relative' }}
+                            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.01)')}
                             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                             <div style={{ display: 'flex', gap: '12px' }}>
                                 <Avatar author={post.author} onClick={(e: React.MouseEvent) => { e.stopPropagation(); setOpenProfile(post.author.name); }} />
@@ -868,18 +868,18 @@ export default function FeedPage() {
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '5px', flexWrap: 'wrap' }}>
                                         <span onClick={(e: React.MouseEvent) => { e.stopPropagation(); setOpenProfile(post.author.name); }}
                                             style={{ fontSize: '14px', fontWeight: 600, color: '#f9fafb', cursor: 'pointer', transition: 'color 0.15s' }}
-                                            onMouseEnter={e => (e.currentTarget.style.color = '#a3e635')}
+                                            onMouseEnter={e => (e.currentTarget.style.color = '#65a30d')}
                                             onMouseLeave={e => (e.currentTarget.style.color = '#f9fafb')}>
                                             {post.author.name}
                                         </span>
                                         <span style={{ fontSize: '10px', color: '#4b5563', fontFamily: 'Courier New, monospace' }}>{post.author.role}</span>
                                         {['Mia K.', 'Rafael G.', 'Yuki T.', 'Dani M.', 'Ash V.'].includes(post.author.name) && (
-                                            <span style={{ fontSize: '8px', padding: '1px 5px', background: 'rgba(163,230,53,0.1)', border: '1px solid rgba(163,230,53,0.3)', borderRadius: '4px', color: '#a3e635', fontFamily: 'Courier New, monospace', fontWeight: 600 }}>NEW</span>
+                                            <span style={{ fontSize: '8px', padding: '1px 5px', background: 'rgba(163,230,53,0.1)', border: '1px solid rgba(163,230,53,0.3)', borderRadius: '4px', color: '#65a30d', fontFamily: 'Courier New, monospace', fontWeight: 600 }}>NEW</span>
                                         )}
-                                        <span style={{ marginLeft: 'auto', fontSize: '10px', color: '#374151', fontFamily: 'Courier New, monospace' }}>{post.time}</span>
+                                        <span style={{ marginLeft: 'auto', fontSize: '10px', color: '#1f2937', fontFamily: 'Courier New, monospace' }}>{post.time}</span>
                                     </div>
 
-                                    <p style={{ fontSize: '14px', color: '#d1d5db', lineHeight: 1.65, marginBottom: '10px' }}>{post.content}</p>
+                                    <p style={{ fontSize: '14px', color: '#1f2937', lineHeight: 1.65, marginBottom: '10px' }}>{post.content}</p>
 
                                     {post.badge && (
                                         <div style={{ marginBottom: '12px' }}>
@@ -900,12 +900,12 @@ export default function FeedPage() {
                                     )}
 
                                     {post.image && (
-                                        <div onClick={(e) => { e.stopPropagation(); setLightbox(post.image!); }} style={{ marginBottom: '12px', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', cursor: 'zoom-in', position: 'relative' }}
-                                            onMouseEnter={e => { (e.currentTarget.querySelector('img') as HTMLImageElement).style.transform = 'scale(1.02)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)'; }}
-                                            onMouseLeave={e => { (e.currentTarget.querySelector('img') as HTMLImageElement).style.transform = 'scale(1)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'; }}>
+                                        <div onClick={(e) => { e.stopPropagation(); setLightbox(post.image!); }} style={{ marginBottom: '12px', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(0,0,0,0.07)', cursor: 'zoom-in', position: 'relative' }}
+                                            onMouseEnter={e => { (e.currentTarget.querySelector('img') as HTMLImageElement).style.transform = 'scale(1.02)'; e.currentTarget.style.borderColor = 'rgba(0,0,0,0.18)'; }}
+                                            onMouseLeave={e => { (e.currentTarget.querySelector('img') as HTMLImageElement).style.transform = 'scale(1)'; e.currentTarget.style.borderColor = 'rgba(0,0,0,0.07)'; }}>
                                             {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img src={post.image} alt="attachment" style={{ width: '100%', maxHeight: '260px', objectFit: 'cover', display: 'block', transition: 'transform 0.3s ease' }} />
-                                            <div style={{ position: 'absolute', bottom: '8px', right: '8px', background: 'rgba(0,0,0,0.6)', borderRadius: '6px', padding: '4px 8px', fontSize: '9px', fontFamily: 'Courier New, monospace', color: 'rgba(255,255,255,0.6)', letterSpacing: '0.1em', backdropFilter: 'blur(4px)' }}>CLICK TO EXPAND</div>
+                                            <div style={{ position: 'absolute', bottom: '8px', right: '8px', background: 'rgba(0,0,0,0.6)', borderRadius: '6px', padding: '4px 8px', fontSize: '9px', fontFamily: 'Courier New, monospace', color: 'rgba(0,0,0,0.6)', letterSpacing: '0.1em', backdropFilter: 'blur(4px)' }}>CLICK TO EXPAND</div>
                                         </div>
                                     )}
 
@@ -913,7 +913,7 @@ export default function FeedPage() {
                                     <div style={{ display: 'flex', gap: '20px', marginTop: '4px' }}>
                                         <button onClick={e => { e.stopPropagation(); toggleLike(post.id); }}
                                             style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none', cursor: 'pointer', color: post.liked ? '#fb923c' : '#4b5563', fontSize: '12px', fontFamily: 'Courier New, monospace', transition: 'color 0.15s', padding: 0 }}
-                                            onMouseEnter={e => { if (!post.liked) e.currentTarget.style.color = '#9ca3af'; }}
+                                            onMouseEnter={e => { if (!post.liked) e.currentTarget.style.color = '#6b7280'; }}
                                             onMouseLeave={e => { if (!post.liked) e.currentTarget.style.color = '#4b5563'; }}>
                                             <Heart size={14} fill={post.liked ? '#fb923c' : 'none'} />{post.likes}
                                         </button>
@@ -922,7 +922,7 @@ export default function FeedPage() {
                                             <MessageCircle size={14} />{post.replies}
                                         </button>
                                         <button onClick={e => { e.stopPropagation(); sharePost(post.id, post.author.name); }}
-                                            style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none', cursor: 'pointer', color: sharedPosts.has(post.id) ? '#a3e635' : '#4b5563', fontSize: '12px', fontFamily: 'Courier New, monospace', transition: 'color 0.15s', padding: 0 }}>
+                                            style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none', cursor: 'pointer', color: sharedPosts.has(post.id) ? '#65a30d' : '#4b5563', fontSize: '12px', fontFamily: 'Courier New, monospace', transition: 'color 0.15s', padding: 0 }}>
                                             <Share2 size={14} />Share
                                         </button>
                                     </div>
@@ -932,15 +932,15 @@ export default function FeedPage() {
                                             <input autoFocus type="text" value={replyText} onChange={e => setReplyText(e.target.value)}
                                                 onKeyDown={e => { if (e.key === 'Enter') submitReply(post.id, post.author.name); if (e.key === 'Escape') { setReplyingTo(null); setReplyText(''); } }}
                                                 placeholder={`Reply to ${post.author.name}...`}
-                                                style={{ flex: 1, padding: '8px 14px', background: '#111111', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', color: '#f9fafb', fontSize: '13px', outline: 'none' }} />
+                                                style={{ flex: 1, padding: '8px 14px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '20px', color: '#f9fafb', fontSize: '13px', outline: 'none' }} />
                                             <button onClick={() => submitReply(post.id, post.author.name)}
-                                                style={{ padding: '8px 16px', background: 'rgba(163,230,53,0.1)', border: '1px solid rgba(163,230,53,0.25)', borderRadius: '20px', color: '#a3e635', fontSize: '11px', cursor: 'pointer', fontFamily: 'Courier New, monospace' }}>SEND</button>
+                                                style={{ padding: '8px 16px', background: 'rgba(163,230,53,0.1)', border: '1px solid rgba(163,230,53,0.25)', borderRadius: '20px', color: '#65a30d', fontSize: '11px', cursor: 'pointer', fontFamily: 'Courier New, monospace' }}>SEND</button>
                                         </div>
                                     )}
 
                                     <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                                         <button onClick={e => { e.stopPropagation(); setOpenPost(post); }}
-                                            style={{ flex: 1, padding: '10px', background: 'rgba(163,230,53,0.06)', border: '1px solid rgba(163,230,53,0.2)', borderRadius: '10px', color: '#a3e635', fontSize: '11px', fontWeight: 700, fontFamily: 'Courier New, monospace', letterSpacing: '0.1em', cursor: 'pointer', transition: 'all 0.15s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                                            style={{ flex: 1, padding: '10px', background: 'rgba(163,230,53,0.06)', border: '1px solid rgba(163,230,53,0.2)', borderRadius: '10px', color: '#65a30d', fontSize: '11px', fontWeight: 700, fontFamily: 'Courier New, monospace', letterSpacing: '0.1em', cursor: 'pointer', transition: 'all 0.15s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                                             onMouseEnter={e => { e.currentTarget.style.background = 'rgba(163,230,53,0.12)'; e.currentTarget.style.borderColor = 'rgba(163,230,53,0.4)'; }}
                                             onMouseLeave={e => { e.currentTarget.style.background = 'rgba(163,230,53,0.06)'; e.currentTarget.style.borderColor = 'rgba(163,230,53,0.2)'; }}>
                                             OPEN THREAD <MessageCircle size={14} />
@@ -967,39 +967,39 @@ export default function FeedPage() {
                  `}</style>
 
                 {/* ── Right sidebar ─────────────────── */}
-                <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'sticky', top: 0, height: '100vh', overflow: 'auto', background: '#080808' }}>
+                <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'sticky', top: 0, height: '100vh', overflow: 'auto', background: '#f9fafb' }}>
 
                     {/* Trending */}
-                    <div style={{ background: '#0d0d0d', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '16px' }}>
+                    <div style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: '12px', padding: '16px' }}>
                         <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <Briefcase size={10} /> Trending Projects
                         </div>
                         {TRENDING.map((t, i) => (
                             <a key={i} href={t.href} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 8px', borderRadius: '8px', textDecoration: 'none', transition: 'background 0.15s', marginBottom: '2px' }}
-                                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
+                                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.03)')}
                                 onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                                <span style={{ fontSize: '13px', fontWeight: 500, color: '#d1d5db' }}>{t.name}</span>
+                                <span style={{ fontSize: '13px', fontWeight: 500, color: '#1f2937' }}>{t.name}</span>
                                 <span style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563' }}>{t.members}m</span>
                             </a>
                         ))}
                     </div>
 
                     {/* Suggested */}
-                    <div style={{ background: '#0d0d0d', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '16px' }}>
+                    <div style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: '12px', padding: '16px' }}>
                         <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <Users size={10} /> Suggested Collaborators
                         </div>
                         {SUGGESTED.map((s, i) => {
                             const isFollowed = followed.has(s.name);
                             return (
-                                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 0', borderBottom: i < SUGGESTED.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
-                                    <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: s.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: 700, color: 'rgba(255,255,255,0.8)', flexShrink: 0 }}>{s.initials}</div>
+                                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 0', borderBottom: i < SUGGESTED.length - 1 ? '1px solid rgba(0,0,0,0.04)' : 'none' }}>
+                                    <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: s.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: 700, color: 'rgba(0,0,0,0.8)', flexShrink: 0 }}>{s.initials}</div>
                                     <div style={{ flex: 1, minWidth: 0 }}>
-                                        <div style={{ fontSize: '12px', fontWeight: 500, color: '#d1d5db' }}>{s.name}</div>
+                                        <div style={{ fontSize: '12px', fontWeight: 500, color: '#1f2937' }}>{s.name}</div>
                                         <div style={{ fontSize: '10px', color: '#4b5563', fontFamily: 'Courier New, monospace' }}>{s.role}</div>
                                     </div>
                                     <button onClick={() => toggleFollow(s.name)}
-                                        style={{ padding: '3px 10px', background: isFollowed ? 'rgba(163,230,53,0.08)' : 'rgba(255,255,255,0.04)', border: `1px solid ${isFollowed ? 'rgba(163,230,53,0.2)' : 'rgba(255,255,255,0.08)'}`, borderRadius: '20px', color: isFollowed ? '#a3e635' : '#6b7280', fontSize: '9px', cursor: 'pointer', fontFamily: 'Courier New, monospace', letterSpacing: '0.06em', transition: 'all 0.15s', flexShrink: 0 }}>
+                                        style={{ padding: '3px 10px', background: isFollowed ? 'rgba(163,230,53,0.08)' : 'rgba(0,0,0,0.04)', border: `1px solid ${isFollowed ? 'rgba(163,230,53,0.2)' : 'rgba(0,0,0,0.08)'}`, borderRadius: '20px', color: isFollowed ? '#65a30d' : '#6b7280', fontSize: '9px', cursor: 'pointer', fontFamily: 'Courier New, monospace', letterSpacing: '0.06em', transition: 'all 0.15s', flexShrink: 0 }}>
                                         {isFollowed ? '✓' : 'FOLLOW'}
                                     </button>
                                 </div>
@@ -1008,21 +1008,21 @@ export default function FeedPage() {
                     </div>
 
                     {/* Open roles */}
-                    <div style={{ background: '#0d0d0d', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '16px' }}>
+                    <div style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: '12px', padding: '16px' }}>
                         <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <Star size={10} /> Open Roles
                         </div>
                         {OPEN_ROLES.map((r, i) => (
                             <div key={i} onClick={() => setOpenRole(r)}
-                                style={{ padding: '9px 8px', borderRadius: '8px', cursor: 'pointer', marginBottom: '4px', border: '1px solid rgba(255,255,255,0.04)', transition: 'all 0.15s' }}
-                                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
-                                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.04)'; }}>
+                                style={{ padding: '9px 8px', borderRadius: '8px', cursor: 'pointer', marginBottom: '4px', border: '1px solid rgba(0,0,0,0.04)', transition: 'all 0.15s' }}
+                                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.02)'; e.currentTarget.style.borderColor = 'rgba(0,0,0,0.1)'; }}
+                                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(0,0,0,0.04)'; }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div>
-                                        <div style={{ fontSize: '12px', fontWeight: 500, color: '#d1d5db', marginBottom: '2px' }}>{r.title}</div>
+                                        <div style={{ fontSize: '12px', fontWeight: 500, color: '#1f2937', marginBottom: '2px' }}>{r.title}</div>
                                         <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563' }}>{r.project}</div>
                                     </div>
-                                    <span style={{ padding: '2px 7px', background: 'rgba(163,230,53,0.1)', border: '1px solid rgba(163,230,53,0.2)', borderRadius: '8px', fontSize: '9px', color: '#a3e635', fontFamily: 'Courier New, monospace' }}>OPEN</span>
+                                    <span style={{ padding: '2px 7px', background: 'rgba(163,230,53,0.1)', border: '1px solid rgba(163,230,53,0.2)', borderRadius: '8px', fontSize: '9px', color: '#65a30d', fontFamily: 'Courier New, monospace' }}>OPEN</span>
                                 </div>
                             </div>
                         ))}
@@ -1039,7 +1039,6 @@ export default function FeedPage() {
                 <RoleModal title={openRole.title} project={openRole.project} type={openRole.type}
                     onClose={() => setOpenRole(null)} showToast={showToast} />
             )}
-            {lightbox && <Lightbox src={lightbox} onClose={() => setLightbox(null)} />}
             {openPost && (
                 <PostModal key={openPost.id} post={openPost} onClose={() => setOpenPost(null)} onProfile={setOpenProfile} />
             )}

@@ -33,7 +33,7 @@ const IP_DOCS: IPDoc[] = [
         name: 'Gothic Intel',
         label: 'ENCRYPTED BLUEPRINT · CLASS 5',
         icon: Shield,
-        color: '#a3e635',
+        color: '#65a30d',
         description: 'Encrypted blueprints for magical firearms used in the Space-Balls Season 2 production. Distribution strictly controlled.',
         status: 'PROTECTED — REVIEW PENDING',
         protected: true,
@@ -47,7 +47,7 @@ export default function VaultPage() {
     const [newName, setNewName] = useState('');
 
     return (
-        <div style={{ padding: '32px', minHeight: '100%', background: '#0a0a0a', color: '#e5e7eb', fontFamily: 'Inter, sans-serif' }}>
+        <div style={{ padding: '32px', minHeight: '100%', background: '#ffffff', color: '#1f2937', fontFamily: 'Inter, sans-serif' }}>
 
             {/* Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '40px' }}>
@@ -59,7 +59,7 @@ export default function VaultPage() {
                 </div>
                 <button
                     onClick={() => setShowNew(true)}
-                    style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 18px', background: 'rgba(163,230,53,0.08)', border: '1px solid rgba(163,230,53,0.2)', borderRadius: '10px', color: '#a3e635', fontSize: '12px', fontWeight: 700, fontFamily: 'Courier New, monospace', letterSpacing: '0.08em', cursor: 'pointer', transition: 'background 0.15s' }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 18px', background: 'rgba(163,230,53,0.08)', border: '1px solid rgba(163,230,53,0.2)', borderRadius: '10px', color: '#65a30d', fontSize: '12px', fontWeight: 700, fontFamily: 'Courier New, monospace', letterSpacing: '0.08em', cursor: 'pointer', transition: 'background 0.15s' }}
                     onMouseEnter={e => (e.currentTarget.style.background = 'rgba(163,230,53,0.15)')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'rgba(163,230,53,0.08)')}
                 >
@@ -75,16 +75,16 @@ export default function VaultPage() {
                         <button
                             key={doc.id}
                             onClick={() => setSelected(doc)}
-                            style={{ background: '#111111', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px', padding: '28px', textAlign: 'left', cursor: 'pointer', transition: 'border-color 0.15s, background 0.15s', width: '100%' }}
+                            style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.07)', borderRadius: '16px', padding: '28px', textAlign: 'left', cursor: 'pointer', transition: 'border-color 0.15s, background 0.15s', width: '100%' }}
                             onMouseEnter={e => { e.currentTarget.style.borderColor = `rgba(${doc.id === 'cyber-seal' ? '59,130,246' : '163,230,53'},0.3)`; }}
-                            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'; }}
+                            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.07)'; }}
                         >
                             <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: `rgba(${doc.id === 'cyber-seal' ? '59,130,246' : '163,230,53'},0.1)`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
                                 <Icon size={24} style={{ color: doc.color }} />
                             </div>
                             <div style={{ fontSize: '18px', fontWeight: 700, color: '#f9fafb', marginBottom: '6px' }}>{doc.name}</div>
                             <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>{doc.label}</div>
-                            <div style={{ fontSize: '12px', color: '#9ca3af', lineHeight: 1.6, marginBottom: '16px' }}>{doc.description.slice(0, 80)}...</div>
+                            <div style={{ fontSize: '12px', color: '#6b7280', lineHeight: 1.6, marginBottom: '16px' }}>{doc.description.slice(0, 80)}...</div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                                 <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 6px #22c55e' }} />
                                 <span style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#22c55e', letterSpacing: '0.08em' }}>{doc.status}</span>
@@ -96,11 +96,11 @@ export default function VaultPage() {
                 {/* Add new IP card */}
                 <button
                     onClick={() => setShowNew(true)}
-                    style={{ background: 'transparent', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '16px', padding: '28px', textAlign: 'center', cursor: 'pointer', transition: 'border-color 0.15s', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', minHeight: '200px' }}
+                    style={{ background: 'transparent', border: '1px dashed rgba(0,0,0,0.1)', borderRadius: '16px', padding: '28px', textAlign: 'center', cursor: 'pointer', transition: 'border-color 0.15s', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', minHeight: '200px' }}
                     onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(163,230,53,0.3)')}
-                    onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)')}
+                    onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(0,0,0,0.1)')}
                 >
-                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', border: '1px dashed rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', border: '1px dashed rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <Plus size={20} style={{ color: '#4b5563' }} />
                     </div>
                     <span style={{ fontSize: '12px', color: '#4b5563', fontFamily: 'Courier New, monospace', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Add New IP</span>
@@ -111,9 +111,9 @@ export default function VaultPage() {
             <div style={{ marginTop: '60px', textAlign: 'center' }}>
                 <button
                     onClick={() => setShowNew(true)}
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '11px', fontFamily: 'Courier New, monospace', letterSpacing: '0.4em', textTransform: 'uppercase', color: '#374151', transition: 'color 0.2s', padding: '12px 24px' }}
-                    onMouseEnter={e => (e.currentTarget.style.color = '#a3e635')}
-                    onMouseLeave={e => (e.currentTarget.style.color = '#374151')}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '11px', fontFamily: 'Courier New, monospace', letterSpacing: '0.4em', textTransform: 'uppercase', color: '#1f2937', transition: 'color 0.2s', padding: '12px 24px' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = '#65a30d')}
+                    onMouseLeave={e => (e.currentTarget.style.color = '#1f2937')}
                 >
                     BEYOND THE NEON ABYSS →
                 </button>
@@ -126,10 +126,10 @@ export default function VaultPage() {
                     onClick={() => setSelected(null)}
                 >
                     <div
-                        style={{ background: '#111111', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', padding: '36px', maxWidth: '520px', width: '100%', position: 'relative' }}
+                        style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '20px', padding: '36px', maxWidth: '520px', width: '100%', position: 'relative' }}
                         onClick={e => e.stopPropagation()}
                     >
-                        <button onClick={() => setSelected(null)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(255,255,255,0.05)', border: 'none', borderRadius: '8px', cursor: 'pointer', padding: '6px', color: '#9ca3af' }}>
+                        <button onClick={() => setSelected(null)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(0,0,0,0.05)', border: 'none', borderRadius: '8px', cursor: 'pointer', padding: '6px', color: '#6b7280' }}>
                             <X size={16} />
                         </button>
 
@@ -143,7 +143,7 @@ export default function VaultPage() {
                             </div>
                         </div>
 
-                        <p style={{ fontSize: '14px', color: '#9ca3af', lineHeight: 1.7, marginBottom: '24px' }}>{selected.description}</p>
+                        <p style={{ fontSize: '14px', color: '#6b7280', lineHeight: 1.7, marginBottom: '24px' }}>{selected.description}</p>
 
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px', padding: '12px 16px', background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.15)', borderRadius: '10px' }}>
                             <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 6px #22c55e' }} />
@@ -154,16 +154,16 @@ export default function VaultPage() {
                             <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '10px' }}>Collaborators</div>
                             <div style={{ display: 'flex', gap: '8px' }}>
                                 {selected.collaborators.map((c, i) => (
-                                    <div key={i} style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', fontSize: '12px', color: '#d1d5db' }}>{c}</div>
+                                    <div key={i} style={{ padding: '6px 12px', background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)', borderRadius: '8px', fontSize: '12px', color: '#1f2937' }}>{c}</div>
                                 ))}
                             </div>
                         </div>
 
                         <div style={{ display: 'flex', gap: '8px' }}>
                             {[{ icon: Share2, label: 'Share' }, { icon: Edit3, label: 'Edit' }, { icon: UserPlus, label: 'Add Collaborator' }].map(({ icon: Icon, label }) => (
-                                <button key={label} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '10px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', color: '#9ca3af', fontSize: '11px', cursor: 'pointer', transition: 'all 0.15s', fontFamily: 'Courier New, monospace' }}
-                                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(163,230,53,0.08)'; e.currentTarget.style.color = '#a3e635'; e.currentTarget.style.borderColor = 'rgba(163,230,53,0.2)'; }}
-                                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = '#9ca3af'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}>
+                                <button key={label} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '10px', background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)', borderRadius: '10px', color: '#6b7280', fontSize: '11px', cursor: 'pointer', transition: 'all 0.15s', fontFamily: 'Courier New, monospace' }}
+                                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(163,230,53,0.08)'; e.currentTarget.style.color = '#65a30d'; e.currentTarget.style.borderColor = 'rgba(163,230,53,0.2)'; }}
+                                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.04)'; e.currentTarget.style.color = '#6b7280'; e.currentTarget.style.borderColor = 'rgba(0,0,0,0.08)'; }}>
                                     <Icon size={13} /> {label}
                                 </button>
                             ))}
@@ -179,10 +179,10 @@ export default function VaultPage() {
                     onClick={() => setShowNew(false)}
                 >
                     <div
-                        style={{ background: '#111111', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', padding: '36px', maxWidth: '440px', width: '100%', position: 'relative' }}
+                        style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '20px', padding: '36px', maxWidth: '440px', width: '100%', position: 'relative' }}
                         onClick={e => e.stopPropagation()}
                     >
-                        <button onClick={() => setShowNew(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(255,255,255,0.05)', border: 'none', borderRadius: '8px', cursor: 'pointer', padding: '6px', color: '#9ca3af' }}>
+                        <button onClick={() => setShowNew(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(0,0,0,0.05)', border: 'none', borderRadius: '8px', cursor: 'pointer', padding: '6px', color: '#6b7280' }}>
                             <X size={16} />
                         </button>
                         <h2 style={{ fontSize: '20px', fontWeight: 700, color: '#f9fafb', marginBottom: '8px' }}>Register New IP</h2>
@@ -193,16 +193,16 @@ export default function VaultPage() {
                                 placeholder="IP Name..."
                                 value={newName}
                                 onChange={e => setNewName(e.target.value)}
-                                style={{ background: '#0d0d0d', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '12px 16px', color: '#f9fafb', fontSize: '14px', outline: 'none', fontFamily: 'Inter, sans-serif' }}
+                                style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '10px', padding: '12px 16px', color: '#f9fafb', fontSize: '14px', outline: 'none', fontFamily: 'Inter, sans-serif' }}
                             />
                             <textarea
                                 placeholder="Description..."
                                 rows={3}
-                                style={{ background: '#0d0d0d', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '12px 16px', color: '#f9fafb', fontSize: '14px', outline: 'none', resize: 'none', fontFamily: 'Inter, sans-serif' }}
+                                style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '10px', padding: '12px 16px', color: '#f9fafb', fontSize: '14px', outline: 'none', resize: 'none', fontFamily: 'Inter, sans-serif' }}
                             />
                             <button
                                 onClick={() => setShowNew(false)}
-                                style={{ padding: '12px', background: 'rgba(163,230,53,0.1)', border: '1px solid rgba(163,230,53,0.25)', borderRadius: '10px', color: '#a3e635', fontSize: '13px', fontWeight: 700, cursor: 'pointer', fontFamily: 'Courier New, monospace', letterSpacing: '0.08em', transition: 'background 0.15s' }}
+                                style={{ padding: '12px', background: 'rgba(163,230,53,0.1)', border: '1px solid rgba(163,230,53,0.25)', borderRadius: '10px', color: '#65a30d', fontSize: '13px', fontWeight: 700, cursor: 'pointer', fontFamily: 'Courier New, monospace', letterSpacing: '0.08em', transition: 'background 0.15s' }}
                                 onMouseEnter={e => (e.currentTarget.style.background = 'rgba(163,230,53,0.18)')}
                                 onMouseLeave={e => (e.currentTarget.style.background = 'rgba(163,230,53,0.1)')}
                             >

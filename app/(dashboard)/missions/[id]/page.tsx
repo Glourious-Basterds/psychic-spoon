@@ -62,19 +62,19 @@ export default function MissionDetailPage() {
                         <ChevronLeft size={16} />
                         Back to Missions
                     </Link>
-                    <h1 className="text-7xl md:text-8xl font-black hashi-font text-[#1a1a1a] tracking-tightest uppercase leading-none">
+                    <h1 className="text-7xl md:text-8xl font-black hashi-font text-[#ffffff] tracking-tightest uppercase leading-none">
                         {mission.title}
                     </h1>
                     <div className="flex items-center gap-4">
-                        <span className="px-4 py-1 bg-[#c20000] text-white text-[10px] font-black uppercase tracking-widest shadow-[10px_10px_30px_rgba(194,0,0,0.2)]">
+                        <span className="px-4 py-1 bg-[#c20000] text-[#0a0a0a] text-[10px] font-black uppercase tracking-widest shadow-[10px_10px_30px_rgba(194,0,0,0.2)]">
                             {mission.status}
                         </span>
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#1a1a1a]/30">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#ffffff]/30">
                             Sector: 07-N
                         </span>
                     </div>
                 </div>
-                <div className="max-w-md italic text-lg text-[#1a1a1a]/60 leading-relaxed font-medium">
+                <div className="max-w-md italic text-lg text-[#ffffff]/60 leading-relaxed font-medium">
                     &quot;{mission.desc}&quot;
                 </div>
             </div>
@@ -92,18 +92,18 @@ export default function MissionDetailPage() {
                                     key={m.id}
                                     onClick={() => setActiveModule(activeModule === m.id ? null : m.id)}
                                     className={`group p-8 border hover:border-[#c20000] transition-all cursor-pointer relative overflow-hidden
-                                        ${activeModule === m.id ? 'bg-[#c20000] border-[#c20000] text-white' : 'bg-white/40 border-[#c20000]/10 text-[#1a1a1a]'}`}
+                                        ${activeModule === m.id ? 'bg-[#c20000] border-[#c20000] text-[#0a0a0a]' : 'bg-black/40 border-[#c20000]/10 text-[#ffffff]'}`}
                                 >
                                     <div className="flex justify-between items-start mb-6">
-                                        <div className={`p-3 border ${activeModule === m.id ? 'border-white/20 bg-white/10' : 'border-[#c20000]/10 bg-[#c20000]/5 text-[#c20000]'}`}>
+                                        <div className={`p-3 border ${activeModule === m.id ? 'border-black/20 bg-black/10' : 'border-[#c20000]/10 bg-[#c20000]/5 text-[#c20000]'}`}>
                                             <m.icon size={24} />
                                         </div>
-                                        <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 ${activeModule === m.id ? 'bg-white text-[#c20000]' : 'bg-[#1a1a1a] text-white'}`}>
+                                        <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 ${activeModule === m.id ? 'bg-white text-[#c20000]' : 'bg-[#ffffff] text-[#0a0a0a]'}`}>
                                             {m.status}
                                         </span>
                                     </div>
                                     <h3 className="text-xl font-black uppercase hashi-font mb-2">{m.title}</h3>
-                                    <p className={`text-xs font-bold leading-relaxed ${activeModule === m.id ? 'text-white/70' : 'text-[#1a1a1a]/40'}`}>
+                                    <p className={`text-xs font-bold leading-relaxed ${activeModule === m.id ? 'text-black/70' : 'text-[#ffffff]/40'}`}>
                                         {m.desc}
                                     </p>
                                     <ArrowRight className={`absolute bottom-8 right-8 transition-all ${activeModule === m.id ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'}`} />
@@ -112,12 +112,12 @@ export default function MissionDetailPage() {
                         </div>
                     </div>
 
-                    <div className="p-12 bg-white/30 border border-[#c20000]/10 backdrop-blur-xl relative overflow-hidden">
+                    <div className="p-12 bg-black/30 border border-[#c20000]/10 backdrop-blur-xl relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-32 h-32 opacity-5">
                             <Star size={128} className="text-[#c20000]" />
                         </div>
                         <h3 className="text-sm font-black uppercase tracking-[0.5em] text-[#c20000] mb-6">Narrative Insight</h3>
-                        <p className="text-2xl font-black hashi-font text-[#1a1a1a] leading-tight italic">
+                        <p className="text-2xl font-black hashi-font text-[#ffffff] leading-tight italic">
                             {mission.narrative}
                         </p>
                     </div>
@@ -125,37 +125,37 @@ export default function MissionDetailPage() {
 
                 {/* Sidebar Stats */}
                 <aside className="space-y-12">
-                    <div className="bg-[#1a1a1a] p-8 text-white space-y-8">
-                        <div className="flex items-center gap-4 border-b border-white/10 pb-6">
+                    <div className="bg-[#ffffff] p-8 text-[#0a0a0a] space-y-8">
+                        <div className="flex items-center gap-4 border-b border-black/10 pb-6">
                             <div className="w-12 h-12 bg-[#c20000] flex items-center justify-center font-black hashi-font text-xl">88%</div>
                             <div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-white/40">Sync Rate</p>
+                                <p className="text-[10px] font-black uppercase tracking-widest text-black/40">Sync Rate</p>
                                 <p className="font-bold uppercase tracking-tighter">Synchronized</p>
                             </div>
                         </div>
 
                         <div className="space-y-4">
-                            <p className="text-[10px] font-black uppercase tracking-widest text-white/40">Personnel Assigned</p>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-black/40">Personnel Assigned</p>
                             <div className="flex -space-x-3">
                                 {[1, 2, 3].map(i => (
-                                    <div key={i} className="w-10 h-10 border-2 border-[#1a1a1a] bg-zinc-800 flex items-center justify-center font-black hashi-font text-[10px]">U{i}</div>
+                                    <div key={i} className="w-10 h-10 border-2 border-[#ffffff] bg-zinc-800 flex items-center justify-center font-black hashi-font text-[10px]">U{i}</div>
                                 ))}
-                                <div className="w-10 h-10 border-2 border-[#1a1a1a] bg-[#c20000] flex items-center justify-center font-black hashi-font text-[10px]">+</div>
+                                <div className="w-10 h-10 border-2 border-[#ffffff] bg-[#c20000] flex items-center justify-center font-black hashi-font text-[10px]">+</div>
                             </div>
                         </div>
 
-                        <Button className="w-full bg-[#c20000] hover:bg-white hover:text-black text-white rounded-none py-8 font-black uppercase tracking-[0.2em] transition-all hashi-font text-xs">
+                        <Button className="w-full bg-[#c20000] hover:bg-white hover:text-black text-[#0a0a0a] rounded-none py-8 font-black uppercase tracking-[0.2em] transition-all hashi-font text-xs">
                             <Play size={16} className="mr-2" />
                             Initialize Phase
                         </Button>
                     </div>
 
-                    <div className="p-8 border border-[#c20000]/10 bg-white/20 space-y-4">
+                    <div className="p-8 border border-[#c20000]/10 bg-black/20 space-y-4">
                         <div className="flex items-center gap-2 text-[#c20000]">
                             <Lock size={14} />
                             <span className="text-[10px] font-black uppercase tracking-widest">Encrypted Note</span>
                         </div>
-                        <p className="text-xs font-bold text-[#1a1a1a]/60 leading-relaxed italic">
+                        <p className="text-xs font-bold text-[#ffffff]/60 leading-relaxed italic">
                             &quot;The transition from shadows to shakers is nearly complete. Ensure the martini mix matches the tactical specs.&quot;
                         </p>
                     </div>
