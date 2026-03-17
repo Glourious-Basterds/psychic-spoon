@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Image as ImageIcon, Music, Phone, MessageSquare, Video, Play, Pause, Phone as PhoneIcon, X, Send, ChevronDown } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
 type TabId = 'PHOTOS' | 'SOUNDTRACKS' | 'CALLS' | 'MESSAGES' | 'VIDEO';
 type ProjectId = 'bar-man' | 'space-balls';
@@ -162,8 +163,8 @@ function CommsInner() {
         'space-balls': { ...PROJECTS['space-balls'].messages },
     });
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    // Only auto-scroll when a new user message is sent — not on channel switch
     const sentCountRef = useRef(0);
+    const { status } = useSession();
 
     useEffect(() => {
         if (projectParam !== activeProject) {
@@ -185,6 +186,10 @@ function CommsInner() {
     const currentMessages = localMessages[activeProject]?.[activeChannel] ?? [];
 
     const sendMessage = () => {
+        if (status === 'unauthenticated') {
+            alert('Please log in to send a message.');
+            return;
+        }
         if (!newMessage.trim()) return;
         const msg: Message = {
             id: Date.now().toString(),
@@ -243,7 +248,7 @@ function CommsInner() {
             {/* Channel sidebar */}
             <div style={{ width: '200px', background: '#ffffff', borderRight: '1px solid rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', flexShrink: 0, overflow: 'hidden' }}>
                 <div style={{ padding: '16px 14px', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
-                    <div style={{ fontSize: '11px', fontWeight: 800, fontFamily: 'Courier New, monospace', color: '#f9fafb', letterSpacing: '0.08em' }}>{proj.name}</div>
+                    <div style={{ fontSize: '11px', fontWeight: 800, fontFamily: 'Courier New, monospace', color: '#030712', letterSpacing: '0.08em' }}>{proj.name}</div>
                     <div style={{ fontSize: '9px', color: '#4b5563', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: '2px', fontFamily: 'Courier New, monospace' }}>{proj.subtitle}</div>
                 </div>
 
@@ -253,7 +258,7 @@ function CommsInner() {
                     const isOnline = proj.onlineUsers.includes(ch);
                     return (
                         <button key={ch} onClick={() => { setActiveChannel(ch); setActiveTab('MESSAGES'); }}
-                            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 14px', background: isCh ? 'rgba(0,0,0,0.05)' : 'transparent', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left', color: isCh ? '#f9fafb' : '#4b5563', transition: 'all 0.15s' }}
+                            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 14px', background: isCh ? 'rgba(0,0,0,0.05)' : 'transparent', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left', color: isCh ? '#030712' : '#4b5563', transition: 'all 0.15s' }}
                             onMouseEnter={e => { if (!isCh) e.currentTarget.style.color = '#6b7280'; }}
                             onMouseLeave={e => { if (!isCh) e.currentTarget.style.color = '#4b5563'; }}>
                             <span style={{ fontSize: '11px', color: '#1f2937', flexShrink: 0 }}>{isOnline ? '◉' : '#'}</span>
@@ -269,7 +274,7 @@ function CommsInner() {
                     const isActive = activeTab === t.id && activeTab !== 'MESSAGES';
                     return (
                         <button key={t.id} onClick={() => setActiveTab(t.id)}
-                            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 14px', background: activeTab === t.id && activeTab !== 'MESSAGES' ? 'rgba(0,0,0,0.04)' : 'transparent', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left', color: isActive ? '#f9fafb' : '#4b5563', transition: 'all 0.15s' }}
+                            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 14px', background: activeTab === t.id && activeTab !== 'MESSAGES' ? 'rgba(0,0,0,0.04)' : 'transparent', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left', color: isActive ? '#030712' : '#4b5563', transition: 'all 0.15s' }}
                             onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = '#6b7280'; }}
                             onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = '#4b5563'; }}>
                             <Icon size={12} />
@@ -298,7 +303,7 @@ function CommsInner() {
                         const isActive = activeTab === t.id;
                         return (
                             <button key={t.id} onClick={() => setActiveTab(t.id)}
-                                style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 14px', background: 'none', border: 'none', cursor: 'pointer', color: isActive ? '#f9fafb' : '#4b5563', fontSize: '11px', fontWeight: isActive ? 700 : 400, fontFamily: 'Courier New, monospace', letterSpacing: '0.08em', textTransform: 'uppercase', borderBottom: isActive ? '2px solid #65a30d' : '2px solid transparent', transition: 'all 0.15s', marginBottom: '-1px' }}
+                                style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 14px', background: 'none', border: 'none', cursor: 'pointer', color: isActive ? '#030712' : '#4b5563', fontSize: '11px', fontWeight: isActive ? 700 : 400, fontFamily: 'Courier New, monospace', letterSpacing: '0.08em', textTransform: 'uppercase', borderBottom: isActive ? '2px solid #65a30d' : '2px solid transparent', transition: 'all 0.15s', marginBottom: '-1px' }}
                                 onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = '#6b7280'; }}
                                 onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = '#4b5563'; }}>
                                 <Icon size={12} />
@@ -364,7 +369,7 @@ function CommsInner() {
 
                                         {/* Track info */}
                                         <div style={{ padding: '16px' }}>
-                                            <div style={{ fontSize: '14px', fontWeight: 600, color: nowPlaying ? '#f9fafb' : '#4b5563', marginBottom: '4px', transition: 'color 0.3s', minHeight: '20px' }}>
+                                            <div style={{ fontSize: '14px', fontWeight: 600, color: nowPlaying ? '#030712' : '#4b5563', marginBottom: '4px', transition: 'color 0.3s', minHeight: '20px' }}>
                                                 {nowPlaying ? nowPlaying.title : 'No track selected'}
                                             </div>
                                             <div style={{ fontSize: '11px', fontFamily: 'Courier New, monospace', color: '#4b5563', marginBottom: '16px' }}>
@@ -434,7 +439,7 @@ function CommsInner() {
                                                         <Music size={14} style={{ color: isPlaying ? '#65a30d' : '#1f2937' }} />
                                                     </div>
                                                     <div style={{ flex: 1 }}>
-                                                        <div style={{ fontSize: '13px', fontWeight: isPlaying ? 600 : 400, color: isPlaying ? '#f9fafb' : '#1f2937', marginBottom: '2px' }}>{t.title}</div>
+                                                        <div style={{ fontSize: '13px', fontWeight: isPlaying ? 600 : 400, color: isPlaying ? '#030712' : '#1f2937', marginBottom: '2px' }}>{t.title}</div>
                                                         <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#1f2937' }}>{t.artist}</div>
                                                     </div>
                                                     <span style={{ fontSize: '11px', fontFamily: 'Courier New, monospace', color: '#1f2937', flexShrink: 0 }}>{t.duration}</span>
@@ -460,7 +465,7 @@ function CommsInner() {
                                             <PhoneIcon size={16} style={{ color: callStatusColor[c.status] }} />
                                         </div>
                                         <div style={{ flex: 1 }}>
-                                            <div style={{ fontSize: '14px', fontWeight: 500, color: '#f9fafb', marginBottom: '2px' }}>{c.user}</div>
+                                            <div style={{ fontSize: '14px', fontWeight: 500, color: '#030712', marginBottom: '2px' }}>{c.user}</div>
                                             <div style={{ fontSize: '11px', fontFamily: 'Courier New, monospace', color: '#4b5563' }}>{c.date}</div>
                                         </div>
                                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
@@ -485,7 +490,7 @@ function CommsInner() {
                             <div style={{ padding: '10px 20px', borderBottom: '1px solid rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', gap: '8px', background: '#ffffff', flexShrink: 0 }}>
                                 <span style={{ fontSize: '12px', color: '#4b5563', fontFamily: 'Courier New, monospace' }}>#</span>
                                 <select value={activeChannel} onChange={e => setActiveChannel(e.target.value)}
-                                    style={{ background: 'transparent', border: 'none', color: '#f9fafb', fontSize: '13px', fontWeight: 600, cursor: 'pointer', outline: 'none' }}>
+                                    style={{ background: 'transparent', border: 'none', color: '#030712', fontSize: '13px', fontWeight: 600, cursor: 'pointer', outline: 'none' }}>
                                     {proj.channels.map(ch => <option key={ch} value={ch} style={{ background: '#ffffff' }}>{ch}</option>)}
                                 </select>
                                 <ChevronDown size={12} style={{ color: '#4b5563' }} />
@@ -518,7 +523,7 @@ function CommsInner() {
                                 <input type="text" value={newMessage} onChange={e => setNewMessage(e.target.value)}
                                     onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
                                     placeholder={`Message #${activeChannel}...`}
-                                    style={{ flex: 1, background: '#ffffff', border: '1px solid rgba(0,0,0,0.08)', borderRadius: '10px', padding: '10px 16px', color: '#f9fafb', fontSize: '13px', outline: 'none', fontFamily: 'Inter, sans-serif', transition: 'border-color 0.15s' }}
+                                    style={{ flex: 1, background: '#ffffff', border: '1px solid rgba(0,0,0,0.08)', borderRadius: '10px', padding: '10px 16px', color: '#030712', fontSize: '13px', outline: 'none', fontFamily: 'Inter, sans-serif', transition: 'border-color 0.15s' }}
                                     onFocus={e => (e.target.style.borderColor = 'rgba(0,0,0,0.18)')}
                                     onBlur={e => (e.target.style.borderColor = 'rgba(0,0,0,0.08)')} />
                                 <button onClick={sendMessage}

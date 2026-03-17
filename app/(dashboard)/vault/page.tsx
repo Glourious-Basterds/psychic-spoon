@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Shield, Lock, X, Plus, Share2, Edit3, UserPlus } from 'lucide-react';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 interface IPDoc {
     id: string;
@@ -45,6 +46,15 @@ export default function VaultPage() {
     const [selected, setSelected] = useState<IPDoc | null>(null);
     const [showNew, setShowNew] = useState(false);
     const [newName, setNewName] = useState('');
+    const { status } = useSession();
+
+    const requireAuth = (action: () => void) => {
+        if (status === 'unauthenticated') {
+            alert('Please log in for Vault permissions.');
+        } else {
+            action();
+        }
+    };
 
     return (
         <div style={{ padding: '32px', minHeight: '100%', background: '#ffffff', color: '#1f2937', fontFamily: 'Inter, sans-serif' }}>
@@ -52,13 +62,13 @@ export default function VaultPage() {
             {/* Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '40px' }}>
                 <div>
-                    <h1 style={{ fontSize: '28px', fontWeight: 700, color: '#f9fafb', margin: 0, letterSpacing: '-0.02em' }}>IP Vault</h1>
+                    <h1 style={{ fontSize: '28px', fontWeight: 700, color: '#030712', margin: 0, letterSpacing: '-0.02em' }}>IP Vault</h1>
                     <p style={{ marginTop: '6px', fontSize: '12px', color: '#6b7280', fontFamily: 'Courier New, monospace', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
                         Maximum security · Intellectual Property Storage
                     </p>
                 </div>
                 <button
-                    onClick={() => setShowNew(true)}
+                    onClick={() => requireAuth(() => setShowNew(true))}
                     style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 18px', background: 'rgba(163,230,53,0.08)', border: '1px solid rgba(163,230,53,0.2)', borderRadius: '10px', color: '#65a30d', fontSize: '12px', fontWeight: 700, fontFamily: 'Courier New, monospace', letterSpacing: '0.08em', cursor: 'pointer', transition: 'background 0.15s' }}
                     onMouseEnter={e => (e.currentTarget.style.background = 'rgba(163,230,53,0.15)')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'rgba(163,230,53,0.08)')}
@@ -82,7 +92,7 @@ export default function VaultPage() {
                             <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: `rgba(${doc.id === 'cyber-seal' ? '59,130,246' : '163,230,53'},0.1)`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
                                 <Icon size={24} style={{ color: doc.color }} />
                             </div>
-                            <div style={{ fontSize: '18px', fontWeight: 700, color: '#f9fafb', marginBottom: '6px' }}>{doc.name}</div>
+                            <div style={{ fontSize: '18px', fontWeight: 700, color: '#030712', marginBottom: '6px' }}>{doc.name}</div>
                             <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>{doc.label}</div>
                             <div style={{ fontSize: '12px', color: '#6b7280', lineHeight: 1.6, marginBottom: '16px' }}>{doc.description.slice(0, 80)}...</div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -95,7 +105,7 @@ export default function VaultPage() {
 
                 {/* Add new IP card */}
                 <button
-                    onClick={() => setShowNew(true)}
+                    onClick={() => requireAuth(() => setShowNew(true))}
                     style={{ background: 'transparent', border: '1px dashed rgba(0,0,0,0.1)', borderRadius: '16px', padding: '28px', textAlign: 'center', cursor: 'pointer', transition: 'border-color 0.15s', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', minHeight: '200px' }}
                     onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(163,230,53,0.3)')}
                     onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(0,0,0,0.1)')}
@@ -110,7 +120,7 @@ export default function VaultPage() {
             {/* Beyond the Neon Abyss CTA */}
             <div style={{ marginTop: '60px', textAlign: 'center' }}>
                 <button
-                    onClick={() => setShowNew(true)}
+                    onClick={() => requireAuth(() => setShowNew(true))}
                     style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '11px', fontFamily: 'Courier New, monospace', letterSpacing: '0.4em', textTransform: 'uppercase', color: '#1f2937', transition: 'color 0.2s', padding: '12px 24px' }}
                     onMouseEnter={e => (e.currentTarget.style.color = '#65a30d')}
                     onMouseLeave={e => (e.currentTarget.style.color = '#1f2937')}
@@ -138,7 +148,7 @@ export default function VaultPage() {
                                 <selected.icon size={28} style={{ color: selected.color }} />
                             </div>
                             <div>
-                                <div style={{ fontSize: '20px', fontWeight: 700, color: '#f9fafb' }}>{selected.name}</div>
+                                <div style={{ fontSize: '20px', fontWeight: 700, color: '#030712' }}>{selected.name}</div>
                                 <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{selected.label}</div>
                             </div>
                         </div>
@@ -161,7 +171,7 @@ export default function VaultPage() {
 
                         <div style={{ display: 'flex', gap: '8px' }}>
                             {[{ icon: Share2, label: 'Share' }, { icon: Edit3, label: 'Edit' }, { icon: UserPlus, label: 'Add Collaborator' }].map(({ icon: Icon, label }) => (
-                                <button key={label} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '10px', background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)', borderRadius: '10px', color: '#6b7280', fontSize: '11px', cursor: 'pointer', transition: 'all 0.15s', fontFamily: 'Courier New, monospace' }}
+                                <button key={label} onClick={() => requireAuth(() => { })} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '10px', background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)', borderRadius: '10px', color: '#6b7280', fontSize: '11px', cursor: 'pointer', transition: 'all 0.15s', fontFamily: 'Courier New, monospace' }}
                                     onMouseEnter={e => { e.currentTarget.style.background = 'rgba(163,230,53,0.08)'; e.currentTarget.style.color = '#65a30d'; e.currentTarget.style.borderColor = 'rgba(163,230,53,0.2)'; }}
                                     onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.04)'; e.currentTarget.style.color = '#6b7280'; e.currentTarget.style.borderColor = 'rgba(0,0,0,0.08)'; }}>
                                     <Icon size={13} /> {label}
@@ -185,7 +195,7 @@ export default function VaultPage() {
                         <button onClick={() => setShowNew(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(0,0,0,0.05)', border: 'none', borderRadius: '8px', cursor: 'pointer', padding: '6px', color: '#6b7280' }}>
                             <X size={16} />
                         </button>
-                        <h2 style={{ fontSize: '20px', fontWeight: 700, color: '#f9fafb', marginBottom: '8px' }}>Register New IP</h2>
+                        <h2 style={{ fontSize: '20px', fontWeight: 700, color: '#030712', marginBottom: '8px' }}>Register New IP</h2>
                         <p style={{ fontSize: '12px', color: '#6b7280', marginBottom: '28px', fontFamily: 'Courier New, monospace' }}>Add your intellectual property to the vault.</p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                             <input
@@ -193,12 +203,12 @@ export default function VaultPage() {
                                 placeholder="IP Name..."
                                 value={newName}
                                 onChange={e => setNewName(e.target.value)}
-                                style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '10px', padding: '12px 16px', color: '#f9fafb', fontSize: '14px', outline: 'none', fontFamily: 'Inter, sans-serif' }}
+                                style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '10px', padding: '12px 16px', color: '#030712', fontSize: '14px', outline: 'none', fontFamily: 'Inter, sans-serif' }}
                             />
                             <textarea
                                 placeholder="Description..."
                                 rows={3}
-                                style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '10px', padding: '12px 16px', color: '#f9fafb', fontSize: '14px', outline: 'none', resize: 'none', fontFamily: 'Inter, sans-serif' }}
+                                style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '10px', padding: '12px 16px', color: '#030712', fontSize: '14px', outline: 'none', resize: 'none', fontFamily: 'Inter, sans-serif' }}
                             />
                             <button
                                 onClick={() => setShowNew(false)}

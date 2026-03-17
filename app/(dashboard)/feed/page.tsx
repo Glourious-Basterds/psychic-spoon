@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Heart, MessageCircle, Share2, X, Users, Briefcase, Star, UserPlus, Check, Search, ChevronDown, ChevronUp, Layers, MousePointer2, BarChart3, Mail, Plus } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Post {
@@ -369,10 +370,11 @@ function Avatar({ author, size = 36, onClick }: { author: Author; size?: number;
 }
 
 // ─── Profile Modal ────────────────────────────────────────────────────────────
-function ProfileModal({ name, onClose, onFollow, followed, showToast }: {
+function ProfileModal({ name, onClose, onFollow, followed, showToast, requireAuth }: {
     name: string; onClose: () => void;
     onFollow: (name: string) => void; followed: Set<string>;
     showToast: (msg: string, type?: 'success' | 'info') => void;
+    requireAuth: (fn: () => void) => void;
 }) {
     const profile = PROFILES[name];
     const [activeTab, setActiveTab] = useState<'posts' | 'projects' | 'ip' | 'reviews'>('posts');
@@ -406,11 +408,11 @@ function ProfileModal({ name, onClose, onFollow, followed, showToast }: {
                         </div>
                         <span style={{ fontSize: '12px', fontFamily: 'Courier New, monospace', color: '#6b7280' }}>{profile.rating}/5</span>
                         <div style={{ display: 'flex', gap: '8px', marginLeft: 'auto' }}>
-                            <button onClick={() => { onFollow(name); showToast(isFollowing ? `Unfollowed ${name}` : `Now following ${name}`, 'success'); }}
+                            <button onClick={() => requireAuth(() => { onFollow(name); })}
                                 style={{ padding: '6px 16px', background: isFollowing ? 'rgba(163,230,53,0.1)' : 'rgba(0,0,0,0.04)', border: `1px solid ${isFollowing ? 'rgba(163,230,53,0.3)' : 'rgba(0,0,0,0.1)'}`, borderRadius: '20px', color: isFollowing ? '#65a30d' : '#6b7280', fontSize: '11px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', fontFamily: 'Courier New, monospace', letterSpacing: '0.06em', transition: 'all 0.15s' }}>
                                 {isFollowing ? <><Check size={10} /> CONNECTED</> : <><UserPlus size={10} /> CONNECT</>}
                             </button>
-                            <button onClick={() => showToast(`Invite sent to ${name}`, 'success')}
+                            <button onClick={() => requireAuth(() => showToast(`Invite sent to ${name}`, 'success'))}
                                 style={{ padding: '6px 16px', background: 'rgba(163,230,53,0.08)', border: '1px solid rgba(163,230,53,0.2)', borderRadius: '20px', color: '#65a30d', fontSize: '11px', cursor: 'pointer', fontFamily: 'Courier New, monospace', letterSpacing: '0.06em' }}>
                                 INVITE
                             </button>
@@ -494,9 +496,10 @@ function ProfileModal({ name, onClose, onFollow, followed, showToast }: {
 }
 
 // ─── Role Modal ───────────────────────────────────────────────────────────────
-function RoleModal({ title, project, type, onClose, showToast }: {
+function RoleModal({ title, project, type, onClose, showToast, requireAuth }: {
     title: string; project: string; type: string; onClose: () => void;
     showToast: (msg: string, type?: 'success' | 'info') => void;
+    requireAuth: (fn: () => void) => void;
 }) {
     const [applied, setApplied] = useState(false);
     return (
@@ -515,7 +518,7 @@ function RoleModal({ title, project, type, onClose, showToast }: {
                     </div>
                 </div>
                 <div style={{ display: 'flex', gap: '10px' }}>
-                    <button onClick={() => { if (!applied) { setApplied(true); showToast(`Application sent for ${title}`, 'success'); } }}
+                    <button onClick={() => requireAuth(() => { if (!applied) { setApplied(true); showToast(`Application sent for ${title}`, 'success'); } })}
                         style={{ flex: 1, padding: '12px', background: applied ? 'rgba(163,230,53,0.06)' : 'rgba(163,230,53,0.15)', border: '1px solid rgba(163,230,53,0.3)', borderRadius: '10px', color: '#65a30d', fontSize: '12px', fontFamily: 'Courier New, monospace', letterSpacing: '0.1em', cursor: applied ? 'default' : 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
                         {applied ? <><Check size={12} /> APPLIED</> : 'APPLY NOW'}
                     </button>
@@ -527,7 +530,7 @@ function RoleModal({ title, project, type, onClose, showToast }: {
 }
 
 // ─── Post Modal (Thread View) ──────────────────────────────────────────────────────
-function PostModal({ post, onClose, onProfile }: { post: Post; onClose: () => void; onProfile: (name: string) => void }) {
+function PostModal({ post, onClose, onProfile, requireAuth }: { post: Post; onClose: () => void; onProfile: (name: string) => void; requireAuth: (fn: () => void) => void; }) {
     const comments = post.comments ?? [];
     const [replyText, setReplyText] = useState('');
     const [localComments, setLocalComments] = useState<Comment[]>(comments);
@@ -539,18 +542,18 @@ function PostModal({ post, onClose, onProfile }: { post: Post; onClose: () => vo
         return () => window.removeEventListener('keydown', handler);
     }, [onClose]);
 
-    const sendReply = () => {
+    const sendReply = () => requireAuth(() => {
         if (!replyText.trim()) return;
         const newComment: Comment = {
             id: Date.now(), author: AUTHORS['Pietro M.'], content: replyText.trim(), time: 'now', likes: 0,
         };
         setLocalComments(prev => [...prev, newComment]);
         setReplyText('');
-    };
+    });
 
-    const toggleCommentLike = (id: number) => {
+    const toggleCommentLike = (id: number) => requireAuth(() => {
         setLikedComments(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
-    };
+    });
 
     return (
         <div style={{ position: 'fixed', inset: 0, zIndex: 4000, display: 'flex' }} onClick={onClose}>
@@ -648,7 +651,7 @@ function PostModal({ post, onClose, onProfile }: { post: Post; onClose: () => vo
 }
 
 // ─── Project Focus ────────────────────────────────────────────────────────────
-function ProjectFocus({ isEditorSetting = false }: { isEditorSetting?: boolean }) {
+function ProjectFocus({ isEditorSetting = false, requireAuth }: { isEditorSetting?: boolean, requireAuth: (fn: () => void) => void }) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isArticleHiddenByEditor] = useState(isEditorSetting); // simulating editor preference
 
@@ -661,7 +664,7 @@ function ProjectFocus({ isEditorSetting = false }: { isEditorSetting?: boolean }
                     <div style={{ fontSize: '11px', fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '4px' }}>Project Focus</div>
                     <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#030712', letterSpacing: '-0.02em', margin: 0 }}>THE SPAGHETTI MONSTER</h2>
                 </div>
-                <button style={{ padding: '10px 24px', background: '#65a30d', border: 'none', borderRadius: '10px', color: '#ffffff', fontSize: '12px', fontWeight: 800, fontFamily: 'Courier New, monospace', letterSpacing: '0.05em', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 20px rgba(163,230,53,0.2)' }}
+                <button onClick={() => requireAuth(() => { })} style={{ padding: '10px 24px', background: '#65a30d', border: 'none', borderRadius: '10px', color: '#ffffff', fontSize: '12px', fontWeight: 800, fontFamily: 'Courier New, monospace', letterSpacing: '0.05em', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 20px rgba(163,230,53,0.2)' }}
                     onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
                     onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}>
                     COLLABORATE
@@ -742,8 +745,17 @@ export default function FeedPage() {
     const [sharedPosts, setSharedPosts] = useState<Set<number>>(new Set());
     const [lightbox, setLightbox] = useState<string | null>(null);
     const [openPost, setOpenPost] = useState<Post | null>(null);
+    const { status } = useSession();
 
-    const toggleLike = (id: number) => {
+    const requireAuth = (action: () => void) => {
+        if (status === 'unauthenticated') {
+            showToast('Please log in to perform this action', 'info');
+        } else {
+            action();
+        }
+    };
+
+    const toggleLike = (id: number) => requireAuth(() => {
         setPosts(prev => prev.map(p => {
             if (p.id === id) {
                 const nowLiked = !p.liked;
@@ -752,29 +764,29 @@ export default function FeedPage() {
             }
             return p;
         }));
-    };
+    });
 
-    const submitReply = (id: number, author: string) => {
+    const submitReply = (id: number, author: string) => requireAuth(() => {
         if (!replyText.trim()) return;
         setPosts(prev => prev.map(p => p.id === id ? { ...p, replies: p.replies + 1 } : p));
         showToast(`Reply sent to ${author}`, 'success');
         setReplyingTo(null);
         setReplyText('');
-    };
+    });
 
-    const toggleFollow = (name: string) => {
+    const toggleFollow = (name: string) => requireAuth(() => {
         setFollowed(prev => {
             const next = new Set(prev);
             if (next.has(name)) { next.delete(name); showToast(`Disconnected from ${name}`, 'info'); }
             else { next.add(name); showToast(`Now connected with ${name}`, 'success'); }
             return next;
         });
-    };
+    });
 
-    const sharePost = (id: number, author: string) => {
+    const sharePost = (id: number, author: string) => requireAuth(() => {
         setSharedPosts(prev => new Set(prev).add(id));
         showToast(`Post by ${author} shared`, 'success');
-    };
+    });
 
     const filteredPosts = posts.filter(p =>
         search === '' || p.content.toLowerCase().includes(search.toLowerCase()) || p.author.name.toLowerCase().includes(search.toLowerCase())
@@ -898,7 +910,7 @@ export default function FeedPage() {
                         </div>
                     ))}
 
-                    <ProjectFocus isEditorSetting={true} />
+                    <ProjectFocus isEditorSetting={true} requireAuth={requireAuth} />
                 </div>
 
                 <style>{`
@@ -992,14 +1004,14 @@ export default function FeedPage() {
             {/* Modals */}
             {openProfile && (
                 <ProfileModal name={openProfile} onClose={() => setOpenProfile(null)}
-                    onFollow={toggleFollow} followed={followed} showToast={showToast} />
+                    onFollow={toggleFollow} followed={followed} showToast={showToast} requireAuth={requireAuth} />
             )}
             {openRole && (
                 <RoleModal title={openRole.title} project={openRole.project} type={openRole.type}
-                    onClose={() => setOpenRole(null)} showToast={showToast} />
+                    onClose={() => setOpenRole(null)} showToast={showToast} requireAuth={requireAuth} />
             )}
             {openPost && (
-                <PostModal key={openPost.id} post={openPost} onClose={() => setOpenPost(null)} onProfile={setOpenProfile} />
+                <PostModal key={openPost.id} post={openPost} onClose={() => setOpenPost(null)} onProfile={setOpenProfile} requireAuth={requireAuth} />
             )}
 
             {lightbox && (
