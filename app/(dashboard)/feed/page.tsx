@@ -860,7 +860,6 @@ export default function FeedPage() {
                                             onMouseLeave={e => { (e.currentTarget.querySelector('img') as HTMLImageElement).style.transform = 'scale(1)'; e.currentTarget.style.borderColor = 'rgba(0,0,0,0.07)'; }}>
                                             {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img src={post.image} alt="attachment" style={{ width: '100%', maxHeight: '260px', objectFit: 'cover', display: 'block', transition: 'transform 0.3s ease' }} />
-                                            <div style={{ position: 'absolute', bottom: '8px', right: '8px', background: 'rgba(0,0,0,0.6)', borderRadius: '6px', padding: '4px 8px', fontSize: '9px', fontFamily: 'Courier New, monospace', color: 'rgba(0,0,0,0.6)', letterSpacing: '0.1em', backdropFilter: 'blur(4px)' }}>CLICK TO EXPAND</div>
                                         </div>
                                     )}
 
