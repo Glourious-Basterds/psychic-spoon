@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, Search, X } from 'lucide-react';
+import { ChevronDown, ChevronUp, Search, X, Plus } from 'lucide-react';
+import { useProjects, Mission } from '@/app/context/ProjectContext';
+import { NewMissionModal } from '@/components/missions/NewMissionModal';
 
 type MissionStatus = 'IN_PROGRESS' | 'COMPLETED' | 'IN_CONSIDERATION';
 type FilterTab = 'ALL' | 'CURRENT' | 'PAST' | 'FUTURE';
@@ -19,24 +21,7 @@ interface DueDate {
     detail: string;
 }
 
-interface Mission {
-    id: string;
-    title: string;
-    role: string;
-    projectNumber: string;
-    status: MissionStatus;
-    progress?: number;
-    summary?: string;
-    members?: { initials: string; color: string; name: string }[];
-    extraMembers?: number;
-    milestones?: Milestone[];
-    photos?: { emoji: string; bg: string }[];
-    dueDates?: DueDate[];
-    rating?: number;
-    views?: string;
-    repPts?: number;
-    offer?: string;
-}
+// Local Mission interface removed in favor of ProjectContext Mission
 
 const MISSIONS: Mission[] = [
     {
@@ -166,11 +151,13 @@ const FILTER_MAP: Record<FilterTab, MissionStatus[]> = {
 };
 
 export default function MissionsPage() {
+    const { missions } = useProjects();
     const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set(['bar-man']));
     const [filter, setFilter] = useState<FilterTab>('ALL');
     const [search, setSearch] = useState('');
     const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
     const [dueDateDetail, setDueDateDetail] = useState<string | null>(null);
+    const [showNewMissionModal, setShowNewMissionModal] = useState(false);
 
     const toggle = (id: string) => setExpandedIds(prev => {
         const next = new Set(prev);
@@ -184,7 +171,7 @@ export default function MissionsPage() {
         setFilter(prev => prev === tab ? 'ALL' : tab);
     };
 
-    const filteredMissions = MISSIONS.filter(m =>
+    const filteredMissions = missions.filter((m: Mission) =>
         FILTER_MAP[filter].includes(m.status) &&
         m.title.toLowerCase().includes(search.toLowerCase())
     );
@@ -233,6 +220,12 @@ export default function MissionsPage() {
                             {tab}
                         </button>
                     ))}
+                    <button 
+                        onClick={() => setShowNewMissionModal(true)}
+                        style={{ marginLeft: '12px', padding: '6px 16px', background: '#65a30d', border: 'none', borderRadius: '20px', color: '#ffffff', fontSize: '10px', fontWeight: 800, fontFamily: 'Courier New, monospace', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '0 4px 12px rgba(163,230,53,0.2)' }}
+                    >
+                        <Plus size={12} /> NEW MISSION
+                    </button>
                 </div>
             </div>
 
@@ -247,9 +240,8 @@ export default function MissionsPage() {
                                 <span className="missions-divider-label">{sectionLabel}</span>
                                 <div className="missions-divider-line" />
                             </div>
-
-                            {missions.map(mission => {
-                                const cfg = STATUS_CONFIG[mission.status];
+                            {missions.map((mission: Mission) => {
+                                const cfg = STATUS_CONFIG[mission.status] || STATUS_CONFIG.IN_PROGRESS;
                                 const isExpanded = expandedIds.has(mission.id);
                                 return (
                                     <div key={mission.id} className="mission-card">
@@ -452,6 +444,10 @@ export default function MissionsPage() {
                 }}>
                     {tooltip.text}
                 </div>
+            )}
+
+            {showNewMissionModal && (
+                <NewMissionModal onClose={() => setShowNewMissionModal(false)} />
             )}
 
             {/* Due Date Detail Modal */}

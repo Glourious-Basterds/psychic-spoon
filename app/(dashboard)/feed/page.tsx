@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Heart, MessageCircle, Share2, X, Users, Briefcase, Star, UserPlus, Check, Search, ChevronDown, ChevronUp, Layers, MousePointer2, BarChart3, Mail, Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import { useProjects, TrendingProject, OpenRole } from '@/app/context/ProjectContext';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Post {
@@ -287,22 +288,10 @@ const INITIAL_POSTS: Post[] = [
     },
 ];
 
-const TRENDING = [
-    { name: 'The Bar-Man', members: 8, href: '/comms?project=bar-man' },
-    { name: 'Space-Balls S2', members: 6, href: '/comms?project=space-balls' },
-    { name: 'Ghost Protocol Noir', members: 3, href: '/missions' },
-];
-
 const SUGGESTED = [
     { name: 'Sara R.', role: 'Sound Designer', initials: 'SR', color: '#1a2a3a' },
     { name: 'Marco V.', role: 'VFX Compositor', initials: 'MV', color: '#2a1a1a' },
     { name: 'Elena K.', role: 'Score Composer', initials: 'EK', color: '#1a1a2a' },
-];
-
-const OPEN_ROLES = [
-    { title: 'Sound Designer', project: 'The Bar-Man', type: 'Freelance' },
-    { title: 'VFX Lead', project: 'Space-Balls S2', type: 'Full-time' },
-    { title: 'Script Editor', project: 'Ghost Protocol', type: 'Contract' },
 ];
 
 // ─── Comments data ─────────────────────────────────────────────────────────────
@@ -734,6 +723,7 @@ function ProjectFocus({ isEditorSetting = false, requireAuth }: { isEditorSettin
 
 // ─── Main Page ─────────────────────────────────────────────────────────────────
 export default function FeedPage() {
+    const { trendingProjects, openRoles } = useProjects();
     const { toasts, show: showToast, dismiss } = useToast();
     const [posts, setPosts] = useState<Post[]>(INITIAL_POSTS);
     const [search, setSearch] = useState('');
@@ -945,11 +935,14 @@ export default function FeedPage() {
                         <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <Briefcase size={10} /> Trending Projects
                         </div>
-                        {TRENDING.map((t, i) => (
+                        {trendingProjects.map((t: TrendingProject, i: number) => (
                             <a key={i} href={t.href} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 8px', borderRadius: '8px', textDecoration: 'none', transition: 'background 0.15s', marginBottom: '2px' }}
                                 onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.03)')}
                                 onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                                <span style={{ fontSize: '13px', fontWeight: 500, color: '#1f2937' }}>{t.name}</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <span style={{ fontSize: '13px', fontWeight: 500, color: '#1f2937' }}>{t.name}</span>
+                                    {t.isNew && <span style={{ fontSize: '9px', fontWeight: 800, color: '#65a30d', background: 'rgba(163,230,53,0.1)', padding: '2px 6px', borderRadius: '4px', fontFamily: 'Courier New, monospace' }}>NEW</span>}
+                                </div>
                                 <span style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563' }}>{t.members}m</span>
                             </a>
                         ))}
@@ -983,7 +976,7 @@ export default function FeedPage() {
                         <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <Star size={10} /> Open Roles
                         </div>
-                        {OPEN_ROLES.map((r, i) => (
+                        {openRoles.map((r: OpenRole, i: number) => (
                             <div key={i} onClick={() => setOpenRole(r)}
                                 style={{ padding: '9px 8px', borderRadius: '8px', cursor: 'pointer', marginBottom: '4px', border: '1px solid rgba(0,0,0,0.04)', transition: 'all 0.15s' }}
                                 onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.02)'; e.currentTarget.style.borderColor = 'rgba(0,0,0,0.1)'; }}

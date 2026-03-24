@@ -6,7 +6,9 @@ import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 import { LayoutDashboard, FolderKanban, MessageSquare, ShieldCheck, LogOut, Menu, PanelLeftOpen, PanelLeftClose, Globe } from 'lucide-react';
 import { useUI } from '@/context/UIContext';
+import { useProjects } from '@/app/context/ProjectContext';
 import { CinematicTrigger, GlobalMiniPlayer } from '@/components/ui/cinematic-player';
+import { ProjectProvider } from '@/app/context/ProjectContext';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
@@ -69,7 +71,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }, []);
 
     return (
-        <div className="h-screen bg-[#f9fafb] text-[#030712] flex flex-col md:flex-row overflow-hidden relative selection:bg-black/10 selection:text-[#030712]">
+        <ProjectProvider>
+            <div className="h-screen bg-[#f9fafb] text-[#030712] flex flex-col md:flex-row overflow-hidden relative selection:bg-black/10 selection:text-[#030712]">
             {/* Pure Black Background - Subtle Gradients from CSS hashi-theme-bg */}
             <div className="absolute inset-0 z-0 pointer-events-none hashi-theme-bg opacity-40" />
 
@@ -160,5 +163,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
             <GlobalMiniPlayer />
         </div>
+    </ProjectProvider>
     );
 }
