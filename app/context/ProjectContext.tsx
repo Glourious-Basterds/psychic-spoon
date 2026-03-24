@@ -79,6 +79,9 @@ interface ProjectContextType {
         roles: string[];
         deadlines: { label: string; date: string }[];
     }) => void;
+    deleteProject: (id: string) => void;
+    addPhotoToProject: (projectId: string, photo: Photo) => void;
+    addMessageToProject: (projectId: string, channel: string, message: Message) => void;
 }
 
 // --- Context & Provider ---
@@ -432,8 +435,57 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
         }));
     };
 
+    const deleteProject = (id: string) => {
+        // Find the project name for openRoles filtering
+        const project = missions.find(m => m.id === id);
+        const projectName = project?.title;
+
+        setMissions(prev => prev.filter(m => m.id !== id));
+        setTrendingProjects(prev => prev.filter(p => !p.href.includes(`project=${id}`)));
+        if (projectName) {
+            setOpenRoles(prev => prev.filter(r => r.project !== projectName));
+        }
+        setWorkspaces(prev => {
+            const next = { ...prev };
+            delete next[id];
+            return next;
+        });
+    };
+
+    const addPhotoToProject = (projectId: string, photo: Photo) => {
+        setWorkspaces(prev => {
+            const ws = prev[projectId];
+            if (!ws) return prev;
+            return {
+                ...prev,
+                [projectId]: {
+                    ...ws,
+                    photos: [photo, ...ws.photos]
+                }
+            };
+        });
+    };
+
+    const addMessageToProject = (projectId: string, channel: string, message: Message) => {
+        setWorkspaces(prev => {
+            const ws = prev[projectId];
+            if (!ws) return prev;
+            const channelMessages = ws.messages[channel] || [];
+            return {
+                ...prev,
+                [projectId]: {
+                    ...ws,
+                    messages: {
+                        ...ws.messages,
+                        [channel]: [...channelMessages, message]
+                    }
+                }
+            };
+        });
+    };
+
     return (
-        <ProjectContext.Provider value={{ missions, trendingProjects, openRoles, workspaces, publishMission }}>
+        <ProjectContext.Provider value={{ missions, trendingProjects, openRoles, workspaces, publishMission, deleteProject, addPhotoToProject, addMessageToProject }}>
             {children}
         </ProjectContext.Provider>
     );

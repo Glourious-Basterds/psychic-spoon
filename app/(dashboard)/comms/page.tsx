@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Image as ImageIcon, Music, Phone, MessageSquare, Video, Play, Pause, Phone as PhoneIcon, X, Send, ChevronDown } from 'lucide-react';
+import { Image as ImageIcon, Music, Phone, MessageSquare, Video, Play, Pause, Phone as PhoneIcon, X, Send, ChevronDown, Trash2, Upload, Camera, AlertTriangle } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useProjects, Message, Photo, Track, Call } from '@/app/context/ProjectContext';
+import { useRouter } from 'next/navigation';
 
 type TabId = 'PHOTOS' | 'SOUNDTRACKS' | 'CALLS' | 'MESSAGES' | 'VIDEO';
 type ProjectId = string;
@@ -13,7 +14,8 @@ type ProjectId = string;
 // PROJECTS constant removed - using ProjectContext
 
 function CommsInner() {
-    const { workspaces } = useProjects();
+    const { workspaces, deleteProject, addPhotoToProject, addMessageToProject } = useProjects();
+    const router = useRouter();
     const searchParams = useSearchParams();
     const projectParam = searchParams.get('project') || 'bar-man';
     const channelParam = searchParams.get('channel');
@@ -24,13 +26,8 @@ function CommsInner() {
     const [playingTrack, setPlayingTrack] = useState<string | null>(null);
     const [lightbox, setLightbox] = useState<Photo | null>(null);
     const [newMessage, setNewMessage] = useState('');
-    const [localMessages, setLocalMessages] = useState<Record<string, Record<string, Message[]>>>(() => {
-        const msgs: Record<string, Record<string, Message[]>> = {};
-        Object.entries(workspaces).forEach(([id, ws]: [string, any]) => {
-            msgs[id] = { ...ws.messages };
-        });
-        return msgs;
-    });
+    const [isDeleting, setIsDeleting] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const sentCountRef = useRef(0);
     const { status } = useSession();
@@ -58,7 +55,27 @@ function CommsInner() {
     }, [sentCountRef.current]);
 
     const proj = workspaces[activeProject] || workspaces['bar-man'];
-    const currentMessages = localMessages[activeProject]?.[activeChannel] ?? [];
+    const currentMessages = proj?.messages?.[activeChannel] ?? [];
+
+    const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                addPhotoToProject(activeProject, {
+                    src: reader.result as string,
+                    alt: file.name
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleDeleteProject = () => {
+        deleteProject(activeProject);
+        setIsDeleting(false);
+        router.push('/feed');
+    };
 
     const sendMessage = () => {
         if (status === 'unauthenticated') {
@@ -75,13 +92,7 @@ function CommsInner() {
             time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
             mine: true,
         };
-        setLocalMessages(prev => ({
-            ...prev,
-            [activeProject]: {
-                ...prev[activeProject],
-                [activeChannel]: [...(prev[activeProject]?.[activeChannel] ?? []), msg],
-            },
-        }));
+        addMessageToProject(activeProject, activeChannel, msg);
         sentCountRef.current += 1;
         setNewMessage('');
     };
@@ -122,10 +133,31 @@ function CommsInner() {
 
             {/* Channel sidebar */}
             <div style={{ width: '200px', background: '#ffffff', borderRight: '1px solid rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', flexShrink: 0, overflow: 'hidden' }}>
-                <div style={{ padding: '16px 14px', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
-                    <div style={{ fontSize: '11px', fontWeight: 800, fontFamily: 'Courier New, monospace', color: '#030712', letterSpacing: '0.08em' }}>{proj.name}</div>
-                    <div style={{ fontSize: '9px', color: '#4b5563', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: '2px', fontFamily: 'Courier New, monospace' }}>{proj.subtitle}</div>
+                <div style={{ padding: '16px 14px', borderBottom: '1px solid rgba(0,0,0,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div>
+                        <div style={{ fontSize: '11px', fontWeight: 800, fontFamily: 'Courier New, monospace', color: '#030712', letterSpacing: '0.08em' }}>{proj.name}</div>
+                        <div style={{ fontSize: '9px', color: '#4b5563', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: '2px', fontFamily: 'Courier New, monospace' }}>{proj.subtitle}</div>
+                    </div>
+                    <button 
+                        onClick={() => setIsDeleting(true)}
+                        style={{ padding: '4px', background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af' }}
+                        title="Project Settings"
+                    >
+                        <Trash2 size={12} />
+                    </button>
                 </div>
+
+                {isDeleting && (
+                    <div style={{ padding: '12px 14px', background: 'rgba(239,68,68,0.05)', borderBottom: '1px solid rgba(239,68,68,0.1)' }}>
+                        <div style={{ fontSize: '9px', fontWeight: 800, color: '#ef4444', fontFamily: 'Courier New, monospace', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <AlertTriangle size={10} /> DELETE WORKSPACE?
+                        </div>
+                        <div style={{ display: 'flex', gap: '4px' }}>
+                            <button onClick={handleDeleteProject} style={{ flex: 1, padding: '4px', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '9px', fontWeight: 800 }}>YES</button>
+                            <button onClick={() => setIsDeleting(false)} style={{ flex: 1, padding: '4px', background: 'rgba(0,0,0,0.05)', color: '#4b5563', border: 'none', borderRadius: '4px', fontSize: '9px', fontWeight: 800 }}>NO</button>
+                        </div>
+                    </div>
+                )}
 
                 <div style={{ padding: '12px 14px 4px', fontSize: '9px', color: '#4b5563', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'Courier New, monospace', fontWeight: 700 }}>Intelligence Hub</div>
                 {proj.channels.map((ch: string) => {
@@ -194,8 +226,23 @@ function CommsInner() {
                     {/* PHOTOS */}
                     {activeTab === 'PHOTOS' && (
                         <div>
-                            <div style={{ fontSize: '11px', fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '20px' }}>
-                                VISUAL.ARCHIVE &nbsp; <span style={{ color: '#1f2937' }}>{proj.photos.length} OBJECTS_LOCALIZED</span>
+                            <input 
+                                type="file" 
+                                ref={fileInputRef} 
+                                onChange={handlePhotoUpload} 
+                                accept="image/*" 
+                                style={{ display: 'none' }} 
+                            />
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                                <div style={{ fontSize: '11px', fontFamily: 'Courier New, monospace', color: '#4b5563', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
+                                    VISUAL.ARCHIVE &nbsp; <span style={{ color: '#1f2937' }}>{proj.photos.length} OBJECTS_LOCALIZED</span>
+                                </div>
+                                <button 
+                                    onClick={() => fileInputRef.current?.click()}
+                                    style={{ padding: '6px 14px', background: '#65a30d', border: 'none', borderRadius: '20px', color: '#ffffff', fontSize: '10px', fontWeight: 800, fontFamily: 'Courier New, monospace', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                                >
+                                    <Upload size={12} /> UPLOAD PHOTO
+                                </button>
                             </div>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '12px' }}>
                                 {proj.photos.map((p: Photo, i: number) => (

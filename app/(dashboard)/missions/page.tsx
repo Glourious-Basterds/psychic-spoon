@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, Search, X, Plus } from 'lucide-react';
+import { ChevronDown, ChevronUp, Search, X, Plus, Trash2, AlertTriangle } from 'lucide-react';
 import { useProjects, Mission } from '@/app/context/ProjectContext';
 import { NewMissionModal } from '@/components/missions/NewMissionModal';
 
@@ -151,13 +151,14 @@ const FILTER_MAP: Record<FilterTab, MissionStatus[]> = {
 };
 
 export default function MissionsPage() {
-    const { missions } = useProjects();
+    const { missions, deleteProject } = useProjects();
     const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set(['bar-man']));
     const [filter, setFilter] = useState<FilterTab>('ALL');
     const [search, setSearch] = useState('');
     const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
     const [dueDateDetail, setDueDateDetail] = useState<string | null>(null);
     const [showNewMissionModal, setShowNewMissionModal] = useState(false);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
 
     const toggle = (id: string) => setExpandedIds(prev => {
         const next = new Set(prev);
@@ -319,6 +320,42 @@ export default function MissionsPage() {
                                                                     ))}
                                                                     {mission.extraMembers && <span className="mission-extra-members">+{mission.extraMembers} members</span>}
                                                                 </div>
+                                                            )}
+                                                        </div>
+
+                                                        {/* Project Management */}
+                                                        <div className="mission-section-block" style={{ marginTop: 'auto', paddingTop: '20px', borderTop: '1px solid rgba(0,0,0,0.04)' }}>
+                                                            <div className="mission-section-label" style={{ color: '#ef4444' }}>DANGER ZONE</div>
+                                                            {deletingId === mission.id ? (
+                                                                <div style={{ padding: '16px', background: 'rgba(239,68,68,0.08)', borderRadius: '12px', border: '1px solid rgba(239,68,68,0.2)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#ef4444', fontSize: '11px', fontWeight: 800, fontFamily: 'Courier New, monospace', letterSpacing: '0.05em' }}>
+                                                                        <AlertTriangle size={16} /> PERMANENT DELETION
+                                                                    </div>
+                                                                    <p style={{ fontSize: '12px', color: '#4b5563', margin: 0, lineHeight: 1.5 }}>This will remove the mission and all associated workspace data.</p>
+                                                                    <div style={{ display: 'flex', gap: '8px' }}>
+                                                                        <button 
+                                                                            onClick={() => { deleteProject(mission.id); setDeletingId(null); }}
+                                                                            style={{ flex: 1, padding: '10px', background: '#ef4444', border: 'none', borderRadius: '8px', color: '#ffffff', fontSize: '11px', fontWeight: 800, fontFamily: 'Courier New, monospace', cursor: 'pointer' }}
+                                                                        >
+                                                                            DELETE NOW
+                                                                        </button>
+                                                                        <button 
+                                                                            onClick={() => setDeletingId(null)}
+                                                                            style={{ flex: 1, padding: '10px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '8px', color: '#4b5563', fontSize: '11px', fontWeight: 800, fontFamily: 'Courier New, monospace', cursor: 'pointer' }}
+                                                                        >
+                                                                            CANCEL
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            ) : (
+                                                                <button 
+                                                                    onClick={() => setDeletingId(mission.id)}
+                                                                    style={{ width: '100%', padding: '12px', background: 'transparent', border: '1px dashed rgba(239,68,68,0.4)', borderRadius: '12px', color: '#ef4444', fontSize: '11px', fontWeight: 800, fontFamily: 'Courier New, monospace', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', transition: 'all 0.2s' }}
+                                                                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.05)'; e.currentTarget.style.borderColor = '#ef4444'; }}
+                                                                    onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(239,68,68,0.4)'; }}
+                                                                >
+                                                                    <Trash2 size={14} /> TERMINATE MISSION WORKSPACE
+                                                                </button>
                                                             )}
                                                         </div>
 

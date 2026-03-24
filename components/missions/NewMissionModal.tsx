@@ -26,11 +26,23 @@ export function NewMissionModal({ onClose }: NewMissionModalProps) {
     const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
     const [deadlines, setDeadlines] = useState<{ label: string; date: string }[]>([]);
     const [isPublic, setIsPublic] = useState(true);
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
 
     const toggleRole = (role: string) => {
         setSelectedRoles(prev => 
             prev.includes(role) ? prev.filter(r => r !== role) : [...prev, role]
         );
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setCoverImage(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const addDeadline = () => {
@@ -77,8 +89,15 @@ export function NewMissionModal({ onClose }: NewMissionModalProps) {
                 <div style={{ flex: 1, overflowY: 'auto', padding: '0 0 40px 0' }} className="custom-scroll">
                     
                     {/* Cover Section */}
+                    <input 
+                        type="file" 
+                        ref={fileInputRef} 
+                        onChange={handleFileChange} 
+                        accept="image/*" 
+                        style={{ display: 'none' }} 
+                    />
                     <div 
-                        onClick={() => setCoverImage('/images/bg_hashi_overview.png')} // Simulated upload
+                        onClick={() => fileInputRef.current?.click()}
                         style={{ width: '100%', height: '200px', background: coverImage ? `url(${coverImage}) center/cover` : '#f3f4f6', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '8px', borderBottom: '1px solid rgba(0,0,0,0.06)', transition: 'all 0.3s' }}
                     >
                         {!coverImage && (
