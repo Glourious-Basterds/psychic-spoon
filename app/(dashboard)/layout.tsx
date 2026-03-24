@@ -37,7 +37,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 message: "How's the project going on so far? ... Idk, have a look around dumbass",
                 time: 'Just now',
                 projectId: 'bar-man',
-                channelId: 'general'
+                channelId: 'Bruce-W.'
             },
             {
                 id: 2,
@@ -45,7 +45,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 message: "How's the food guys? ... Mamma Mia! It's the best cuisine in the world",
                 time: '2m ago',
                 projectId: 'space-balls',
-                channelId: 'kitchen'
+                channelId: 'Home-Base'
             }
         ];
 
