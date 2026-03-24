@@ -151,10 +151,11 @@ const PROJECTS = {
 function CommsInner() {
     const searchParams = useSearchParams();
     const projectParam = (searchParams.get('project') as ProjectId) || 'bar-man';
+    const channelParam = searchParams.get('channel');
 
     const [activeProject, setActiveProject] = useState<ProjectId>(projectParam);
-    const [activeChannel, setActiveChannel] = useState(PROJECTS[projectParam].channels[0]);
-    const [activeTab, setActiveTab] = useState<TabId>('PHOTOS');
+    const [activeChannel, setActiveChannel] = useState(channelParam || PROJECTS[projectParam].channels[0]);
+    const [activeTab, setActiveTab] = useState<TabId>(channelParam ? 'MESSAGES' : 'PHOTOS');
     const [playingTrack, setPlayingTrack] = useState<string | null>(null);
     const [lightbox, setLightbox] = useState<Photo | null>(null);
     const [newMessage, setNewMessage] = useState('');
@@ -169,10 +170,16 @@ function CommsInner() {
     useEffect(() => {
         if (projectParam !== activeProject) {
             setActiveProject(projectParam);
-            setActiveChannel(PROJECTS[projectParam].channels[0]);
+            if (!channelParam) {
+                setActiveChannel(PROJECTS[projectParam].channels[0]);
+            }
+        }
+        if (channelParam && channelParam !== activeChannel) {
+            setActiveChannel(channelParam);
+            setActiveTab('MESSAGES');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [projectParam]);
+    }, [projectParam, channelParam]);
 
     // Intentionally NOT depending on activeChannel/activeTab — only scroll on new sent messages
     useEffect(() => {

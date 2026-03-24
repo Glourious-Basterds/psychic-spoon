@@ -19,10 +19,10 @@ export default function Home() {
           <Link href="#pricing" className="text-sm font-bold uppercase tracking-widest text-zinc-400 hover:text-white transition-colors">Hero Plans</Link>
         </div>
         <div className="flex items-center gap-4">
-          <Link href="/dashboard">
+          <Link href="/feed">
             <Button variant="ghost" className="font-bold text-white uppercase tracking-tighter">Login</Button>
           </Link>
-          <Link href="/dashboard">
+          <Link href="/feed">
             <Button className="bg-marvel-red text-white hover:bg-red-700 comic-border border-none shadow-none uppercase font-black italic tracking-tighter px-6">Join Now</Button>
           </Link>
         </div>
@@ -46,7 +46,7 @@ export default function Home() {
         </p>
 
         <div className="flex flex-col gap-6 sm:flex-row">
-          <Link href="/dashboard">
+          <Link href="/feed">
             <Button size="lg" className="bg-marvel-red hover:bg-red-700 text-white font-black uppercase italic tracking-tighter text-2xl h-16 px-10 rounded-none shadow-[8px_8px_0px_white] active:translate-y-1 active:shadow-none transition-all">
               Ascend Now <ChevronRight className="ml-2 h-6 w-6" />
             </Button>

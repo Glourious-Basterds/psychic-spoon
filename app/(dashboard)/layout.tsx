@@ -89,7 +89,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <Link
                         key={notif.id}
                         href={`/comms?project=${notif.projectId}&channel=${notif.channelId}`}
-                        className="w-80 bg-[#ffffff]/90 backdrop-blur-2xl border border-black/5 p-4 shadow-[30px_30px_70px_rgba(0,0,0,0.05)] pointer-events-auto animate-in slide-in-from-right duration-700 hover:border-black/20 transition-all group"
+                        className="w-80 bg-[#ffffff]/90 backdrop-blur-2xl border border-black/5 p-4 shadow-[30px_30px_70px_rgba(0,0,0,0.05)] pointer-events-auto animate-in slide-in-from-right duration-700 hover:border-black/20 transition-all group cursor-pointer"
                     >
                         <div className="flex justify-between items-start mb-2">
                             <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-black/40 group-hover:text-[#030712] transition-colors hashi-font">{notif.title}</h4>
