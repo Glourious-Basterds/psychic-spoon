@@ -240,7 +240,7 @@ function CommsInner() {
                     return (
                         <button
                             key={pid}
-                            onClick={() => { setActiveProject(pid); setActiveChannel(PROJECTS[pid].channels[0]); setActiveTab('PHOTOS'); setPlayingTrack(null); }}
+                            onClick={() => { setActiveProject(pid); setActiveChannel(PROJECTS[pid].channels[0]); setActiveTab('MESSAGES'); setPlayingTrack(null); }}
                             title={PROJECTS[pid].name}
                             style={{ width: '44px', height: '44px', borderRadius: isActive ? '12px' : '22px', border: isActive ? '2px solid rgba(163,230,53,0.4)' : '1px solid rgba(0,0,0,0.08)', background: isActive ? 'rgba(163,230,53,0.08)' : '#ffffff', color: isActive ? '#65a30d' : '#4b5563', fontSize: '9px', fontWeight: 800, fontFamily: 'Courier New, monospace', letterSpacing: '0.02em', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                             onMouseEnter={e => { if (!isActive) { e.currentTarget.style.borderRadius = '14px'; e.currentTarget.style.color = '#1f2937'; } }}
