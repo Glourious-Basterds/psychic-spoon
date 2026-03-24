@@ -40,7 +40,7 @@ export default function DashboardPage() {
 
             {/* Header */}
             <div style={{ marginBottom: '40px' }}>
-                <h1 style={{ fontSize: '28px', fontWeight: 700, color: '#f9fafb', margin: 0, letterSpacing: '-0.02em' }}>Dashboard</h1>
+                <h1 style={{ fontSize: '28px', fontWeight: 700, color: '#030712', margin: 0, letterSpacing: '-0.02em' }}>Dashboard</h1>
                 <p style={{ marginTop: '6px', fontSize: '12px', color: '#6b7280', fontFamily: 'Courier New, monospace', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
                     The world awaits, {session?.user?.name || 'Traveler'}
                 </p>
@@ -57,7 +57,7 @@ export default function DashboardPage() {
                             <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#4b5563', marginBottom: '12px' }}>
                                 {s.label}
                             </div>
-                            <div style={{ fontSize: '36px', fontWeight: 800, color: '#f9fafb', lineHeight: 1, letterSpacing: '-0.02em' }}>{s.value}</div>
+                            <div style={{ fontSize: '36px', fontWeight: 800, color: '#030712', lineHeight: 1, letterSpacing: '-0.02em' }}>{s.value}</div>
                             <div style={{ marginTop: '6px', fontSize: '11px', color: '#6b7280' }}>{s.sub}</div>
                             <Icon size={40} style={{ position: 'absolute', right: '16px', bottom: '16px', color: 'rgba(0,0,0,0.03)' }} />
                         </Link>
@@ -78,7 +78,7 @@ export default function DashboardPage() {
                         {projects.map(p => (
                             <div key={p.id} style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.07)', borderRadius: '12px', padding: '20px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '24px' }}>
                                 <div>
-                                    <div style={{ fontSize: '15px', fontWeight: 600, color: '#f9fafb', marginBottom: '4px' }}>{p.title}</div>
+                                    <div style={{ fontSize: '15px', fontWeight: 600, color: '#030712', marginBottom: '4px' }}>{p.title}</div>
                                     <div style={{ fontSize: '12px', color: '#6b7280', lineHeight: 1.5 }}>{p.description}</div>
                                 </div>
                                 <Link

@@ -293,7 +293,7 @@ export default function MissionsPage() {
                                             <div className="mission-rating-row">
                                                 <div className="mission-stars">
                                                     {[1, 2, 3, 4, 5].map(s => (
-                                                        <span key={s} style={{ color: s <= (mission.rating || 0) ? '#facc15' : '#1f2937' }}>★</span>
+                                                        <span key={s} style={{ color: s <= (mission.rating || 0) ? '#facc15' : '#4b5563' }}>★</span>
                                                     ))}
                                                 </div>
                                                 <span className="mission-rating-label">Your project rating</span>
@@ -437,7 +437,7 @@ export default function MissionsPage() {
                     left: tooltip.x,
                     top: tooltip.y,
                     transform: 'translate(-50%, -100%)',
-                    background: '#1c1c1c',
+                    background: '#ffffff',
                     border: '1px solid rgba(0,0,0,0.12)',
                     borderRadius: '8px',
                     padding: '8px 12px',
@@ -468,7 +468,7 @@ export default function MissionsPage() {
             <style>{`
                 .missions-root { display: flex; flex-direction: column; height: 100vh; overflow-y: auto; background: #ffffff; color: #1f2937; font-family: 'Inter', sans-serif; }
                 .missions-topbar { display: flex; align-items: center; gap: 16px; padding: 0 24px; height: 56px; background: #ffffff; border-bottom: 1px solid rgba(0,0,0,0.06); flex-shrink: 0; }
-                .missions-title { font-size: 15px; font-weight: 600; color: #f9fafb; margin: 0; white-space: nowrap; }
+                .missions-title { font-size: 15px; font-weight: 600; color: #030712; margin: 0; white-space: nowrap; }
                 .missions-search-wrap { position: relative; flex: 1; max-width: 360px; }
                 .missions-search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #4b5563; pointer-events: none; }
                 .missions-search { width: 100%; background: #ffffff; border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; padding: 6px 30px 6px 32px; font-size: 12px; font-family: 'Courier New', monospace; color: #1f2937; outline: none; transition: border-color 0.2s; box-sizing: border-box; }
@@ -488,7 +488,7 @@ export default function MissionsPage() {
                 .mission-card-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; cursor: pointer; gap: 16px; user-select: none; }
                 .mission-header-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
                 .mission-status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-                .mission-title { font-size: 15px; font-weight: 600; color: #f9fafb; line-height: 1.2; }
+                .mission-title { font-size: 15px; font-weight: 600; color: #030712; line-height: 1.2; }
                 .mission-sub { font-size: 11px; font-family: 'Courier New', monospace; color: #6b7280; margin-top: 2px; letter-spacing: 0.05em; }
                 .mission-header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
                 .mission-mini-bar { width: 80px; height: 4px; background: rgba(0,0,0,0.08); border-radius: 2px; overflow: hidden; }
@@ -498,13 +498,13 @@ export default function MissionsPage() {
                 .mission-badge { font-size: 10px; font-weight: 700; font-family: 'Courier New', monospace; letter-spacing: 0.06em; padding: 3px 10px; border-radius: 20px; white-space: nowrap; transition: opacity 0.15s; }
                 .mission-badge:hover { opacity: 0.75; }
                 .mission-chevron { color: #4b5563; flex-shrink: 0; }
-                .mission-rating-row { display: flex; align-items: center; gap: 10px; padding: 10px 18px; background: #0e0e0e; border-top: 1px solid rgba(0,0,0,0.06); font-family: 'Courier New', monospace; font-size: 11px; }
+                .mission-rating-row { display: flex; align-items: center; gap: 10px; padding: 10px 18px; background: #f9fafb; border-top: 1px solid rgba(0,0,0,0.06); font-family: 'Courier New', monospace; font-size: 11px; }
                 .mission-stars { font-size: 14px; letter-spacing: 1px; }
                 .mission-rating-label { color: #4b5563; flex: 1; }
                 .mission-views { color: #6b7280; }
                 .mission-rep { color: #4ade80; font-weight: 700; }
                 .mission-body-line { height: 1px; background: rgba(0,0,0,0.06); }
-                .mission-body-inner { display: flex; padding: 20px 18px; background: #0e0e0e; }
+                .mission-body-inner { display: flex; padding: 20px 18px; background: #f9fafb; }
                 .mission-col-left { flex: 1; display: flex; flex-direction: column; gap: 20px; padding-right: 20px; }
                 .mission-col-divider { width: 1px; background: rgba(0,0,0,0.06); flex-shrink: 0; }
                 .mission-col-right { flex: 1; display: flex; flex-direction: column; gap: 20px; padding-left: 20px; }
@@ -512,7 +512,7 @@ export default function MissionsPage() {
                 .mission-section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'Courier New', monospace; color: #4b5563; }
                 .mission-summary-text { font-size: 13px; line-height: 1.6; color: #6b7280; margin: 0; }
                 .mission-members { display: flex; align-items: center; gap: 4px; margin-top: 4px; }
-                .mission-avatar { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #0e0e0e; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: rgba(0,0,0,0.8); margin-left: -4px; cursor: default; transition: transform 0.15s; }
+                .mission-avatar { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #f9fafb; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: rgba(0,0,0,0.8); margin-left: -4px; cursor: default; transition: transform 0.15s; }
                 .mission-avatar:first-child { margin-left: 0; }
                 .mission-avatar:hover { transform: scale(1.2); z-index: 10; }
                 .mission-extra-members { font-size: 11px; font-family: 'Courier New', monospace; color: #6b7280; margin-left: 6px; }
