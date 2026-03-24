@@ -155,7 +155,7 @@ function CommsInner() {
 
     const [activeProject, setActiveProject] = useState<ProjectId>(projectParam);
     const [activeChannel, setActiveChannel] = useState(channelParam || PROJECTS[projectParam].channels[0]);
-    const [activeTab, setActiveTab] = useState<TabId>(channelParam ? 'MESSAGES' : 'PHOTOS');
+    const [activeTab, setActiveTab] = useState<TabId>('MESSAGES');
     const [playingTrack, setPlayingTrack] = useState<string | null>(null);
     const [lightbox, setLightbox] = useState<Photo | null>(null);
     const [newMessage, setNewMessage] = useState('');
