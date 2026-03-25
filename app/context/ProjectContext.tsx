@@ -67,6 +67,58 @@ export interface Call { id: string; user: string; date: string; duration: string
 export interface Message { id: string; sender: string; initials: string; color: string; content: string; time: string; mine: boolean; isEasterEgg?: boolean; }
 export interface Photo { src: string; alt: string; }
 
+export interface Review {
+    id: string;
+    reviewerName: string;
+    reviewerPhoto: string | null;
+    projectTitle: string;
+    text: string;
+    rating: number;
+    date: string;
+}
+
+export interface RatingBreakdown {
+    reliability: number;
+    communication: number;
+    punctuality: number;
+    quality: number;
+    toneUnderstanding: number;
+    creativity: number;
+    teamwork: number;
+}
+
+export interface Post {
+    id: string;
+    authorName: string;
+    authorInitials: string;
+    authorColor: string;
+    content: string;
+    image?: string;
+    likes: number;
+    comments: number;
+    timestamp: string;
+}
+
+export interface UserProfile {
+    id: string;
+    name: string;
+    photo: string | null;
+    coverImage: string | null;
+    role: string;
+    rating: number;
+    reviewCount: number;
+    bio: string;
+    email: string;
+    portfolio?: string;
+    social?: string;
+    skills: string[];
+    specialties: string[];
+    hobbies: string[];
+    ratings: RatingBreakdown;
+    reviews: Review[];
+    posts: Post[];
+}
+
 export interface ProjectWorkspace {
     name: string;
     subtitle: string;
@@ -111,6 +163,9 @@ interface ProjectContextType {
     removeNotification: (id: string) => void;
     unreadCounts: Record<string, Record<string, number>>;
     markAsRead: (projectId: string, channel: string) => void;
+    userProfile: UserProfile;
+    updateProfile: (data: Partial<UserProfile>) => void;
+    getOtherUserById: (id: string) => UserProfile | undefined;
 }
 
 // --- Context & Provider ---
@@ -125,6 +180,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
     const [workspaces, setWorkspaces] = useState<Record<string, ProjectWorkspace>>({});
     const [notifications, setNotifications] = useState<AppNotification[]>([]);
     const [unreadCounts, setUnreadCounts] = useState<Record<string, Record<string, number>>>({});
+    const [userProfile, setUserProfile] = useState<UserProfile>({} as UserProfile);
     const [isLoaded, setIsLoaded] = useState(false);
 
     // Default data (returned if localStorage is empty)
@@ -356,8 +412,99 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
                 'Elena-K.': [
                     { id: 'ek1', sender: 'Elena K.', initials: 'EK', color: '#1a1a2a', content: "The zero-gravity carbonara simulation is finally stable.", time: '15:20', mine: false },
                 ]
-            },
+            }
+        }
+    };
+
+    const defaultProfile: UserProfile = {
+        id: 'pietro-m',
+        name: 'Pietro M.',
+        photo: null,
+        coverImage: '/images/abstract_hashi_overview.png',
+        role: 'Sound Designer & Director',
+        rating: 4.8,
+        reviewCount: 32,
+        bio: "I'm a visual storyteller and sound architect. I love creating atmospheric experiences where audio and video dance together perfectly. Looking for projects that challenge the boundaries of noir and sci-fi.",
+        email: 'pietro@hashi.cx',
+        portfolio: 'pietro.hashi.cx',
+        social: '@pietro_m',
+        skills: ['Sound Design', 'Film Editing', 'Cinematography', 'VFX', 'Color Grading', 'Audio Engineering'],
+        specialties: ['Atmospheric Soundscapes', 'Noir Lighting', 'Cinematic Soundtrack'],
+        hobbies: ['Synth building', 'Vintage lenses', 'Italian cooking', 'Urban sketching'],
+        ratings: {
+            reliability: 4.9,
+            communication: 4.7,
+            punctuality: 4.8,
+            quality: 4.9,
+            toneUnderstanding: 5.0,
+            creativity: 4.8,
+            teamwork: 4.6
         },
+        reviews: [
+            {
+                id: 'rev1',
+                reviewerName: 'Bruce W.',
+                reviewerPhoto: null,
+                projectTitle: 'The Bar-Man',
+                text: "Pietro's sound design on the rainy bar scene was extraordinary. He didn't just add sound, he added a character. Pure noir feeling.",
+                rating: 5,
+                date: '2 months ago'
+            },
+            {
+                id: 'rev2',
+                reviewerName: 'Elena K.',
+                reviewerPhoto: null,
+                projectTitle: 'Space Balls — S2',
+                text: "The zero-G pasta sounds are hilarious and perfectly timed. High level of reliability and quick turnarounds.",
+                rating: 4,
+                date: '1 week ago'
+            }
+        ],
+        posts: [
+            {
+                id: 'post1',
+                authorName: 'Pietro M.',
+                authorInitials: 'PM',
+                authorColor: '#1e3a5f',
+                content: "Just finished the late-night sound pass for #TheBarMan. There's something magical about silence in noir.",
+                image: '/images/bts_cinematographer.png',
+                likes: 42,
+                comments: 8,
+                timestamp: '2h ago'
+            },
+            {
+                id: 'post2',
+                authorName: 'Pietro M.',
+                authorInitials: 'PM',
+                authorColor: '#1e3a5f',
+                content: "Experimenting with binaural recording for the next mission. The space feels huge.",
+                likes: 28,
+                comments: 3,
+                timestamp: 'Yesterday'
+            }
+        ]
+    };
+
+    const otherUsers: Record<string, UserProfile> = {
+        'bruce-w': {
+            id: 'bruce-w',
+            name: 'Bruce W.',
+            photo: null,
+            coverImage: '/images/barman_noir.png',
+            role: 'Lead Director',
+            rating: 4.9,
+            reviewCount: 124,
+            bio: "Director at Nightside Productions. I chase light and shadows. Looking for obsessive perfectionists.",
+            email: 'bruce@nightside.io',
+            social: '@the_bat_dir',
+            portfolio: 'nightside.io',
+            skills: ['Directing', 'Writing', 'Fight Choreography'],
+            specialties: ['Dark Noir', 'Action Sequences'],
+            hobbies: ['Martial arts', 'Night vision tech'],
+            ratings: { reliability: 5, communication: 4, punctuality: 5, quality: 5, toneUnderstanding: 5, creativity: 5, teamwork: 3 },
+            reviews: [],
+            posts: []
+        }
     };
 
     // Load from localStorage
@@ -367,6 +514,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
         const savedRoles = localStorage.getItem('hashi_roles');
         const savedWorkspaces = localStorage.getItem('hashi_workspaces');
         const savedUnread = localStorage.getItem('hashi_unread');
+        const savedProfile = localStorage.getItem('hashi_profile');
 
         if (savedMissions) {
             const parsed = JSON.parse(savedMissions);
@@ -452,6 +600,9 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
             });
         }
 
+        if (savedProfile) setUserProfile(JSON.parse(savedProfile));
+        else setUserProfile(defaultProfile);
+        
         setIsLoaded(true);
     }, []);
 
@@ -463,8 +614,9 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
             localStorage.setItem('hashi_roles', JSON.stringify(openRoles));
             localStorage.setItem('hashi_workspaces', JSON.stringify(workspaces));
             localStorage.setItem('hashi_unread', JSON.stringify(unreadCounts));
+            localStorage.setItem('hashi_profile', JSON.stringify(userProfile));
         }
-    }, [missions, trendingProjects, openRoles, workspaces, unreadCounts, isLoaded]);
+    }, [missions, trendingProjects, openRoles, workspaces, unreadCounts, userProfile, isLoaded]);
 
     const publishMission = (data: {
         name: string;
@@ -737,6 +889,14 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
         });
     };
 
+    const updateProfile = (data: Partial<UserProfile>) => {
+        setUserProfile(prev => ({ ...prev, ...data }));
+    };
+
+    const getOtherUserById = (id: string) => {
+        return otherUsers[id];
+    };
+
     // --- Message Simulation Engine ---
     useEffect(() => {
         if (!isLoaded) return;
@@ -789,6 +949,9 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
             },
             unreadCounts,
             markAsRead,
+            userProfile,
+            updateProfile,
+            getOtherUserById,
             joinProject,
             reachOut
         }}>

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
-import { LayoutDashboard, FolderKanban, MessageSquare, ShieldCheck, LogOut, Menu, PanelLeftOpen, PanelLeftClose, Globe, X } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, MessageSquare, ShieldCheck, LogOut, Menu, PanelLeftOpen, PanelLeftClose, Globe, X, User } from 'lucide-react';
 import { useUI } from '@/context/UIContext';
 import { useProjects } from '@/app/context/ProjectContext';
 import { CinematicTrigger, GlobalMiniPlayer } from '@/components/ui/cinematic-player';
@@ -23,6 +23,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         { href: '/feed', label: 'Feed', icon: Globe },
         { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
         { href: '/missions', label: 'Missions', icon: FolderKanban },
+        { href: '/profile', label: 'Profile', icon: User },
         { href: '/comms', label: 'Workspace', icon: MessageSquare, badge: totalUnread > 0 ? totalUnread : null },
         { href: '/vault', label: 'IP Vault', icon: ShieldCheck },
     ];
