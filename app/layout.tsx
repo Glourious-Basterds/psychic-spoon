@@ -3,6 +3,7 @@ import { Inter, Bangers } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/providers/session-provider";
 import { UIProvider } from '@/context/UIContext';
+import { ProjectProvider } from '@/app/context/ProjectContext';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -33,7 +34,9 @@ export default function RootLayout({
       <body className={`${inter.variable} ${bangers.variable} font-sans antialiased`}>
         <AuthProvider>
           <UIProvider>
-            {children}
+            <ProjectProvider>
+              {children}
+            </ProjectProvider>
           </UIProvider>
         </AuthProvider>
       </body>

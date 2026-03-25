@@ -14,7 +14,7 @@ type ProjectId = string;
 // PROJECTS constant removed - using ProjectContext
 
 function CommsInner() {
-    const { workspaces, deleteProject, addPhotoToProject, addMessageToProject } = useProjects();
+    const { workspaces, deleteProject, addPhotoToProject, addMessageToProject, markAsRead, unreadCounts } = useProjects();
     const router = useRouter();
     const searchParams = useSearchParams();
     const projectParam = searchParams.get('project') || 'bar-man';
@@ -51,11 +51,20 @@ function CommsInner() {
         if (sentCountRef.current > 0) {
             messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sentCountRef.current]);
+
+    useEffect(() => {
+        if (activeProject && activeChannel) {
+            markAsRead(activeProject, activeChannel);
+        }
+    }, [activeProject, activeChannel, markAsRead]);
 
     const proj = workspaces[activeProject] || workspaces['bar-man'];
     const currentMessages = proj?.messages?.[activeChannel] ?? [];
+
+    if (!proj) {
+        return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#ffffff', color: '#4b5563', fontFamily: 'Courier New, monospace', fontSize: '11px', letterSpacing: '0.1em' }}>INITIALIZING WORKSPACE...</div>;
+    }
 
     const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -121,11 +130,16 @@ function CommsInner() {
                             key={pid}
                             onClick={() => { setActiveProject(pid); setActiveChannel(workspaces[pid].channels[0]); setActiveTab('MESSAGES'); setPlayingTrack(null); }}
                             title={workspaces[pid].name}
-                            style={{ width: '44px', height: '44px', borderRadius: isActive ? '12px' : '22px', border: isActive ? '2px solid rgba(163,230,53,0.4)' : '1px solid rgba(0,0,0,0.08)', background: isActive ? 'rgba(163,230,53,0.08)' : '#ffffff', color: isActive ? '#65a30d' : '#4b5563', fontSize: '9px', fontWeight: 800, fontFamily: 'Courier New, monospace', letterSpacing: '0.02em', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                            style={{ position: 'relative', width: '44px', height: '44px', borderRadius: isActive ? '12px' : '22px', border: isActive ? '2px solid rgba(163,230,53,0.4)' : '1px solid rgba(0,0,0,0.08)', background: isActive ? 'rgba(163,230,53,0.08)' : '#ffffff', color: isActive ? '#65a30d' : '#4b5563', fontSize: '9px', fontWeight: 800, fontFamily: 'Courier New, monospace', letterSpacing: '0.02em', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                             onMouseEnter={e => { if (!isActive) { e.currentTarget.style.borderRadius = '14px'; e.currentTarget.style.color = '#1f2937'; } }}
                             onMouseLeave={e => { if (!isActive) { e.currentTarget.style.borderRadius = '22px'; e.currentTarget.style.color = '#4b5563'; } }}
                         >
                             {initials}
+                            {Object.values(unreadCounts[pid] || {}).reduce((a, b) => a + b, 0) > 0 && (
+                                <div style={{ position: 'absolute', top: '-5px', right: '-5px', width: '16px', height: '16px', borderRadius: '50%', background: '#ef4444', color: '#fff', fontSize: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, border: '2px solid #f9fafb' }}>
+                                    {Object.values(unreadCounts[pid] || {}).reduce((a, b) => a + b, 0)}
+                                </div>
+                            )}
                         </button>
                     );
                 })}
@@ -163,6 +177,7 @@ function CommsInner() {
                 {proj.channels.map((ch: string) => {
                     const isCh = activeChannel === ch && activeTab === 'MESSAGES';
                     const isOnline = proj.onlineUsers.includes(ch);
+                    const unread = unreadCounts[activeProject]?.[ch] || 0;
                     return (
                         <button key={ch} onClick={() => { setActiveChannel(ch); setActiveTab('MESSAGES'); }}
                             style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 14px', background: isCh ? 'rgba(0,0,0,0.05)' : 'transparent', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left', color: isCh ? '#030712' : '#4b5563', transition: 'all 0.15s' }}
@@ -170,7 +185,12 @@ function CommsInner() {
                             onMouseLeave={e => { if (!isCh) e.currentTarget.style.color = '#4b5563'; }}>
                             <span style={{ fontSize: '11px', color: '#1f2937', flexShrink: 0 }}>{isOnline ? '◉' : '#'}</span>
                             <span style={{ fontSize: '12px', fontWeight: isCh ? 600 : 400 }}>{ch}</span>
-                            {isOnline && <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 4px #22c55e', marginLeft: 'auto', flexShrink: 0 }} />}
+                            {unread > 0 && (
+                                <div style={{ marginLeft: 'auto', padding: '1px 6px', background: '#ef4444', color: '#fff', borderRadius: '10px', fontSize: '8px', fontWeight: 900 }}>
+                                    {unread}
+                                </div>
+                            )}
+                            {unread === 0 && isOnline && <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 4px #22c55e', marginLeft: 'auto', flexShrink: 0 }} />}
                         </button>
                     );
                 })}
@@ -202,9 +222,27 @@ function CommsInner() {
             {/* Main content */}
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
+                {/* Banner */}
+                <div style={{ width: '100%', height: '140px', position: 'relative', flexShrink: 0, overflow: 'hidden', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
+                    <img 
+                        src={proj.coverImage || '/images/abstract_hashi_overview.png'} 
+                        alt={proj.name} 
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                    />
+                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7))' }} />
+                    <div style={{ position: 'absolute', bottom: '20px', left: '24px', right: '24px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                            <div style={{ fontSize: '8px', fontWeight: 900, color: '#000', background: '#a3e635', padding: '2px 8px', borderRadius: '4px', fontFamily: 'Courier New, monospace', letterSpacing: '0.05em' }}>WORKSPACE ACTIVE</div>
+                            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.7)', fontFamily: 'Courier New, monospace' }}>ID: {activeProject.toUpperCase()}</div>
+                        </div>
+                        <h1 style={{ fontSize: '32px', fontWeight: 900, color: '#ffffff', margin: 0, letterSpacing: '-0.03em', textShadow: '0 2px 10px rgba(0,0,0,0.4)', lineHeight: 1 }}>{proj.name.toUpperCase()}</h1>
+                        <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.85)', fontFamily: 'Courier New, monospace', marginTop: '6px', letterSpacing: '0.08em', fontWeight: 500 }}>{proj.subtitle.toUpperCase()}</div>
+                    </div>
+                </div>
+
                 {/* Tabs bar */}
-                <div style={{ height: '48px', borderBottom: '1px solid rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', padding: '0 24px', gap: '4px', background: '#ffffff', flexShrink: 0 }}>
-                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#3b82f6', boxShadow: '0 0 6px #3b82f6', marginRight: '12px' }} />
+                <div style={{ height: '48px', borderBottom: '1px solid rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', padding: '0 24px', gap: '4px', background: '#f9fafb', flexShrink: 0 }}>
+                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#65a30d', boxShadow: '0 0 6px rgba(101,163,13,0.5)', marginRight: '12px' }} />
                     {mediaTabDef.map(t => {
                         const Icon = t.icon;
                         const isActive = activeTab === t.id;

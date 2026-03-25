@@ -23,117 +23,6 @@ interface DueDate {
 
 // Local Mission interface removed in favor of ProjectContext Mission
 
-const MISSIONS: Mission[] = [
-    {
-        id: 'bar-man',
-        title: 'The Bar Man',
-        role: 'Lead Director',
-        projectNumber: '#0041',
-        status: 'IN_PROGRESS',
-        progress: 62,
-        summary: 'A noir short film following a bartender who slowly realizes his regulars are ghosts. Visual tone: desaturated, high contrast. Sound design is central.',
-        members: [
-            { initials: 'JK', color: '#1e3a5f', name: 'James K.' },
-            { initials: 'SR', color: '#1a4731', name: 'Sara R.' },
-            { initials: 'MT', color: '#4a1a1a', name: 'Marco T.' },
-            { initials: 'AL', color: '#4a2e0a', name: 'Anna L.' },
-        ],
-        extraMembers: 2,
-        milestones: [
-            { label: 'Script 11/23', state: 'done', tooltip: 'Completed on Nov 23 · Approved by director' },
-            { label: 'Storyboard 12/01', state: 'done', tooltip: 'Completed on Dec 1 · All scenes locked' },
-            { label: 'Rough Cut 12/27', state: 'active', tooltip: 'Next step: Deliver rough cut to editor by Dec 27. 3 scenes remaining.' },
-            { label: 'Final 01/10', state: 'future', tooltip: 'Final delivery — Jan 10' },
-        ],
-        photos: [
-            { emoji: '🎬', bg: 'linear-gradient(135deg, #0d1b2a, #1a2d42)' },
-            { emoji: '🎭', bg: 'linear-gradient(135deg, #0d2a1a, #1a4228)' },
-            { emoji: '🎙', bg: 'linear-gradient(135deg, #2a1e0d, #3d2c12)' },
-        ],
-        dueDates: [
-            { label: 'SOUND MIX', date: 'Dec 20', urgency: 'overdue', detail: 'OVERDUE — Sound mix was due Dec 20. Contact audio team immediately.' },
-            { label: 'ROUGH CUT', date: 'Dec 27', urgency: 'soon', detail: 'Due in 3 days — Rough cut delivery to editing suite.' },
-            { label: 'COLOR GRADE', date: 'Jan 05', urgency: 'ok', detail: 'On track — Color grading session booked Jan 5.' },
-            { label: 'FINAL DELIVERY', date: 'Jan 10', urgency: 'ok', detail: 'Final delivery to distributor, Jan 10.' },
-        ],
-    },
-    {
-        id: 'space-balls',
-        title: 'Space Balls — Season 2',
-        role: 'Animator',
-        projectNumber: '#0038',
-        status: 'IN_PROGRESS',
-        progress: 40,
-        summary: 'A space comedy in which Lord Helmet and his crew attempt to cook authentic Italian cuisine in zero gravity. Visual tone: vibrant, wide-angle, full of chaos. Animation pipeline in full swing.',
-        members: [
-            { initials: 'LH', color: '#3a1a3a', name: 'Lord Helmet' },
-            { initials: 'TS', color: '#3a1e1e', name: 'Tony S.' },
-            { initials: 'PM', color: '#1e3a5f', name: 'Pietro M.' },
-            { initials: 'EK', color: '#1a1a2a', name: 'Elena K.' },
-        ],
-        extraMembers: 3,
-        milestones: [
-            { label: 'Concept 10/15', state: 'done', tooltip: 'Completed Oct 15 · Concept approved by full cast' },
-            { label: 'Animatic 11/30', state: 'done', tooltip: 'Completed Nov 30 · All scenes storyboarded and timed' },
-            { label: 'Animation 01/20', state: 'active', tooltip: 'In progress — 40% of animation complete. Pasta cannon sequence pending.' },
-            { label: 'Post 02/28', state: 'future', tooltip: 'Post-production and VFX — Feb 28' },
-        ],
-        photos: [
-            { emoji: '🚀', bg: 'linear-gradient(135deg, #0d0f2a, #1a1d42)' },
-            { emoji: '🍝', bg: 'linear-gradient(135deg, #2a1a0d, #3d2c12)' },
-            { emoji: '🪖', bg: 'linear-gradient(135deg, #1a0d2a, #2d1a42)' },
-        ],
-        dueDates: [
-            { label: 'ANIMATIC', date: 'Nov 30', urgency: 'ok' as const, detail: 'Completed — Animatic delivered and approved.' },
-            { label: 'ANIMATION', date: 'Jan 20', urgency: 'soon' as const, detail: 'Due Jan 20 — 40% complete. Pasta cannon sequence is the critical path.' },
-            { label: 'VFX PASS', date: 'Feb 10', urgency: 'ok' as const, detail: 'On track — VFX team briefed. Zero-gravity pasta effects in production.' },
-            { label: 'FINAL CUT', date: 'Feb 28', urgency: 'ok' as const, detail: 'Final delivery — Feb 28. Distribution via Hashi IP Vault.' },
-        ],
-    },
-    {
-        id: 'sweet-angel',
-        title: 'Sweet Angel',
-        role: 'Sound Designer',
-        projectNumber: '#0029',
-        status: 'COMPLETED',
-        progress: 100,
-        rating: 4,
-        views: '2.4k',
-        repPts: 18,
-        summary: 'An intimate short film about a musician who discovers her late grandmother\'s unreleased recordings. Atmospheric sound design — layered ambience, vinyl crackle, and live chamber reverb. Delivered on time and under budget.',
-        members: [
-            { initials: 'CL', color: '#2a1a3a', name: 'Clara L.' },
-            { initials: 'RD', color: '#1a3a2a', name: 'Ravi D.' },
-            { initials: 'PM', color: '#1e3a5f', name: 'Pietro M.' },
-        ],
-        extraMembers: 1,
-        milestones: [
-            { label: 'Pre-production 09/01', state: 'done', tooltip: 'Completed Sep 1 · All reference tracks approved' },
-            { label: 'Recording 09/20', state: 'done', tooltip: 'Completed Sep 20 · Live session recorded at Studio V' },
-            { label: 'Mix 10/05', state: 'done', tooltip: 'Completed Oct 5 · Final mix approved by director' },
-            { label: 'Delivery 10/15', state: 'done', tooltip: 'Delivered Oct 15 · Accepted by distributor' },
-        ],
-        photos: [
-            { emoji: '🎵', bg: 'linear-gradient(135deg, #1a0d2a, #2d1a42)' },
-            { emoji: '🎙', bg: 'linear-gradient(135deg, #0d1a2a, #1a2d42)' },
-            { emoji: '🎻', bg: 'linear-gradient(135deg, #2a1a0d, #3d2c12)' },
-        ],
-        dueDates: [
-            { label: 'RECORDING', date: 'Sep 20', urgency: 'ok' as const, detail: 'Completed — Live recording session delivered ahead of schedule.' },
-            { label: 'FINAL MIX', date: 'Oct 05', urgency: 'ok' as const, detail: 'Completed — Mix approved by director and Clara L.' },
-            { label: 'DELIVERY', date: 'Oct 15', urgency: 'ok' as const, detail: 'Completed — Delivered to distributor. 2.4k views in first week.' },
-            { label: 'ARCHIVE', date: 'Oct 20', urgency: 'ok' as const, detail: 'Archived in IP Vault. Rating: 4/5 stars. +18 rep pts.' },
-        ],
-    },
-    {
-        id: 'project-nexus',
-        title: 'Project Nexus',
-        role: 'Performer',
-        projectNumber: '',
-        status: 'IN_CONSIDERATION',
-        offer: '$100',
-    },
-];
 
 const STATUS_CONFIG = {
     IN_PROGRESS: { dot: '#3b82f6', badge: { bg: 'rgba(59,130,246,0.1)', text: '#60a5fa', border: 'rgba(59,130,246,0.25)' }, label: 'IN PROGRESS', filter: 'CURRENT' as FilterTab },
@@ -296,7 +185,7 @@ export default function MissionsPage() {
                                         )}
 
                                         {/* Expanded Body */}
-                                        {isExpanded && mission.summary && (
+                                        {isExpanded && (
                                             <div className="mission-body">
                                                 <div className="mission-body-line" />
                                                 <div className="mission-body-inner">
@@ -396,7 +285,14 @@ export default function MissionsPage() {
 
                                                     {/* RIGHT */}
                                                     <div className="mission-col-right">
-                                                        {mission.photos && (
+                                                        {mission.coverImage ? (
+                                                            <div className="mission-section-block">
+                                                                <div className="mission-section-label">PROJECT COVER</div>
+                                                                <div className="mission-cover-container">
+                                                                    <img src={mission.coverImage} alt={mission.title} className="mission-cover-img" />
+                                                                </div>
+                                                            </div>
+                                                        ) : mission.photos && (
                                                             <div className="mission-section-block">
                                                                 <div className="mission-section-label">PROJECT PHOTOS</div>
                                                                 <div className="mission-photos-grid">
@@ -408,6 +304,15 @@ export default function MissionsPage() {
                                                                 </div>
                                                             </div>
                                                         )}
+
+                                                        <div className="mission-section-block" style={{ marginTop: 'auto' }}>
+                                                            <a 
+                                                                href={`/comms?project=${mission.id}`}
+                                                                className="mission-workspace-link"
+                                                            >
+                                                                OPEN PROJECT WORKSPACE
+                                                            </a>
+                                                        </div>
 
                                                         {mission.dueDates && (
                                                             <div className="mission-section-block">
@@ -564,6 +469,10 @@ export default function MissionsPage() {
                 .mission-due-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
                 .mission-due-label { font-size: 9px; font-family: 'Courier New', monospace; letter-spacing: 0.1em; text-transform: uppercase; color: #4b5563; margin-bottom: 4px; }
                 .mission-due-date { font-size: 14px; font-weight: 700; font-family: 'Courier New', monospace; }
+                .mission-cover-container { width: 100%; height: 120px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(0,0,0,0.06); }
+                .mission-cover-img { width: 100%; height: 100%; object-fit: cover; }
+                .mission-workspace-link { width: 100%; padding: 12px; background: #030712; color: #ffffff; text-decoration: none; border-radius: 12px; font-size: 11px; font-weight: 800; font-family: 'Courier New', monospace; letter-spacing: 0.1em; display: flex; alignItems: center; justifyContent: center; text-align: center; transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+                .mission-workspace-link:hover { background: #111827; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }
                 .missions-content::-webkit-scrollbar { width: 4px; }
                 .missions-content::-webkit-scrollbar-track { background: transparent; }
                 .missions-content::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 2px; }

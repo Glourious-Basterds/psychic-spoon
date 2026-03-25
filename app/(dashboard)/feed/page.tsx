@@ -735,7 +735,10 @@ export default function FeedPage() {
     const [sharedPosts, setSharedPosts] = useState<Set<number>>(new Set());
     const [lightbox, setLightbox] = useState<string | null>(null);
     const [openPost, setOpenPost] = useState<Post | null>(null);
+    const [selectedProject, setSelectedProject] = useState<TrendingProject | null>(null);
+    const [showAuthPrompt, setShowAuthPrompt] = useState(false);
     const { status } = useSession();
+    const { joinProject, reachOut } = useProjects();
 
     const requireAuth = (action: () => void) => {
         if (status === 'unauthenticated') {
@@ -936,15 +939,27 @@ export default function FeedPage() {
                             <Briefcase size={10} /> Trending Projects
                         </div>
                         {trendingProjects.map((t: TrendingProject, i: number) => (
-                            <a key={i} href={t.href} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 8px', borderRadius: '8px', textDecoration: 'none', transition: 'background 0.15s', marginBottom: '2px' }}
+                            <div key={i} onClick={() => { setSelectedProject(t); setShowAuthPrompt(false); }} 
+                                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px', borderRadius: '8px', cursor: 'pointer', transition: 'background 0.15s', marginBottom: '2px' }}
                                 onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.03)')}
                                 onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <span style={{ fontSize: '13px', fontWeight: 500, color: '#1f2937' }}>{t.name}</span>
-                                    {t.isNew && <span style={{ fontSize: '9px', fontWeight: 800, color: '#65a30d', background: 'rgba(163,230,53,0.1)', padding: '2px 6px', borderRadius: '4px', fontFamily: 'Courier New, monospace' }}>NEW</span>}
+                                {t.coverImage ? (
+                                    <div style={{ width: '32px', height: '32px', borderRadius: '6px', overflow: 'hidden', flexShrink: 0, border: '1px solid rgba(0,0,0,0.05)' }}>
+                                        <img src={t.coverImage} alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    </div>
+                                ) : (
+                                    <div style={{ width: '32px', height: '32px', borderRadius: '6px', background: 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}>
+                                        {t.name.charAt(0)}
+                                    </div>
+                                )}
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                        <div style={{ fontSize: '13px', fontWeight: 600, color: '#030712', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t.name}</div>
+                                        {t.isNew && <span style={{ fontSize: '7px', fontWeight: 800, color: '#65a30d', background: 'rgba(163,230,53,0.1)', padding: '1px 4px', borderRadius: '3px', fontFamily: 'Courier New, monospace' }}>NEW</span>}
+                                    </div>
+                                    <div style={{ fontSize: '9px', fontFamily: 'Courier New, monospace', color: '#6b7280' }}>{t.members} MEMBERS</div>
                                 </div>
-                                <span style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563' }}>{t.members}m</span>
-                            </a>
+                            </div>
                         ))}
                     </div>
 
@@ -1015,6 +1030,123 @@ export default function FeedPage() {
                 </div>
             )}
 
+            {/* Project Preview Modal */}
+            {selectedProject && (
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(12px)', animation: 'fade-in 0.3s ease' }} onClick={() => setSelectedProject(null)}>
+                    <div style={{ background: '#ffffff', width: '100%', maxWidth: '600px', maxHeight: '90vh', borderRadius: '24px', overflowY: 'auto', position: 'relative', display: 'flex', flexDirection: 'column', animation: 'slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }} onClick={e => e.stopPropagation()}>
+                        
+                        {/* Close button */}
+                        <button onClick={() => setSelectedProject(null)} style={{ position: 'absolute', top: '16px', right: '16px', zIndex: 10, padding: '8px', background: 'rgba(0,0,0,0.4)', border: 'none', borderRadius: '50%', color: '#ffffff', cursor: 'pointer', backdropFilter: 'blur(4px)' }}>
+                            <X size={20} />
+                        </button>
+
+                        {/* Banner */}
+                        <div style={{ width: '100%', height: '200px', position: 'relative', flexShrink: 0 }}>
+                            <img src={selectedProject.coverImage || '/images/default_cover.png'} alt={selectedProject.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <div style={{ position: 'absolute', bottom: '-40px', left: '32px', width: '80px', height: '80px', borderRadius: '20px', background: '#030712', border: '4px solid #ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff', fontSize: '24px', fontWeight: 900, boxShadow: '0 8px 24px rgba(0,0,0,0.1)' }}>
+                                {selectedProject.name.charAt(0)}
+                            </div>
+                        </div>
+
+                        {/* Content */}
+                        <div style={{ padding: '60px 32px 32px' }}>
+                            <div style={{ marginBottom: '24px' }}>
+                                <h2 style={{ fontSize: '28px', fontWeight: 900, color: '#030712', margin: 0, letterSpacing: '-0.02em' }}>{selectedProject.name}</h2>
+                                <p style={{ fontSize: '14px', fontWeight: 700, fontFamily: 'Courier New, monospace', color: '#65a30d', margin: '4px 0 0', letterSpacing: '0.05em', textTransform: 'uppercase' }}>{selectedProject.tagline}</p>
+                            </div>
+
+                            <div style={{ marginBottom: '32px' }}>
+                                <p style={{ fontSize: '15px', color: '#4b5563', lineHeight: 1.6, margin: 0 }}>{selectedProject.description}</p>
+                            </div>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', padding: '24px', background: '#f9fafb', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.05)' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#1e3a5f', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff', fontSize: '14px', fontWeight: 800 }}>
+                                        {selectedProject.creatorName?.charAt(0)}
+                                    </div>
+                                    <div>
+                                        <div style={{ fontSize: '10px', fontWeight: 800, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: 'Courier New, monospace' }}>Creato da</div>
+                                        <div style={{ fontSize: '14px', fontWeight: 700, color: '#030712' }}>{selectedProject.creatorName}</div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div style={{ fontSize: '10px', fontWeight: 800, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: 'Courier New, monospace', marginBottom: '8px' }}>Stiamo cercando</div>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                                        {selectedProject.roles?.map(role => (
+                                            <span key={role} style={{ padding: '4px 10px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.08)', borderRadius: '20px', fontSize: '10px', fontWeight: 700, color: '#4b5563', fontFamily: 'Courier New, monospace' }}>
+                                                {role.toUpperCase()}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div style={{ fontSize: '10px', fontWeight: 800, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: 'Courier New, monospace', marginBottom: '4px' }}>Cosa offriamo</div>
+                                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#fb923c' }}>{selectedProject.offer}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Footer Buttons */}
+                        <div style={{ padding: '24px 32px', borderTop: '1px solid rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            <div style={{ display: 'flex', gap: '16px' }}>
+                                <button 
+                                    onClick={() => {
+                                        if (status === 'unauthenticated') {
+                                            setShowAuthPrompt(true);
+                                        } else {
+                                            joinProject(selectedProject.id);
+                                            showToast(`Ti sei unito a ${selectedProject.name}!`, 'success');
+                                            setSelectedProject(null);
+                                        }
+                                    }}
+                                    style={{ flex: 1, padding: '14px', background: '#65a30d', border: 'none', borderRadius: '14px', color: '#ffffff', fontSize: '13px', fontWeight: 800, fontFamily: 'Courier New, monospace', cursor: 'pointer', letterSpacing: '0.1em', boxShadow: '0 8px 24px rgba(163,230,53,0.3)', transition: 'all 0.2s' }}
+                                    onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
+                                    onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+                                >
+                                    JOIN
+                                </button>
+                                <button 
+                                    onClick={() => {
+                                        if (status === 'unauthenticated') {
+                                            setShowAuthPrompt(true);
+                                        } else {
+                                            const msg = `Ciao, ho visto il tuo progetto ${selectedProject.name} e vorrei saperne di più.`;
+                                            reachOut(selectedProject.id, msg);
+                                            showToast(`Messaggio inviato a ${selectedProject.creatorName}`, 'success');
+                                            window.location.href = '/comms?project=bar-man';
+                                        }
+                                    }}
+                                    style={{ flex: 1, padding: '14px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '14px', color: '#030712', fontSize: '13px', fontWeight: 800, fontFamily: 'Courier New, monospace', cursor: 'pointer', letterSpacing: '0.1em', transition: 'all 0.2s' }}
+                                    onMouseEnter={e => (e.currentTarget.style.background = '#f9fafb')}
+                                    onMouseLeave={e => (e.currentTarget.style.background = '#ffffff')}
+                                >
+                                    REACH OUT
+                                </button>
+                            </div>
+
+                            {showAuthPrompt && (
+                                <div style={{ textAlign: 'center', animation: 'fade-in 0.3s ease' }}>
+                                    <p style={{ fontSize: '12px', color: '#ef4444', fontWeight: 700, margin: '0 0 8px', fontFamily: 'Courier New, monospace' }}>
+                                        Crea un account per unirti al progetto
+                                    </p>
+                                    <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', fontSize: '11px', fontWeight: 800, fontFamily: 'Courier New, monospace' }}>
+                                        <a href="/login" style={{ color: '#65a30d', textDecoration: 'none', borderBottom: '1px solid currentColor' }}>LOG IN</a>
+                                        <span style={{ color: '#d1d5db' }}>|</span>
+                                        <a href="/signup" style={{ color: '#65a30d', textDecoration: 'none', borderBottom: '1px solid currentColor' }}>SIGN UP</a>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <style>{`
+                @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+                @keyframes slide-up { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+            `}</style>
             {/* Toast notifications */}
             <ToastContainer toasts={toasts} onDismiss={dismiss} />
         </div>

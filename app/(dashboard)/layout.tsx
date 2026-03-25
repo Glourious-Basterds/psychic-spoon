@@ -4,22 +4,26 @@ import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
-import { LayoutDashboard, FolderKanban, MessageSquare, ShieldCheck, LogOut, Menu, PanelLeftOpen, PanelLeftClose, Globe } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, MessageSquare, ShieldCheck, LogOut, Menu, PanelLeftOpen, PanelLeftClose, Globe, X } from 'lucide-react';
 import { useUI } from '@/context/UIContext';
 import { useProjects } from '@/app/context/ProjectContext';
 import { CinematicTrigger, GlobalMiniPlayer } from '@/components/ui/cinematic-player';
-import { ProjectProvider } from '@/app/context/ProjectContext';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const { data: session } = useSession();
     const { hashiMode, sidebarCollapsed, toggleSidebar } = useUI();
+    const { notifications, removeNotification, unreadCounts, addMessageToProject } = useProjects();
+
+    const totalUnread = Object.values(unreadCounts).reduce((acc, projectCounts) => {
+        return acc + Object.values(projectCounts).reduce((pAcc, count) => pAcc + count, 0);
+    }, 0);
 
     const navItems = [
         { href: '/feed', label: 'Feed', icon: Globe },
         { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
         { href: '/missions', label: 'Missions', icon: FolderKanban },
-        { href: '/comms', label: 'Workspace', icon: MessageSquare },
+        { href: '/comms', label: 'Workspace', icon: MessageSquare, badge: totalUnread > 0 ? totalUnread : null },
         { href: '/vault', label: 'IP Vault', icon: ShieldCheck },
     ];
 
@@ -28,51 +32,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         return '/images/hashi/overview.png';
     };
 
-    type AppNotification = { id: number; title: string; message: string; time: string; projectId: string; channelId: string; };
-    const [notifications, setNotifications] = useState<AppNotification[]>([]);
-
-    useEffect(() => {
-        const demoNotifications = [
-            {
-                id: 1,
-                title: 'Bruce W.',
-                message: "How's the project going on so far? ... Idk, have a look around dumbass",
-                time: 'Just now',
-                projectId: 'bar-man',
-                channelId: 'Bruce-W.'
-            },
-            {
-                id: 2,
-                title: 'Lord Helmet',
-                message: "How's the food guys? ... Mamma Mia! It's the best cuisine in the world",
-                time: '2m ago',
-                projectId: 'space-balls',
-                channelId: 'Home-Base'
-            }
-        ];
-
-        let index = 0;
-        const interval = setInterval(() => {
-            if (index < demoNotifications.length) {
-                const newNotif = demoNotifications[index];
-                setNotifications(prev => [...prev, newNotif]);
-                index++;
-
-                // Auto-remove after 8s
-                setTimeout(() => {
-                    setNotifications(prev => prev.filter(n => n.id !== newNotif.id));
-                }, 8000);
-            } else {
-                clearInterval(interval);
-            }
-        }, 12000);
-
-        return () => clearInterval(interval);
-    }, []);
-
     return (
-        <ProjectProvider>
-            <div className="h-screen bg-[#f9fafb] text-[#030712] flex flex-col md:flex-row overflow-hidden relative selection:bg-black/10 selection:text-[#030712]">
+        <div className="h-screen bg-[#f9fafb] text-[#030712] flex flex-col md:flex-row overflow-hidden relative selection:bg-black/10 selection:text-[#030712]">
             {/* Pure Black Background - Subtle Gradients from CSS hashi-theme-bg */}
             <div className="absolute inset-0 z-0 pointer-events-none hashi-theme-bg opacity-40" />
 
@@ -86,20 +47,40 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] hashi-font">Open Menu</span>
             </button>
 
-            {/* Global Notification Container (Top Right) */}
-            <div id="global-notifications" className="fixed top-6 right-6 z-[200] flex flex-col gap-4 pointer-events-none">
+            {/* Global Notification Container (Top Right - WhatsApp Mac Style) */}
+            <div id="global-notifications" className="fixed top-6 right-6 z-[500] flex flex-col gap-3 pointer-events-none">
                 {notifications.map(notif => (
-                    <Link
-                        key={notif.id}
-                        href={`/comms?project=${notif.projectId}&channel=${notif.channelId}`}
-                        className="w-80 bg-[#ffffff]/90 backdrop-blur-2xl border border-black/5 p-4 shadow-[30px_30px_70px_rgba(0,0,0,0.05)] pointer-events-auto animate-in slide-in-from-right duration-700 hover:border-black/20 transition-all group cursor-pointer"
-                    >
-                        <div className="flex justify-between items-start mb-2">
-                            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-black/40 group-hover:text-[#030712] transition-colors hashi-font">{notif.title}</h4>
-                            <span className="text-[9px] font-bold text-black/20 uppercase">{notif.time}</span>
-                        </div>
-                        <p className="text-sm font-medium text-black/80 hashi-font tracking-tight leading-relaxed line-clamp-2">{notif.message}</p>
-                    </Link>
+                    <div key={notif.id} className="relative group pointer-events-auto">
+                        <Link
+                            href={`/comms?project=${notif.projectId}&channel=${notif.channelId}`}
+                            className="flex items-center gap-4 w-80 bg-white border border-black/10 p-4 rounded-xl shadow-[0_15px_60px_rgba(0,0,0,0.15)] transition-all cursor-pointer hover:shadow-[0_20px_70px_rgba(0,0,0,0.2)] overflow-hidden"
+                            style={{ animation: 'slideIn 0.4s ease-out' }}
+                        >
+                            {/* Profile Image / Initials */}
+                            <div 
+                                style={{ background: notif.senderColor || '#1e3a5f' }}
+                                className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-inner"
+                            >
+                                {notif.senderInitials || notif.title.charAt(0)}
+                            </div>
+                            
+                            <div className="flex-1 min-w-0">
+                                <div className="flex justify-between items-baseline mb-0.5">
+                                    <h4 className="text-[13px] font-bold text-[#030712] truncate">{notif.title}</h4>
+                                    <span className="text-[10px] text-black/30 font-medium ml-2">{notif.time}</span>
+                                </div>
+                                <p className="text-[12px] text-black/60 leading-tight line-clamp-2 pr-2">{notif.message}</p>
+                            </div>
+                        </Link>
+                        
+                        {/* Close Button X (Visible on Hover) */}
+                        <button 
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); removeNotification(notif.id); }}
+                            className="absolute -top-2 -right-2 w-6 h-6 bg-white border border-black/5 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 shadow-md hover:bg-gray-50 transition-all z-10"
+                        >
+                            <X size={12} className="text-black/40" />
+                        </button>
+                    </div>
                 ))}
             </div>
 
@@ -129,14 +110,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all group border ${isActive
+                                className={`flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-all group border ${isActive
                                     ? 'border-[rgba(163,230,53,0.5)] text-[#65a30d]'
                                     : 'border-transparent text-black/60 hover:text-black/90 hover:bg-black/[0.03]'
                                     }`}
                                 style={isActive ? { background: 'rgba(163,230,53,0.1)' } : undefined}
                             >
-                                <Icon size={16} strokeWidth={1.5} style={isActive ? { color: '#65a30d' } : undefined} />
-                                <span className={`text-xs tracking-wide ${isActive ? 'font-semibold' : 'font-normal'}`}>{item.label}</span>
+                                <div className="flex items-center gap-3">
+                                    <Icon size={16} strokeWidth={1.5} style={isActive ? { color: '#65a30d' } : undefined} />
+                                    <span className={`text-xs tracking-wide ${isActive ? 'font-semibold' : 'font-normal'}`}>{item.label}</span>
+                                </div>
+                                {item.badge && (
+                                    <span className="w-5 h-5 bg-[#ef4444] text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-in zoom-in duration-300">
+                                        {item.badge}
+                                    </span>
+                                )}
                             </Link>
                         );
                     })}
@@ -163,6 +151,5 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
             <GlobalMiniPlayer />
         </div>
-    </ProjectProvider>
     );
 }
