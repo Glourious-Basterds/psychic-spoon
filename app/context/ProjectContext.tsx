@@ -442,9 +442,16 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
             });
             setWorkspaces(patched);
         } else setWorkspaces(defaultWorkspaces);
-        
+
         if (savedUnread) setUnreadCounts(JSON.parse(savedUnread));
-        
+        else {
+            // Default unread counts for a fresh look
+            setUnreadCounts({
+                'bar-man': { 'Clandestine-Intel': 2, 'Bruce-W.': 1 },
+                'space-balls': { 'Home-Base': 1 }
+            });
+        }
+
         setIsLoaded(true);
     }, []);
 
@@ -623,125 +630,167 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
         }
     };
 
+    const markAsRead = (projectId: string, channelId: string) => {
+        setUnreadCounts(prev => {
+            const projectUnread = prev[projectId];
+            if (!projectUnread || !projectUnread[channelId]) return prev;
+            return {
+                ...prev,
+                [projectId]: {
+                    ...projectUnread,
+                    [channelId]: 0
+                }
+            };
+        });
+    };
+
+    const joinProject = (projectId: string) => {
+        const trending = trendingProjects.find(p => p.id === projectId);
+        if (!trending) return;
+
+        // Add to missions
+        const existingMission = missions.find(m => m.id === projectId);
+        if (!existingMission) {
+            const newMission: Mission = {
+                id: trending.id,
+                title: trending.name,
+                role: 'Member',
+                projectNumber: `#00${Math.floor(Math.random() * 90) + 10}`,
+                status: 'IN_PROGRESS',
+                progress: 0,
+                summary: trending.description,
+                coverImage: trending.coverImage,
+                tagline: trending.tagline,
+                members: [{ initials: 'PM', color: '#1e3a5f', name: 'Pietro M.' }],
+                milestones: [
+                    { label: 'Joining', state: 'done', tooltip: 'Joined project from Feed' }
+                ]
+            };
+            setMissions(prev => [newMission, ...prev]);
+        }
+
+        // Add to workspace members
+        setWorkspaces(prev => {
+            const ws = prev[projectId];
+            if (!ws) return prev;
+            if (ws.onlineUsers.includes('Pietro M.')) return prev;
+            return {
+                ...prev,
+                [projectId]: {
+                    ...ws,
+                    onlineUsers: [...ws.onlineUsers, 'Pietro M.']
+                }
+            };
+        });
+
+        // Add system message to #Home-Base
+        addMessageToProject(projectId, 'Home-Base', {
+            id: `sys-${Date.now()}`,
+            sender: 'HASHI_SYSTEM',
+            initials: 'H',
+            color: '#65a30d',
+            content: 'Pietro M. has joined the project via Hashi Feed.',
+            time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+            mine: false
+        });
+    };
+
+    const reachOut = (projectId: string, message: string) => {
+        const trending = trendingProjects.find(p => p.id === projectId);
+        if (!trending) return;
+
+        const creator = trending.creatorName || 'Creator';
+        const channelName = creator.replace(/\s+/g, '-');
+
+        // Create private DM channel in 'bar-man' (home workspace) for simplicity or as a new tab
+        // Actually user requested "Direct Messages section del Workspace"
+        // For this demo, let's treat 'Direct Messages' as a concept.
+        // I'll add the message to the 'bar-man' workspace under a new private channel.
+
+        setWorkspaces(prev => {
+            const ws = prev['bar-man']; // Default workspace for DMs
+            if (!ws) return prev;
+
+            const newMessages = { ...ws.messages };
+            if (!newMessages[channelName]) {
+                newMessages[channelName] = [];
+            }
+
+            newMessages[channelName].push({
+                id: `msg-${Date.now()}`,
+                sender: 'Pietro M.',
+                initials: 'PM',
+                color: '#1e3a5f',
+                content: message,
+                time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+                mine: true
+            });
+
+            return {
+                ...prev,
+                ['bar-man']: {
+                    ...ws,
+                    channels: ws.channels.includes(channelName) ? ws.channels : [...ws.channels, channelName],
+                    messages: newMessages
+                }
+            };
+        });
+    };
+
+    // --- Message Simulation Engine ---
+    useEffect(() => {
+        if (!isLoaded) return;
+
+        const simulationInterval = setInterval(() => {
+            if (Math.random() > 0.7) return;
+
+            const possibleMissions = missions.filter(m => m.id === 'bar-man' || m.id === 'space-balls');
+            if (possibleMissions.length === 0) return;
+
+            const targetMission = possibleMissions[Math.floor(Math.random() * possibleMissions.length)];
+            const ws = defaultWorkspaces[targetMission.id];
+            if (!ws) return;
+
+            const channels = ws.channels.filter(c => c !== 'Home-Base' || Math.random() > 0.5);
+            const targetChannel = channels[Math.floor(Math.random() * channels.length)];
+
+            const messages = ws.messages[targetChannel] || ws.messages['Home-Base'];
+            const potentialMsgs = messages.filter(m => !m.mine && m.sender !== 'HASHI_SYSTEM');
+            if (potentialMsgs.length === 0) return;
+
+            const randomMsgTemplate = potentialMsgs[Math.floor(Math.random() * potentialMsgs.length)];
+
+            const incomingMsg: Message = {
+                ...randomMsgTemplate,
+                id: `sim-${Date.now()}`,
+                time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+                mine: false
+            };
+
+            addMessageToProject(targetMission.id, targetChannel, incomingMsg);
+        }, 45000);
+
+        return () => clearInterval(simulationInterval);
+    }, [isLoaded, missions, addMessageToProject]);
+
     return (
-        <ProjectContext.Provider value={{ 
-            missions, 
-            trendingProjects, 
-            openRoles, 
-            workspaces, 
-            publishMission, 
-            deleteProject, 
-            addPhotoToProject, 
+        <ProjectContext.Provider value={{
+            missions,
+            trendingProjects,
+            openRoles,
+            workspaces,
+            publishMission,
+            deleteProject,
+            addPhotoToProject,
             addMessageToProject,
             notifications,
             removeNotification: (id: string) => {
                 setNotifications(prev => prev.filter(n => n.id !== id));
             },
             unreadCounts,
-            markAsRead: (projectId: string, channelId: string) => {
-                setUnreadCounts(prev => {
-                    const projectUnread = prev[projectId];
-                    if (!projectUnread || !projectUnread[channelId]) return prev;
-                    return {
-                        ...prev,
-                        [projectId]: {
-                            ...projectUnread,
-                            [channelId]: 0
-                        }
-                    };
-                });
-            },
-            joinProject: (projectId: string) => {
-                const trending = trendingProjects.find(p => p.id === projectId);
-                if (!trending) return;
-
-                // Add to missions
-                const existingMission = missions.find(m => m.id === projectId);
-                if (!existingMission) {
-                    const newMission: Mission = {
-                        id: trending.id,
-                        title: trending.name,
-                        role: 'Member',
-                        projectNumber: `#00${Math.floor(Math.random() * 90) + 10}`,
-                        status: 'IN_PROGRESS',
-                        progress: 0,
-                        summary: trending.description,
-                        coverImage: trending.coverImage,
-                        tagline: trending.tagline,
-                        members: [{ initials: 'PM', color: '#1e3a5f', name: 'Pietro M.' }],
-                        milestones: [
-                            { label: 'Joining', state: 'done', tooltip: 'Joined project from Feed' }
-                        ]
-                    };
-                    setMissions(prev => [newMission, ...prev]);
-                }
-
-                // Add to workspace members
-                setWorkspaces(prev => {
-                    const ws = prev[projectId];
-                    if (!ws) return prev;
-                    if (ws.onlineUsers.includes('Pietro M.')) return prev;
-                    return {
-                        ...prev,
-                        [projectId]: {
-                            ...ws,
-                            onlineUsers: [...ws.onlineUsers, 'Pietro M.']
-                        }
-                    };
-                });
-
-                // Add system message to #Home-Base
-                addMessageToProject(projectId, 'Home-Base', {
-                    id: `sys-${Date.now()}`,
-                    sender: 'HASHI_SYSTEM',
-                    initials: 'H',
-                    color: '#65a30d',
-                    content: 'Pietro M. has joined the project via Hashi Feed.',
-                    time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-                    mine: false
-                });
-            },
-            reachOut: (projectId: string, message: string) => {
-                const trending = trendingProjects.find(p => p.id === projectId);
-                if (!trending) return;
-
-                const creator = trending.creatorName || 'Creator';
-                const channelName = creator.replace(/\s+/g, '-');
-
-                // Create private DM channel in 'bar-man' (home workspace) for simplicity or as a new tab
-                // Actually user requested "Direct Messages section del Workspace"
-                // For this demo, let's treat 'Direct Messages' as a concept.
-                // I'll add the message to the 'bar-man' workspace under a new private channel.
-                
-                setWorkspaces(prev => {
-                    const ws = prev['bar-man']; // Default workspace for DMs
-                    if (!ws) return prev;
-                    
-                    const newMessages = { ...ws.messages };
-                    if (!newMessages[channelName]) {
-                        newMessages[channelName] = [];
-                    }
-                    
-                    newMessages[channelName].push({
-                        id: `msg-${Date.now()}`,
-                        sender: 'Pietro M.',
-                        initials: 'PM',
-                        color: '#1e3a5f',
-                        content: message,
-                        time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-                        mine: true
-                    });
-
-                    return {
-                        ...prev,
-                        ['bar-man']: {
-                            ...ws,
-                            channels: ws.channels.includes(channelName) ? ws.channels : [...ws.channels, channelName],
-                            messages: newMessages
-                        }
-                    };
-                });
-            }
+            markAsRead,
+            joinProject,
+            reachOut
         }}>
             {children}
         </ProjectContext.Provider>
