@@ -14,11 +14,30 @@ import { GlobalSearch } from '@/components/ui/GlobalSearch';
 import { ProjectPreviewModal } from '@/components/ui/ProjectPreviewModal';
 import { Search } from 'lucide-react';
 import { TrendingProject } from '@/app/context/ProjectContext';
+import { Suspense } from 'react';
+
+function SearchParamsHandler({ setAuthModalOpen, setAuthModalView }: { setAuthModalOpen: (open: boolean) => void, setAuthModalView: (view: 'login' | 'register') => void }) {
+    const searchParams = useSearchParams();
+    
+    useEffect(() => {
+        const authAction = searchParams.get('auth');
+        if (authAction === 'login' || authAction === 'register') {
+            setAuthModalView(authAction);
+            setAuthModalOpen(true);
+            
+            // Clear the query param without full navigation
+            const newUrl = window.location.pathname;
+            window.history.replaceState({}, '', newUrl);
+        }
+    }, [searchParams, setAuthModalOpen, setAuthModalView]);
+    
+    return null;
+}
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const { data: session, status } = useSession();
-    const searchParams = useSearchParams();
+    // Moved searchParams to SearchParamsHandler
     const router = useRouter();
     const { hashiMode, sidebarCollapsed, toggleSidebar, setAuthModalOpen, setAuthModalView } = useUI();
     const { notifications, removeNotification, unreadCounts, addMessageToProject, userProfile, joinProject, reachOut, isLoaded } = useProjects();
@@ -43,19 +62,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     };
 
     const [showOnboarding, setShowOnboarding] = useState(false);
-
-    // Handle auth query parameters
-    useEffect(() => {
-        const authAction = searchParams.get('auth');
-        if (authAction === 'login' || authAction === 'register') {
-            setAuthModalView(authAction);
-            setAuthModalOpen(true);
-            
-            // Clear the query param without full navigation
-            const newUrl = window.location.pathname;
-            window.history.replaceState({}, '', newUrl);
-        }
-    }, [searchParams, setAuthModalOpen, setAuthModalView]);
 
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [selectedSearchProject, setSelectedSearchProject] = useState<TrendingProject | null>(null);
@@ -175,6 +181,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </button>
 
                 <nav className="flex flex-col gap-1 flex-1 relative z-10 overflow-x-hidden">
+                    <Suspense fallback={null}>
+                        <SearchParamsHandler setAuthModalOpen={setAuthModalOpen} setAuthModalView={setAuthModalView} />
+                    </Suspense>
                     {navItems.map((item) => {
                         const isActive = pathname === item.href;
                         const Icon = item.icon;
