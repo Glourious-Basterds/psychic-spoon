@@ -38,6 +38,11 @@ type UIContextType = {
     audioRef: React.RefObject<HTMLAudioElement | null>;
     sidebarCollapsed: boolean;
     toggleSidebar: () => void;
+    // Auth Modal State
+    isAuthModalOpen: boolean;
+    setAuthModalOpen: (open: boolean) => void;
+    authModalView: 'login' | 'register';
+    setAuthModalView: (view: 'login' | 'register') => void;
 };
 
 const UIContext = createContext<UIContextType | undefined>(undefined);
@@ -56,6 +61,8 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
     const hashiMode = true;
 
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const [isAuthModalOpen, setAuthModalOpen] = useState(false);
+    const [authModalView, setAuthModalView] = useState<'login' | 'register'>('login');
 
     const toggleSidebar = () => setSidebarCollapsed(prev => !prev);
 
@@ -128,7 +135,11 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
             playRandom,
             audioRef,
             sidebarCollapsed,
-            toggleSidebar
+            toggleSidebar,
+            isAuthModalOpen,
+            setAuthModalOpen,
+            authModalView,
+            setAuthModalView
         }}>
             <div className="theme-wrapper hashi-theme">
                 {children}

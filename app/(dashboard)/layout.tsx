@@ -1,19 +1,27 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
-import { LayoutDashboard, FolderKanban, MessageSquare, ShieldCheck, LogOut, Menu, PanelLeftOpen, PanelLeftClose, Globe, X, User } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, MessageSquare, ShieldCheck, LogOut, PanelLeftOpen, PanelLeftClose, Globe, X, User, Compass } from 'lucide-react';
 import { useUI } from '@/context/UIContext';
 import { useProjects } from '@/app/context/ProjectContext';
 import { CinematicTrigger, GlobalMiniPlayer } from '@/components/ui/cinematic-player';
+import AuthModal from '@/components/auth/AuthModal';
+import { OnboardingModal } from '@/components/ui/OnboardingModal';
+import { GlobalSearch } from '@/components/ui/GlobalSearch';
+import { ProjectPreviewModal } from '@/components/ui/ProjectPreviewModal';
+import { Search } from 'lucide-react';
+import { TrendingProject } from '@/app/context/ProjectContext';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
-    const { data: session } = useSession();
-    const { hashiMode, sidebarCollapsed, toggleSidebar } = useUI();
-    const { notifications, removeNotification, unreadCounts, addMessageToProject } = useProjects();
+    const { data: session, status } = useSession();
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const { hashiMode, sidebarCollapsed, toggleSidebar, setAuthModalOpen, setAuthModalView } = useUI();
+    const { notifications, removeNotification, unreadCounts, addMessageToProject, userProfile, joinProject, reachOut, isLoaded } = useProjects();
 
     const totalUnread = Object.values(unreadCounts).reduce((acc, projectCounts) => {
         return acc + Object.values(projectCounts).reduce((pAcc, count) => pAcc + count, 0);
@@ -21,6 +29,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
     const navItems = [
         { href: '/feed', label: 'Feed', icon: Globe },
+        { href: '/discover', label: 'Discover', icon: Compass },
         { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
         { href: '/missions', label: 'Missions', icon: FolderKanban },
         { href: '/profile', label: 'Profile', icon: User },
@@ -33,8 +42,61 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         return '/images/hashi/overview.png';
     };
 
+    const [showOnboarding, setShowOnboarding] = useState(false);
+
+    // Handle auth query parameters
+    useEffect(() => {
+        const authAction = searchParams.get('auth');
+        if (authAction === 'login' || authAction === 'register') {
+            setAuthModalView(authAction);
+            setAuthModalOpen(true);
+            
+            // Clear the query param without full navigation
+            const newUrl = window.location.pathname;
+            window.history.replaceState({}, '', newUrl);
+        }
+    }, [searchParams, setAuthModalOpen, setAuthModalView]);
+
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [selectedSearchProject, setSelectedSearchProject] = useState<TrendingProject | null>(null);
+
+    useEffect(() => {
+        if (status === 'authenticated' && userProfile.hasCompletedOnboarding === false) {
+            setShowOnboarding(true);
+        } else {
+            setShowOnboarding(false);
+        }
+    }, [session, userProfile.hasCompletedOnboarding]);
+
     return (
         <div className="h-screen bg-[#f9fafb] text-[#030712] flex flex-col md:flex-row overflow-hidden relative selection:bg-black/10 selection:text-[#030712]">
+            {/* Auth Modal */}
+            <AuthModal />
+            
+            {/* Onboarding Modal (Auto-trigger) */}
+            {isLoaded && session && !userProfile.hasCompletedOnboarding && (
+                <OnboardingModal onComplete={() => setShowOnboarding(false)} />
+            )}
+
+            {/* Global Search */}
+            <GlobalSearch 
+                isOpen={isSearchOpen} 
+                onClose={() => setIsSearchOpen(false)} 
+                onSelectProject={(p) => setSelectedSearchProject(p)}
+            />
+
+            {/* Project Preview (from Search) */}
+            {selectedSearchProject && (
+                <ProjectPreviewModal 
+                    project={selectedSearchProject} 
+                    onClose={() => setSelectedSearchProject(null)} 
+                    onJoin={joinProject}
+                    onReachOut={reachOut}
+                    status={session ? 'authenticated' : 'unauthenticated'}
+                    setAuthModalOpen={setAuthModalOpen}
+                />
+            )}
+
             {/* Pure Black Background - Subtle Gradients from CSS hashi-theme-bg */}
             <div className="absolute inset-0 z-0 pointer-events-none hashi-theme-bg opacity-40" />
 
@@ -103,6 +165,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <CinematicTrigger />
                 </div>
 
+                {/* Global Search Trigger */}
+                <button 
+                    onClick={() => setIsSearchOpen(true)}
+                    className="flex items-center gap-3 px-4 py-3 mx-[-4px] rounded-xl bg-black/[0.03] border border-black/5 text-[#030712]/40 hover:text-[#65a30d] hover:bg-[#65a30d]/5 hover:border-[#65a30d]/20 transition-all group"
+                >
+                    <Search size={16} strokeWidth={2} className="group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Cerca...</span>
+                </button>
+
                 <nav className="flex flex-col gap-1 flex-1 relative z-10 overflow-x-hidden">
                     {navItems.map((item) => {
                         const isActive = pathname === item.href;
@@ -131,14 +202,54 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     })}
                 </nav>
 
-                <div className="flex flex-col gap-2 pt-8 z-10 border-t border-black/10">
-                    <button
-                        onClick={() => signOut({ callbackUrl: '/' })}
-                        className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all w-full text-left text-black/60 hover:text-[#030712] hover:bg-black/[0.03]"
-                    >
-                        <LogOut size={16} strokeWidth={1.5} />
-                        <span className="text-xs tracking-wide">Sign Out</span>
-                    </button>
+                <div className="flex flex-col gap-4 pt-8 z-10 border-t border-black/10">
+                    {status === 'authenticated' ? (
+                        <div className="flex flex-col gap-4">
+                            {/* User Info Footer */}
+                            <Link 
+                                href="/profile"
+                                className="flex items-center gap-3 px-4 py-3 bg-black/[0.02] border border-black/5 rounded-2xl hover:bg-black/[0.04] transition-all group"
+                            >
+                                <div className="w-10 h-10 rounded-full border border-black/5 overflow-hidden bg-gray-100 shrink-0">
+                                    {(userProfile.photo) ? (
+                                        <img 
+                                            src={userProfile.photo} 
+                                            className="w-full h-full object-cover" 
+                                            style={{
+                                                transform: `translate(${userProfile.photoX || 0}px, ${userProfile.photoY || 0}px) scale(${userProfile.photoScale || 1})`
+                                            }}
+                                            alt="User" 
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center bg-gray-200 text-black/40 font-bold uppercase">
+                                            {userProfile.name?.charAt(0) || 'U'}
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-[11px] font-black text-[#030712] truncate uppercase tracking-tight group-hover:text-[#65a30d] transition-colors">{userProfile.name || 'Utente'}</p>
+                                    <p className="text-[9px] font-bold text-black/30 truncate">{userProfile.email}</p>
+                                </div>
+                            </Link>
+                            
+                            <button
+                                onClick={() => signOut({ callbackUrl: window.location.origin + window.location.pathname })}
+                                className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all w-full text-left text-black/60 hover:text-[#ef4444] hover:bg-red-50/50"
+                            >
+                                <LogOut size={16} strokeWidth={1.5} />
+                                <span className="text-xs tracking-wide">Sign Out</span>
+                            </button>
+                        </div>
+                    ) : (
+                        <button
+                            onClick={() => setAuthModalOpen(true)}
+                            className="flex items-center gap-3 px-4 py-4 bg-black text-white rounded-2xl transition-all w-full text-center justify-center hover:bg-gray-900 shadow-xl shadow-black/10 group"
+                        >
+                            <User size={16} strokeWidth={2} className="group-hover:scale-110 transition-transform" />
+                            <span className="text-[11px] font-black uppercase tracking-[0.2em]">Accedi / Registrati</span>
+                        </button>
+                    )}
+                    
                     <Link href="/vault" className="mt-2 px-4 py-3 rounded-lg bg-black/[0.02] border border-black/10 hover:border-[rgba(163,230,53,0.4)] hover:bg-[rgba(163,230,53,0.08)] transition-all block">
                         <p className="text-[9px] font-bold text-black/50 tracking-[0.25em] uppercase hover:text-[#65a30d] transition-colors">Immortalize your IP →</p>
                     </Link>

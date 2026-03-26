@@ -6,6 +6,8 @@ import { Image as ImageIcon, Music, Phone, MessageSquare, Video, Play, Pause, Ph
 import { useSession } from 'next-auth/react';
 import { useProjects, Message, Photo, Track, Call } from '@/app/context/ProjectContext';
 import { useRouter } from 'next/navigation';
+import { useUI } from '@/context/UIContext';
+import { VerificationBadge } from '@/components/ui/VerificationBadge';
 
 type TabId = 'PHOTOS' | 'SOUNDTRACKS' | 'CALLS' | 'MESSAGES' | 'VIDEO';
 type ProjectId = string;
@@ -14,7 +16,7 @@ type ProjectId = string;
 // PROJECTS constant removed - using ProjectContext
 
 function CommsInner() {
-    const { workspaces, deleteProject, addPhotoToProject, addMessageToProject, markAsRead, unreadCounts } = useProjects();
+    const { workspaces, deleteProject, addPhotoToProject, addMessageToProject, markAsRead, unreadCounts, userProfile } = useProjects();
     const router = useRouter();
     const searchParams = useSearchParams();
     const projectParam = searchParams.get('project') || 'bar-man';
@@ -31,6 +33,9 @@ function CommsInner() {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const sentCountRef = useRef(0);
     const { status } = useSession();
+    const { setAuthModalOpen } = useUI();
+
+    // Removed redirect - using inline guard instead
 
     useEffect(() => {
         if (projectParam !== activeProject) {
@@ -67,16 +72,18 @@ function CommsInner() {
     }
 
     const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                addPhotoToProject(activeProject, {
-                    src: reader.result as string,
-                    alt: file.name
-                });
-            };
-            reader.readAsDataURL(file);
+        const files = e.target.files;
+        if (files) {
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    addPhotoToProject(activeProject, {
+                        src: reader.result as string,
+                        alt: file.name
+                    });
+                };
+                reader.readAsDataURL(file);
+            });
         }
     };
 
@@ -87,10 +94,6 @@ function CommsInner() {
     };
 
     const sendMessage = () => {
-        if (status === 'unauthenticated') {
-            alert('Please log in to send a message.');
-            return;
-        }
         if (!newMessage.trim()) return;
         const msg: Message = {
             id: Date.now().toString(),
@@ -116,6 +119,30 @@ function CommsInner() {
 
     const callStatusColor = { incoming: '#3b82f6', outgoing: '#22c55e', missed: '#ef4444' } as const;
     const callStatusLabel = { incoming: '↙ Incoming', outgoing: '↗ Outgoing', missed: '✕ Missed' } as const;
+
+    if (status === 'unauthenticated') {
+        return (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#ffffff', padding: '40px' }}>
+                <div style={{ maxWidth: '400px', width: '100%', textAlign: 'center' }}>
+                    <div style={{ width: '80px', height: '80px', background: '#030712', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32px', boxShadow: '0 20px 50px rgba(0,0,0,0.15)' }}>
+                        <MessageSquare size={40} className="text-white" />
+                    </div>
+                    <h2 style={{ fontSize: '28px', fontWeight: 900, color: '#030712', letterSpacing: '-0.02em', marginBottom: '16px', textTransform: 'uppercase', fontFamily: '"Bangers", cursive' }}>Workspace Protetto</h2>
+                    <p style={{ fontSize: '13px', color: '#6b7280', lineHeight: 1.6, marginBottom: '40px' }}>
+                        I Workspace sono i centri nevralgici della collaborazione su Hashi. Accedi per comunicare con il tuo team, condividere asset e coordinare le missioni.
+                    </p>
+                    <button 
+                        onClick={() => setAuthModalOpen(true)}
+                        style={{ width: '100%', padding: '16px', background: '#030712', color: '#fff', border: 'none', borderRadius: '16px', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}
+                        onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
+                        onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+                    >
+                        Accedi al Workspace
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div style={{ display: 'flex', height: '100vh', background: '#ffffff', color: '#1f2937', fontFamily: 'Inter, sans-serif', overflow: 'hidden' }}>
@@ -211,10 +238,19 @@ function CommsInner() {
                 })}
 
                 <div style={{ marginTop: 'auto', padding: '12px 14px', borderTop: '1px solid rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#1e3a5f', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: 700, color: '#93c5fd', flexShrink: 0 }}>PM</div>
+                    <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#1e3a5f', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: 700, color: '#93c5fd', flexShrink: 0, overflow: 'hidden' }}>
+                        {userProfile.photo ? (
+                            <img src={userProfile.photo} alt={userProfile.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        ) : (
+                            userProfile.name?.charAt(0) || 'U'
+                        )}
+                    </div>
                     <div>
-                        <div style={{ fontSize: '11px', fontWeight: 600, color: '#1f2937' }}>Pietro Maggiotto</div>
-                        <div style={{ fontSize: '9px', color: '#4b5563', fontFamily: 'Courier New, monospace', letterSpacing: '0.06em' }}>SYNC // HIGH_COMMAND</div>
+                        <div style={{ fontSize: '11px', fontWeight: 600, color: '#1f2937', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            {userProfile.name || 'Utente'}
+                            <VerificationBadge rating={userProfile.rating} size={12} />
+                        </div>
+                        <div style={{ fontSize: '9px', color: '#4b5563', fontFamily: 'Courier New, monospace', letterSpacing: '0.06em' }}>{userProfile.role || 'Creative Citizen'}</div>
                     </div>
                 </div>
             </div>
@@ -425,7 +461,10 @@ function CommsInner() {
                                             <PhoneIcon size={16} style={{ color: callStatusColor[c.status] }} />
                                         </div>
                                         <div style={{ flex: 1 }}>
-                                            <div style={{ fontSize: '14px', fontWeight: 500, color: '#030712', marginBottom: '2px' }}>{c.user}</div>
+                                            <div style={{ fontSize: '14px', fontWeight: 500, color: '#030712', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                {c.user}
+                                                <VerificationBadge rating={4.5} size={14} />
+                                            </div>
                                             <div style={{ fontSize: '11px', fontFamily: 'Courier New, monospace', color: '#4b5563' }}>{c.date}</div>
                                         </div>
                                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
@@ -465,7 +504,10 @@ function CommsInner() {
                                         </div>
                                         <div style={{ maxWidth: '70%' }}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexDirection: msg.mine ? 'row-reverse' : 'row' }}>
-                                                <span style={{ fontSize: '11px', fontWeight: 600, color: msg.isEasterEgg ? '#4b5563' : '#1f2937' }}>{msg.sender}</span>
+                                                <span style={{ fontSize: '11px', fontWeight: 600, color: msg.isEasterEgg ? '#4b5563' : '#1f2937', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                    {msg.sender}
+                                                    <VerificationBadge rating={msg.mine ? 4.8 : 4.5} size={12} />
+                                                </span>
                                                 <span style={{ fontSize: '9px', color: '#1f2937', fontFamily: 'Courier New, monospace' }}>{msg.time}</span>
                                                 {msg.isEasterEgg && <span style={{ fontSize: '9px', color: '#1f2937', fontFamily: 'Courier New, monospace', fontStyle: 'italic' }}>· late night</span>}
                                             </div>

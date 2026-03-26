@@ -1,9 +1,13 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { Heart, MessageCircle, Share2, X, Users, Briefcase, Star, UserPlus, Check, Search, ChevronDown, ChevronUp, Layers, MousePointer2, BarChart3, Mail, Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useProjects, TrendingProject, OpenRole } from '@/app/context/ProjectContext';
+import { useUI } from '@/context/UIContext';
+import { VerificationBadge } from '@/components/ui/VerificationBadge';
+import { ProjectPreviewModal } from '@/components/ui/ProjectPreviewModal';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Post {
@@ -24,6 +28,7 @@ interface Author {
     initials: string;
     color: string;
     role: string;
+    rating?: number;
 }
 
 interface UserProfile {
@@ -54,16 +59,16 @@ interface Comment {
 
 // ─── Static data ───────────────────────────────────────────────────────────────
 const AUTHORS: Record<string, Author> = {
-    'Bruce W.': { name: 'Bruce W.', initials: 'BW', color: '#1a3a2a', role: 'Noir Director · Cinematographer' },
-    'Pietro M.': { name: 'Pietro M.', initials: 'PM', color: '#1e3a5f', role: 'Creative Director · Producer' },
-    'Lord Helmet': { name: 'Lord Helmet', initials: 'LH', color: '#3a1a3a', role: 'Actor · Executive Producer' },
-    'Tony S.': { name: 'Tony S.', initials: 'TS', color: '#3a1e1e', role: 'R&D Engineer · Gadget Designer' },
+    'Bruce W.': { name: 'Bruce W.', initials: 'BW', color: '#1a3a2a', role: 'Noir Director · Cinematographer', rating: 4.9 },
+    'Pietro M.': { name: 'Pietro M.', initials: 'PM', color: '#1e3a5f', role: 'Creative Director · Producer', rating: 4.8 },
+    'Lord Helmet': { name: 'Lord Helmet', initials: 'LH', color: '#3a1a3a', role: 'Actor · Executive Producer', rating: 4.7 },
+    'Tony S.': { name: 'Tony S.', initials: 'TS', color: '#3a1e1e', role: 'R&D Engineer · Gadget Designer', rating: 4.6 },
     // External creators
-    'Mia K.': { name: 'Mia K.', initials: 'MK', color: '#2a1a2e', role: 'Production Designer' },
-    'Rafael G.': { name: 'Rafael G.', initials: 'RG', color: '#1a2e20', role: 'Score Composer' },
-    'Yuki T.': { name: 'Yuki T.', initials: 'YT', color: '#1a1e3a', role: 'Concept Artist · Illustrator' },
-    'Dani M.': { name: 'Dani M.', initials: 'DM', color: '#2e1e14', role: 'Cinematographer · DP' },
-    'Ash V.': { name: 'Ash V.', initials: 'AV', color: '#141e2e', role: 'Creative Producer' },
+    'Mia K.': { name: 'Mia K.', initials: 'MK', color: '#2a1a2e', role: 'Production Designer', rating: 4.5 },
+    'Rafael G.': { name: 'Rafael G.', initials: 'RG', color: '#1a2e20', role: 'Score Composer', rating: 4.4 },
+    'Yuki T.': { name: 'Yuki T.', initials: 'YT', color: '#1a1e3a', role: 'Concept Artist · Illustrator', rating: 4.3 },
+    'Dani M.': { name: 'Dani M.', initials: 'DM', color: '#2e1e14', role: 'Cinematographer · DP', rating: 4.2 },
+    'Ash V.': { name: 'Ash V.', initials: 'AV', color: '#141e2e', role: 'Creative Producer', rating: 4.1 },
 };
 
 const PROFILES: Record<string, UserProfile> = {
@@ -289,9 +294,9 @@ const INITIAL_POSTS: Post[] = [
 ];
 
 const SUGGESTED = [
-    { name: 'Sara R.', role: 'Sound Designer', initials: 'SR', color: '#1a2a3a' },
-    { name: 'Marco V.', role: 'VFX Compositor', initials: 'MV', color: '#2a1a1a' },
-    { name: 'Elena K.', role: 'Score Composer', initials: 'EK', color: '#1a1a2a' },
+    { name: 'Sara R.', role: 'Sound Designer', initials: 'SR', color: '#1a2a3a', rating: 4.5 },
+    { name: 'Marco V.', role: 'VFX Compositor', initials: 'MV', color: '#2a1a1a', rating: 4.2 },
+    { name: 'Elena K.', role: 'Score Composer', initials: 'EK', color: '#1a1a2a', rating: 4.8 },
 ];
 
 // ─── Comments data ─────────────────────────────────────────────────────────────
@@ -575,7 +580,10 @@ function PostModal({ post, onClose, onProfile, requireAuth }: { post: Post; onCl
                                 {post.author.initials}
                             </div>
                             <div>
-                                <div style={{ fontSize: '14px', fontWeight: 600, color: '#f9fafb', cursor: 'pointer' }} onClick={() => { onClose(); setTimeout(() => onProfile(post.author.name), 100); }}>{post.author.name}</div>
+                                <div style={{ fontSize: '14px', fontWeight: 600, color: '#f9fafb', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }} onClick={() => { onClose(); setTimeout(() => onProfile(post.author.name), 100); }}>
+                                    {post.author.name}
+                                    <VerificationBadge rating={post.author.rating || 0} size={14} />
+                                </div>
                                 <div style={{ fontSize: '10px', fontFamily: 'Courier New, monospace', color: '#4b5563' }}>{post.author.role} · {post.time}</div>
                             </div>
                         </div>
@@ -599,9 +607,10 @@ function PostModal({ post, onClose, onProfile, requireAuth }: { post: Post; onCl
                                 </div>
                                 <div style={{ flex: 1, minWidth: 0 }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                                        <span style={{ fontSize: '13px', fontWeight: 600, color: '#1f2937', cursor: 'pointer' }}
+                                        <span style={{ fontSize: '13px', fontWeight: 600, color: '#1f2937', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
                                             onClick={() => { onClose(); setTimeout(() => onProfile(comment.author.name), 100); }}>
                                             {comment.author.name}
+                                            <VerificationBadge rating={comment.author.rating || 0} size={12} />
                                         </span>
                                         <span style={{ fontSize: '9px', fontFamily: 'Courier New, monospace', color: '#1f2937' }}>{comment.author.role}</span>
                                         <span style={{ marginLeft: 'auto', fontSize: '9px', fontFamily: 'Courier New, monospace', color: '#1f2937' }}>{comment.time}</span>
@@ -723,13 +732,12 @@ function ProjectFocus({ isEditorSetting = false, requireAuth }: { isEditorSettin
 
 // ─── Main Page ─────────────────────────────────────────────────────────────────
 export default function FeedPage() {
-    const { trendingProjects, openRoles } = useProjects();
+    const router = useRouter();
     const { toasts, show: showToast, dismiss } = useToast();
     const [posts, setPosts] = useState<Post[]>(INITIAL_POSTS);
     const [search, setSearch] = useState('');
     const [replyingTo, setReplyingTo] = useState<number | null>(null);
     const [replyText, setReplyText] = useState('');
-    const [openProfile, setOpenProfile] = useState<string | null>(null);
     const [openRole, setOpenRole] = useState<{ title: string; project: string; type: string } | null>(null);
     const [followed, setFollowed] = useState<Set<string>>(new Set());
     const [sharedPosts, setSharedPosts] = useState<Set<number>>(new Set());
@@ -738,11 +746,16 @@ export default function FeedPage() {
     const [selectedProject, setSelectedProject] = useState<TrendingProject | null>(null);
     const [showAuthPrompt, setShowAuthPrompt] = useState(false);
     const { status } = useSession();
-    const { joinProject, reachOut } = useProjects();
+    const { trendingProjects, openRoles, userProfile, joinProject, reachOut } = useProjects();
+    const { setAuthModalOpen } = useUI();
+
+    const onProfile = (name: string) => {
+        router.push(`/profile/${encodeURIComponent(name)}`);
+    };
 
     const requireAuth = (action: () => void) => {
         if (status === 'unauthenticated') {
-            showToast('Please log in to perform this action', 'info');
+            setAuthModalOpen(true);
         } else {
             action();
         }
@@ -823,14 +836,15 @@ export default function FeedPage() {
                             onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.01)')}
                             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                             <div style={{ display: 'flex', gap: '12px' }}>
-                                <Avatar author={post.author} onClick={(e: React.MouseEvent) => { e.stopPropagation(); setOpenProfile(post.author.name); }} />
+                                <Avatar author={post.author} onClick={(e: React.MouseEvent) => { e.stopPropagation(); onProfile(post.author.name); }} />
                                 <div style={{ flex: 1, minWidth: 0 }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '5px', flexWrap: 'wrap' }}>
-                                        <span onClick={(e: React.MouseEvent) => { e.stopPropagation(); setOpenProfile(post.author.name); }}
-                                            style={{ fontSize: '14px', fontWeight: 600, color: '#030712', cursor: 'pointer', transition: 'color 0.15s' }}
+                                        <span onClick={(e: React.MouseEvent) => { e.stopPropagation(); onProfile(post.author.name); }}
+                                            style={{ fontSize: '14px', fontWeight: 600, color: '#030712', cursor: 'pointer', transition: 'color 0.15s', display: 'flex', alignItems: 'center', gap: '6px' }}
                                             onMouseEnter={e => (e.currentTarget.style.color = '#65a30d')}
                                             onMouseLeave={e => (e.currentTarget.style.color = '#030712')}>
                                             {post.author.name}
+                                            <VerificationBadge rating={post.author.rating || 0} size={14} />
                                         </span>
                                         <span style={{ fontSize: '10px', color: '#1f2937', fontFamily: 'Courier New, monospace' }}>{post.author.role}</span>
                                         {['Mia K.', 'Rafael G.', 'Yuki T.', 'Dani M.', 'Ash V.'].includes(post.author.name) && (
@@ -916,22 +930,55 @@ export default function FeedPage() {
                 {/* ── Right sidebar ─────────────────── */}
                 <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'sticky', top: 0, height: '100vh', overflow: 'auto', background: '#f9fafb' }}>
 
-                    {/* User Profile Summary */}
-                    <div style={{ padding: '16px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: '12px', textAlign: 'center' }}>
-                        <div style={{ margin: '0 auto 12px', width: '64px', height: '64px', borderRadius: '50%', background: '#1e3a5f', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 800, color: 'white' }}>PM</div>
-                        <div style={{ fontSize: '15px', fontWeight: 700, color: '#030712' }}>Pietro Maggiotto</div>
-                        <div style={{ fontSize: '11px', color: '#4b5563', fontFamily: 'Courier New, monospace', marginTop: '4px' }}>Creative Technologist</div>
-                        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
-                            <div style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#1f2937' }}>3.5k</div>
-                                <div style={{ fontSize: '9px', color: '#6b7280', textTransform: 'uppercase' }}>Followers</div>
+                    {/* User Profile Summary - ONLY for authenticated users */}
+                    {status === 'authenticated' && userProfile.name && (
+                        <div 
+                            onClick={() => router.push('/profile')}
+                            style={{ padding: '16px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: '12px', textAlign: 'center', cursor: 'pointer', transition: 'transform 0.2s, border-color 0.2s' }}
+                            onMouseEnter={e => {
+                                e.currentTarget.style.borderColor = 'rgba(0,0,0,0.12)';
+                                e.currentTarget.style.transform = 'translateY(-1px)';
+                            }}
+                            onMouseLeave={e => {
+                                e.currentTarget.style.borderColor = 'rgba(0,0,0,0.06)';
+                                e.currentTarget.style.transform = 'translateY(0)';
+                            }}
+                        >
+                            <div style={{ margin: '0 auto 12px', width: '64px', height: '64px', borderRadius: '50%', background: '#1e3a5f', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 800, color: 'white', overflow: 'hidden' }}>
+                                {userProfile.photo ? (
+                                    <img src={userProfile.photo} alt={userProfile.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                ) : (
+                                    userProfile.name?.split(' ').map(n => n[0]).join('').toUpperCase() || '?'
+                                )}
                             </div>
-                            <div style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#1f2937' }}>120</div>
-                                <div style={{ fontSize: '9px', color: '#6b7280', textTransform: 'uppercase' }}>Connect</div>
+                            <div style={{ fontSize: '15px', fontWeight: 700, color: '#030712', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                                {userProfile.name}
+                                <VerificationBadge rating={userProfile.rating} size={14} />
+                            </div>
+                            <div style={{ fontSize: '11px', color: '#4b5563', fontFamily: 'Courier New, monospace', marginTop: '4px' }}>{userProfile.role || 'Creative Citizen'}</div>
+                            <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
+                                <div style={{ textAlign: 'center' }}>
+                                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#1f2937' }}>{userProfile.reviewCount > 0 ? `${(userProfile.reviewCount * 1.5).toFixed(1)}k` : '0'}</div>
+                                    <div style={{ fontSize: '9px', color: '#6b7280', textTransform: 'uppercase' }}>Followers</div>
+                                </div>
+                                <div style={{ textAlign: 'center' }}>
+                                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#1f2937' }}>{userProfile.reviewCount}</div>
+                                    <div style={{ fontSize: '9px', color: '#6b7280', textTransform: 'uppercase' }}>Connect</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
+
+                    {status === 'unauthenticated' && (
+                        <div 
+                            onClick={() => setAuthModalOpen(true)}
+                            style={{ padding: '24px 16px', background: 'linear-gradient(135deg, #1e3a5f 0%, #030712 100%)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', textAlign: 'center', cursor: 'pointer' }}
+                        >
+                            <div style={{ fontSize: '14px', fontWeight: 800, color: 'white', marginBottom: '8px', letterSpacing: '0.05em' }}>JOIN THE NETWORK</div>
+                            <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.5, marginBottom: '16px' }}>Sign in to manage your IP, track missions, and connect with elite creators.</p>
+                            <div style={{ display: 'inline-block', padding: '8px 20px', background: '#65a30d', color: 'white', fontSize: '11px', fontWeight: 900, borderRadius: '20px', fontFamily: 'Courier New, monospace' }}>GET STARTED</div>
+                        </div>
+                    )}
 
                     {/* Trending */}
                     <div style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: '12px', padding: '16px' }}>
@@ -974,7 +1021,10 @@ export default function FeedPage() {
                                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 0', borderBottom: i < SUGGESTED.length - 1 ? '1px solid rgba(0,0,0,0.04)' : 'none' }}>
                                     <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: s.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: 700, color: 'rgba(0,0,0,0.8)', flexShrink: 0 }}>{s.initials}</div>
                                     <div style={{ flex: 1, minWidth: 0 }}>
-                                        <div style={{ fontSize: '12px', fontWeight: 500, color: '#1f2937' }}>{s.name}</div>
+                                        <div style={{ fontSize: '12px', fontWeight: 500, color: '#1f2937', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                            {s.name}
+                                            <VerificationBadge rating={s.rating} size={12} />
+                                        </div>
                                         <div style={{ fontSize: '10px', color: '#4b5563', fontFamily: 'Courier New, monospace' }}>{s.role}</div>
                                     </div>
                                     <button onClick={() => toggleFollow(s.name)}
@@ -1010,16 +1060,12 @@ export default function FeedPage() {
             </div>
 
             {/* Modals */}
-            {openProfile && (
-                <ProfileModal name={openProfile} onClose={() => setOpenProfile(null)}
-                    onFollow={toggleFollow} followed={followed} showToast={showToast} requireAuth={requireAuth} />
-            )}
             {openRole && (
                 <RoleModal title={openRole.title} project={openRole.project} type={openRole.type}
                     onClose={() => setOpenRole(null)} showToast={showToast} requireAuth={requireAuth} />
             )}
             {openPost && (
-                <PostModal key={openPost.id} post={openPost} onClose={() => setOpenPost(null)} onProfile={setOpenProfile} requireAuth={requireAuth} />
+                <PostModal key={openPost.id} post={openPost} onClose={() => setOpenPost(null)} onProfile={onProfile} requireAuth={requireAuth} />
             )}
 
             {lightbox && (
@@ -1031,117 +1077,14 @@ export default function FeedPage() {
             )}
 
             {/* Project Preview Modal */}
-            {selectedProject && (
-                <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(12px)', animation: 'fade-in 0.3s ease' }} onClick={() => setSelectedProject(null)}>
-                    <div style={{ background: '#ffffff', width: '100%', maxWidth: '600px', maxHeight: '90vh', borderRadius: '24px', overflowY: 'auto', position: 'relative', display: 'flex', flexDirection: 'column', animation: 'slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }} onClick={e => e.stopPropagation()}>
-                        
-                        {/* Close button */}
-                        <button onClick={() => setSelectedProject(null)} style={{ position: 'absolute', top: '16px', right: '16px', zIndex: 10, padding: '8px', background: 'rgba(0,0,0,0.4)', border: 'none', borderRadius: '50%', color: '#ffffff', cursor: 'pointer', backdropFilter: 'blur(4px)' }}>
-                            <X size={20} />
-                        </button>
-
-                        {/* Banner */}
-                        <div style={{ width: '100%', height: '200px', position: 'relative', flexShrink: 0 }}>
-                            <img src={selectedProject.coverImage || '/images/default_cover.png'} alt={selectedProject.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                            <div style={{ position: 'absolute', bottom: '-40px', left: '32px', width: '80px', height: '80px', borderRadius: '20px', background: '#030712', border: '4px solid #ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff', fontSize: '24px', fontWeight: 900, boxShadow: '0 8px 24px rgba(0,0,0,0.1)' }}>
-                                {selectedProject.name.charAt(0)}
-                            </div>
-                        </div>
-
-                        {/* Content */}
-                        <div style={{ padding: '60px 32px 32px' }}>
-                            <div style={{ marginBottom: '24px' }}>
-                                <h2 style={{ fontSize: '28px', fontWeight: 900, color: '#030712', margin: 0, letterSpacing: '-0.02em' }}>{selectedProject.name}</h2>
-                                <p style={{ fontSize: '14px', fontWeight: 700, fontFamily: 'Courier New, monospace', color: '#65a30d', margin: '4px 0 0', letterSpacing: '0.05em', textTransform: 'uppercase' }}>{selectedProject.tagline}</p>
-                            </div>
-
-                            <div style={{ marginBottom: '32px' }}>
-                                <p style={{ fontSize: '15px', color: '#4b5563', lineHeight: 1.6, margin: 0 }}>{selectedProject.description}</p>
-                            </div>
-
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', padding: '24px', background: '#f9fafb', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.05)' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#1e3a5f', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff', fontSize: '14px', fontWeight: 800 }}>
-                                        {selectedProject.creatorName?.charAt(0)}
-                                    </div>
-                                    <div>
-                                        <div style={{ fontSize: '10px', fontWeight: 800, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: 'Courier New, monospace' }}>Creato da</div>
-                                        <div style={{ fontSize: '14px', fontWeight: 700, color: '#030712' }}>{selectedProject.creatorName}</div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div style={{ fontSize: '10px', fontWeight: 800, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: 'Courier New, monospace', marginBottom: '8px' }}>Stiamo cercando</div>
-                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                                        {selectedProject.roles?.map(role => (
-                                            <span key={role} style={{ padding: '4px 10px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.08)', borderRadius: '20px', fontSize: '10px', fontWeight: 700, color: '#4b5563', fontFamily: 'Courier New, monospace' }}>
-                                                {role.toUpperCase()}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div style={{ fontSize: '10px', fontWeight: 800, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: 'Courier New, monospace', marginBottom: '4px' }}>Cosa offriamo</div>
-                                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#fb923c' }}>{selectedProject.offer}</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Footer Buttons */}
-                        <div style={{ padding: '24px 32px', borderTop: '1px solid rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                            <div style={{ display: 'flex', gap: '16px' }}>
-                                <button 
-                                    onClick={() => {
-                                        if (status === 'unauthenticated') {
-                                            setShowAuthPrompt(true);
-                                        } else {
-                                            joinProject(selectedProject.id);
-                                            showToast(`Ti sei unito a ${selectedProject.name}!`, 'success');
-                                            setSelectedProject(null);
-                                        }
-                                    }}
-                                    style={{ flex: 1, padding: '14px', background: '#65a30d', border: 'none', borderRadius: '14px', color: '#ffffff', fontSize: '13px', fontWeight: 800, fontFamily: 'Courier New, monospace', cursor: 'pointer', letterSpacing: '0.1em', boxShadow: '0 8px 24px rgba(163,230,53,0.3)', transition: 'all 0.2s' }}
-                                    onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
-                                    onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
-                                >
-                                    JOIN
-                                </button>
-                                <button 
-                                    onClick={() => {
-                                        if (status === 'unauthenticated') {
-                                            setShowAuthPrompt(true);
-                                        } else {
-                                            const msg = `Ciao, ho visto il tuo progetto ${selectedProject.name} e vorrei saperne di più.`;
-                                            reachOut(selectedProject.id, msg);
-                                            showToast(`Messaggio inviato a ${selectedProject.creatorName}`, 'success');
-                                            window.location.href = '/comms?project=bar-man';
-                                        }
-                                    }}
-                                    style={{ flex: 1, padding: '14px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '14px', color: '#030712', fontSize: '13px', fontWeight: 800, fontFamily: 'Courier New, monospace', cursor: 'pointer', letterSpacing: '0.1em', transition: 'all 0.2s' }}
-                                    onMouseEnter={e => (e.currentTarget.style.background = '#f9fafb')}
-                                    onMouseLeave={e => (e.currentTarget.style.background = '#ffffff')}
-                                >
-                                    REACH OUT
-                                </button>
-                            </div>
-
-                            {showAuthPrompt && (
-                                <div style={{ textAlign: 'center', animation: 'fade-in 0.3s ease' }}>
-                                    <p style={{ fontSize: '12px', color: '#ef4444', fontWeight: 700, margin: '0 0 8px', fontFamily: 'Courier New, monospace' }}>
-                                        Crea un account per unirti al progetto
-                                    </p>
-                                    <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', fontSize: '11px', fontWeight: 800, fontFamily: 'Courier New, monospace' }}>
-                                        <a href="/login" style={{ color: '#65a30d', textDecoration: 'none', borderBottom: '1px solid currentColor' }}>LOG IN</a>
-                                        <span style={{ color: '#d1d5db' }}>|</span>
-                                        <a href="/signup" style={{ color: '#65a30d', textDecoration: 'none', borderBottom: '1px solid currentColor' }}>SIGN UP</a>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
+            <ProjectPreviewModal 
+                project={selectedProject}
+                onClose={() => setSelectedProject(null)}
+                onJoin={joinProject}
+                onReachOut={reachOut}
+                status={status}
+                setAuthModalOpen={setAuthModalOpen}
+            />
 
             <style>{`
                 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }

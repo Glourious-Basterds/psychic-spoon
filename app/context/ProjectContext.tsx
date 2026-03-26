@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 
 // --- Types ---
 
@@ -38,6 +39,27 @@ export interface Mission {
     offer?: string;
     coverImage?: string | null;
     tagline?: string;
+    ipId?: string; // Link to an IP from the Vault
+}
+
+export type IPCategory = 'Film' | 'Animation' | 'Comic' | 'Video Game' | 'Music' | 'TV Series' | 'Podcast' | 'Other';
+export type IPPrivacy = 'Public' | 'Private' | 'Selective';
+export type IPContactMode = 'Open to pitch' | 'Formal applications only' | 'Paid work/Licensing only';
+
+export interface IntellectualProperty {
+    id: string;
+    title: string;
+    category: IPCategory;
+    tagline: string;
+    description: string;
+    coverImage: string | null;
+    materials: { name: string; url: string; type: string }[];
+    privacy: IPPrivacy;
+    contactModes: IPContactMode[];
+    contactInstructions: string;
+    creatorId: string;
+    creatorName: string;
+    createdAt: string;
 }
 
 export interface TrendingProject {
@@ -54,6 +76,7 @@ export interface TrendingProject {
     creatorPhoto?: string | null;
     roles?: string[];
     offer?: string;
+    category?: string;
 }
 
 export interface OpenRole {
@@ -75,6 +98,7 @@ export interface Review {
     text: string;
     rating: number;
     date: string;
+    categories?: RatingBreakdown;
 }
 
 export interface RatingBreakdown {
@@ -103,7 +127,17 @@ export interface UserProfile {
     id: string;
     name: string;
     photo: string | null;
+    photoScale: number;
+    photoX: number;
+    photoY: number;
     coverImage: string | null;
+    coverScale: number;
+    coverX: number;
+    coverY: number;
+    backgroundPhoto: string | null;
+    bgScale: number;
+    bgX: number;
+    bgY: number;
     role: string;
     rating: number;
     reviewCount: number;
@@ -117,6 +151,8 @@ export interface UserProfile {
     ratings: RatingBreakdown;
     reviews: Review[];
     posts: Post[];
+    hasCompletedOnboarding?: boolean;
+    intent?: string;
 }
 
 export interface ProjectWorkspace {
@@ -153,6 +189,7 @@ interface ProjectContextType {
         coverImage: string | null;
         roles: string[];
         deadlines: { label: string; date: string }[];
+        ipId?: string;
     }) => void;
     deleteProject: (id: string) => void;
     addPhotoToProject: (projectId: string, photo: Photo) => void;
@@ -166,6 +203,13 @@ interface ProjectContextType {
     userProfile: UserProfile;
     updateProfile: (data: Partial<UserProfile>) => void;
     getOtherUserById: (id: string) => UserProfile | undefined;
+    otherUsers: Record<string, UserProfile>;
+    addReview: (targetUserId: string, review: Omit<Review, 'id' | 'date'>) => void;
+    ips: IntellectualProperty[];
+    addIP: (data: Omit<IntellectualProperty, 'id' | 'createdAt' | 'creatorId' | 'creatorName'>) => void;
+    updateIP: (id: string, data: Partial<IntellectualProperty>) => void;
+    deleteIP: (id: string) => void;
+    isLoaded: boolean;
 }
 
 // --- Context & Provider ---
@@ -173,15 +217,7 @@ interface ProjectContextType {
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
 export function ProjectProvider({ children }: { children: ReactNode }) {
-    // Basic state
-    const [missions, setMissions] = useState<Mission[]>([]);
-    const [trendingProjects, setTrendingProjects] = useState<TrendingProject[]>([]);
-    const [openRoles, setOpenRoles] = useState<OpenRole[]>([]);
-    const [workspaces, setWorkspaces] = useState<Record<string, ProjectWorkspace>>({});
-    const [notifications, setNotifications] = useState<AppNotification[]>([]);
-    const [unreadCounts, setUnreadCounts] = useState<Record<string, Record<string, number>>>({});
-    const [userProfile, setUserProfile] = useState<UserProfile>({} as UserProfile);
-    const [isLoaded, setIsLoaded] = useState(false);
+    // Combined state (moved to lower block for session access)
 
     // Default data (returned if localStorage is empty)
     const defaultMissions: Mission[] = [
@@ -313,7 +349,8 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
             creatorName: 'Bruce W.',
             creatorPhoto: null,
             roles: ['Cinematographer', 'VFX Artist', 'Composer'],
-            offer: 'Shared IP Revenue + Daily Rate'
+            offer: 'Shared IP Revenue + Daily Rate',
+            category: 'Film'
         },
         { 
             id: 'space-balls', 
@@ -327,14 +364,127 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
             creatorName: 'Lord Helmet',
             creatorPhoto: null,
             roles: ['Animator', 'Sound Designer'],
-            offer: 'Production Credit + Backend Points'
+            offer: 'Production Credit + Backend Points',
+            category: 'Animazione'
+        },
+        { 
+            id: 'project-woody', 
+            name: 'Project Woody', 
+            members: 12, 
+            href: '/comms?project=project-woody', 
+            coverImage: '/images/concept_art_moon_garden_1772413918467.png', 
+            tagline: 'WOODWORKING & DESIGN', 
+            timestamp: '1h ago',
+            description: 'A masterclass in traditional woodworking techniques blended with modern digital design.',
+            creatorName: 'Pietro M.',
+            creatorPhoto: null,
+            roles: ['Designer', 'Carpenter', 'Photographer'],
+            offer: 'Shared Workspace + IP',
+            category: 'Film'
+        },
+        { 
+            id: 'neo-kyoto', 
+            name: 'Neo-Kyoto Drifters', 
+            members: 15, 
+            href: '/discover', 
+            coverImage: '/images/sculpture_1.png', 
+            tagline: 'CYBERPUNK RACING GAME', 
+            timestamp: '3h ago',
+            description: 'An open-world racing game set in a futuristic Kyoto. High-speed action, deep customization, and a synth-heavy soundtrack.',
+            creatorName: 'Yuki T.',
+            creatorPhoto: null,
+            roles: ['Level Designer', '3D Artist', 'Sound Designer'],
+            offer: 'Pagato',
+            category: 'Videogioco'
+        },
+        { 
+            id: 'sound-silence', 
+            name: 'The Sound of Silence', 
+            members: 4, 
+            href: '/discover', 
+            coverImage: '/images/studio_score_session.png', 
+            tagline: 'EXPERIMENTAL AUDIO PROJECT', 
+            timestamp: '6h ago',
+            description: 'Exploring the boundaries of sound and silence through interactive audio installations.',
+            creatorName: 'Rafael G.',
+            creatorPhoto: null,
+            roles: ['Sound Designer', 'Composer'],
+            offer: 'Collaborazione',
+            category: 'Musica'
+        },
+        { 
+            id: 'mech-heart', 
+            name: 'Mechanical Heart', 
+            members: 22, 
+            href: '/discover', 
+            coverImage: '/images/sculpture_2.png', 
+            tagline: 'STEAMPUNK ANIMATION', 
+            timestamp: '12h ago',
+            description: 'A short film about a clockwork world where emotions are powered by steam and gears.',
+            creatorName: 'Mia K.',
+            creatorPhoto: null,
+            roles: ['Animator', 'VFX Artist', 'Writer'],
+            offer: 'Collaborazione',
+            category: 'Animazione'
+        },
+        { 
+            id: 'beyond-horizon', 
+            name: 'Beyond the Horizon', 
+            members: 3, 
+            href: '/discover', 
+            coverImage: '/images/abstract_hashi_overview.png', 
+            tagline: 'CREATIVE MINDS PODCAST', 
+            timestamp: '1d ago',
+            description: 'A weekly podcast interviewing the top creative minds on Hashi. Success stories, failures, and technical deep dives.',
+            creatorName: 'Ash V.',
+            creatorPhoto: null,
+            roles: ['Editor', 'Guest Coordinator'],
+            offer: 'Volontario',
+            category: 'Podcast'
+        },
+        { 
+            id: 'neon-nights', 
+            name: 'Neon Nights', 
+            members: 45, 
+            href: '/discover', 
+            coverImage: '/images/barman_noir_bartender.png', 
+            tagline: 'CYBERPUNK DRAMA SERIES', 
+            timestamp: '2d ago',
+            description: 'A live-action series following the lives of mercenaries in a neon-drenched megacity.',
+            creatorName: 'Dani M.',
+            creatorPhoto: null,
+            roles: ['Director', 'DP', 'Actor'],
+            offer: 'Pagato',
+            category: 'Serie TV'
+        },
+        { 
+            id: 'great-heist', 
+            name: 'The Great Heist', 
+            members: 7, 
+            href: '/discover', 
+            coverImage: '/images/storyboard_noir.png', 
+            tagline: 'GRAPHIC NOVEL', 
+            timestamp: '3d ago',
+            description: 'A noir graphic novel about the biggest art heist in history. Black and white, heavily stylized.',
+            creatorName: 'Marco V.',
+            creatorPhoto: null,
+            roles: ['Illustrator', 'Writer'],
+            offer: 'Collaborazione',
+            category: 'Fumetto'
         },
     ];
 
     const defaultRoles: OpenRole[] = [
-        { title: 'Sound Designer', project: 'The Bar-Man', type: 'Freelance' },
-        { title: 'VFX Lead', project: 'Space-Balls S2', type: 'Full-time' },
-        { title: 'Script Editor', project: 'Ghost Protocol', type: 'Contract' },
+        { title: 'Sound Designer', project: 'The Bar-Man', type: 'Pagato' },
+        { title: 'VFX Lead', project: 'Space-Balls S2', type: 'Pagato' },
+        { title: 'Level Designer', project: 'Neo-Kyoto Drifters', type: 'Pagato' },
+        { title: '3D Artist', project: 'Neo-Kyoto Drifters', type: 'Collaborazione' },
+        { title: 'Animator', project: 'Mechanical Heart', type: 'Collaborazione' },
+        { title: 'VFX Artist', project: 'Mechanical Heart', type: 'Collaborazione' },
+        { title: 'Editor', project: 'Beyond the Horizon', type: 'Volontario' },
+        { title: 'Illustrator', project: 'The Great Heist', type: 'Collaborazione' },
+        { title: 'Actor', project: 'Neon Nights', type: 'Pagato' },
+        { title: 'Director', project: 'Neon Nights', type: 'Pagato' },
     ];
 
     const defaultWorkspaces: Record<string, ProjectWorkspace> = {
@@ -413,84 +563,111 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
                     { id: 'ek1', sender: 'Elena K.', initials: 'EK', color: '#1a1a2a', content: "The zero-gravity carbonara simulation is finally stable.", time: '15:20', mine: false },
                 ]
             }
+        },
+        'project-woody': {
+            name: 'PROJECT WOODY',
+            subtitle: 'WOODWORKING & DESIGN',
+            coverImage: '/images/concept_art_moon_garden_1772413918467.png',
+            channels: ['Home-Base', 'Design-Lab', 'Workshop-Camera', 'Pietro-M.'],
+            onlineUsers: ['Pietro-M.'],
+            photos: [
+                { src: '/images/concept_art_moon_garden_1772413918467.png', alt: 'Project Cover' },
+                { src: '/images/bts_cinematographer_1772413934142.png', alt: 'IMG_4845.jpg' },
+            ],
+            tracks: [],
+            calls: [],
+            messages: {
+                'Home-Base': [
+                    { id: 'pw1', sender: 'Pietro M.', initials: 'PM', color: '#1e3a5f', content: "Welcome to Project Woody. Let's build something authentic.", time: '11:00', mine: true },
+                ]
+            }
         }
     };
 
-    const defaultProfile: UserProfile = {
+    const pietroProfile: UserProfile = {
         id: 'pietro-m',
         name: 'Pietro M.',
         photo: null,
+        photoScale: 1,
+        photoX: 0,
+        photoY: 0,
         coverImage: '/images/abstract_hashi_overview.png',
+        coverScale: 1,
+        coverX: 0,
+        coverY: 0,
+        backgroundPhoto: null,
+        bgScale: 1,
+        bgX: 0,
+        bgY: 0,
         role: 'Sound Designer & Director',
         rating: 4.8,
         reviewCount: 32,
         bio: "I'm a visual storyteller and sound architect. I love creating atmospheric experiences where audio and video dance together perfectly. Looking for projects that challenge the boundaries of noir and sci-fi.",
         email: 'pietro@hashi.cx',
-        portfolio: 'pietro.hashi.cx',
         social: '@pietro_m',
-        skills: ['Sound Design', 'Film Editing', 'Cinematography', 'VFX', 'Color Grading', 'Audio Engineering'],
-        specialties: ['Atmospheric Soundscapes', 'Noir Lighting', 'Cinematic Soundtrack'],
-        hobbies: ['Synth building', 'Vintage lenses', 'Italian cooking', 'Urban sketching'],
-        ratings: {
-            reliability: 4.9,
-            communication: 4.7,
-            punctuality: 4.8,
-            quality: 4.9,
-            toneUnderstanding: 5.0,
-            creativity: 4.8,
-            teamwork: 4.6
-        },
+        portfolio: 'pietromaggiotto.com',
+        skills: ['Sound Design', 'Directing', 'Cinematography', 'Music Production'],
+        specialties: ['Noir Aesthetics', 'Spatial Audio', 'Atmospheric Lighting'],
+        hobbies: ['Synth building', 'Street photography', 'Cooking'],
+        ratings: { reliability: 5, communication: 5, punctuality: 4.5, quality: 5, toneUnderstanding: 5, creativity: 5, teamwork: 4.5 },
         reviews: [
-            {
-                id: 'rev1',
-                reviewerName: 'Bruce W.',
-                reviewerPhoto: null,
-                projectTitle: 'The Bar-Man',
-                text: "Pietro's sound design on the rainy bar scene was extraordinary. He didn't just add sound, he added a character. Pure noir feeling.",
-                rating: 5,
-                date: '2 months ago'
-            },
-            {
-                id: 'rev2',
-                reviewerName: 'Elena K.',
-                reviewerPhoto: null,
-                projectTitle: 'Space Balls — S2',
-                text: "The zero-G pasta sounds are hilarious and perfectly timed. High level of reliability and quick turnarounds.",
-                rating: 4,
-                date: '1 week ago'
-            }
+            { id: 'rev1', reviewerName: 'Bruce W.', reviewerPhoto: null, projectTitle: 'The Bar-Man', text: "Pietro's sound design is the soul of this film. He doesn't just record sound; he builds worlds.", rating: 5, date: '1 week ago' },
+            { id: 'rev2', reviewerName: 'Mia K.', reviewerPhoto: null, projectTitle: 'Shadow & Light', text: "Exceptional collaborator. His understanding of mood and pacing is intuitive.", rating: 4.5, date: '1 month ago' }
         ],
         posts: [
-            {
-                id: 'post1',
-                authorName: 'Pietro M.',
-                authorInitials: 'PM',
-                authorColor: '#1e3a5f',
-                content: "Just finished the late-night sound pass for #TheBarMan. There's something magical about silence in noir.",
-                image: '/images/bts_cinematographer.png',
-                likes: 42,
-                comments: 8,
-                timestamp: '2h ago'
-            },
-            {
-                id: 'post2',
-                authorName: 'Pietro M.',
-                authorInitials: 'PM',
-                authorColor: '#1e3a5f',
-                content: "Experimenting with binaural recording for the next mission. The space feels huge.",
-                likes: 28,
-                comments: 3,
-                timestamp: 'Yesterday'
-            }
-        ]
+            { id: 'post1', authorName: 'Pietro M.', authorInitials: 'PM', authorColor: '#1e3a5f', content: "Just finished the late-night sound pass for #TheBarMan. There's something magical about silence in noir.", image: '/images/bts_cinematographer.png', likes: 42, comments: 8, timestamp: '2h ago' },
+            { id: 'post2', authorName: 'Pietro M.', authorInitials: 'PM', authorColor: '#1e3a5f', content: "Experimenting with binaural recording for the next mission. The space feels huge.", likes: 28, comments: 3, timestamp: 'Yesterday' }
+        ],
+        hasCompletedOnboarding: true,
+        intent: 'Both'
     };
 
-    const otherUsers: Record<string, UserProfile> = {
+    const guestProfile: UserProfile = {
+        id: 'guest',
+        name: '',
+        photo: null,
+        photoScale: 1,
+        photoX: 0,
+        photoY: 0,
+        coverImage: null,
+        coverScale: 1,
+        coverX: 0,
+        coverY: 0,
+        backgroundPhoto: null,
+        bgScale: 1,
+        bgX: 0,
+        bgY: 0,
+        role: '',
+        rating: 0,
+        reviewCount: 0,
+        bio: '',
+        email: '',
+        skills: [],
+        specialties: [],
+        hobbies: [],
+        ratings: { reliability: 0, communication: 0, punctuality: 0, quality: 0, toneUnderstanding: 0, creativity: 0, teamwork: 0 },
+        reviews: [],
+        posts: [],
+        hasCompletedOnboarding: false,
+        intent: ''
+    };
+
+    const initialOtherUsers: Record<string, UserProfile> = {
         'bruce-w': {
             id: 'bruce-w',
             name: 'Bruce W.',
             photo: null,
+            photoScale: 1,
+            photoX: 0,
+            photoY: 0,
             coverImage: '/images/barman_noir.png',
+            coverScale: 1,
+            coverX: 0,
+            coverY: 0,
+            backgroundPhoto: null,
+            bgScale: 1,
+            bgX: 0,
+            bgY: 0,
             role: 'Lead Director',
             rating: 4.9,
             reviewCount: 124,
@@ -502,121 +679,123 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
             specialties: ['Dark Noir', 'Action Sequences'],
             hobbies: ['Martial arts', 'Night vision tech'],
             ratings: { reliability: 5, communication: 4, punctuality: 5, quality: 5, toneUnderstanding: 5, creativity: 5, teamwork: 3 },
-            reviews: [],
+            reviews: [
+                {
+                    id: 'rev-bw1',
+                    reviewerName: 'Pietro M.',
+                    reviewerPhoto: null,
+                    projectTitle: 'The Bar-Man',
+                    text: "Bruce is a visionary. His direction is clear, and his dedication to the noir aesthetic is unmatched.",
+                    rating: 5,
+                    date: '2 months ago'
+                }
+            ],
             posts: []
         }
     };
 
-    // Load from localStorage
+    const { data: session } = useSession();
+    const userEmail = session?.user?.email || null;
+
+    const [missions, setMissions] = useState<Mission[]>([]);
+    const [trendingProjects, setTrendingProjects] = useState<TrendingProject[]>([]);
+    const [openRoles, setOpenRoles] = useState<OpenRole[]>([]);
+    const [workspaces, setWorkspaces] = useState<Record<string, ProjectWorkspace>>({});
+    const [notifications, setNotifications] = useState<AppNotification[]>([]);
+    const [unreadCounts, setUnreadCounts] = useState<Record<string, Record<string, number>>>({});
+    const [userProfile, setUserProfile] = useState<UserProfile>(guestProfile);
+    const [ips, setIps] = useState<IntellectualProperty[]>([]);
+    const [otherUsers, setOtherUsers] = useState<Record<string, UserProfile>>({});
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    // Initial Load (One-time)
     useEffect(() => {
-        const savedMissions = localStorage.getItem('hashi_missions');
+        // Shared data always loads
         const savedTrending = localStorage.getItem('hashi_trending');
         const savedRoles = localStorage.getItem('hashi_roles');
-        const savedWorkspaces = localStorage.getItem('hashi_workspaces');
-        const savedUnread = localStorage.getItem('hashi_unread');
-        const savedProfile = localStorage.getItem('hashi_profile');
-
-        if (savedMissions) {
-            const parsed = JSON.parse(savedMissions);
-            const patched = parsed.map((m: Mission) => {
-                const def = defaultMissions.find(d => d.id === m.id);
-                if (def) {
-                    return {
-                        ...def,
-                        ...m,
-                        coverImage: m.coverImage || def.coverImage,
-                        tagline: m.tagline || def.tagline,
-                        dueDates: m.dueDates || def.dueDates,
-                        milestones: m.milestones || def.milestones,
-                        summary: m.summary || def.summary
-                    };
-                }
-                return m;
-            });
-            setMissions(patched);
-        } else {
-            setMissions(defaultMissions);
-        }
-
+        
         if (savedTrending) {
-            const parsed = JSON.parse(savedTrending);
-            const merged = parsed.map((p: TrendingProject) => {
-                const def = defaultTrending.find(d => d.id === p.id);
-                if (def) {
-                    return {
-                        ...def,
-                        ...p,
-                        // Ensure these new fields are always taken from default if they don't exist in saved
-                        description: p.description || def.description,
-                        creatorName: p.creatorName || def.creatorName,
-                        roles: p.roles || def.roles,
-                        offer: p.offer || def.offer,
-                        tagline: p.tagline || def.tagline,
-                        coverImage: p.coverImage || def.coverImage
-                    };
-                }
-                return p;
-            });
-            setTrendingProjects(merged as TrendingProject[]);
-        } else {
-            setTrendingProjects(defaultTrending);
-        }
+             const parsed = JSON.parse(savedTrending);
+             const merged = parsed.map((p: TrendingProject) => {
+                 const def = defaultTrending.find(d => d.id === p.id);
+                 return def ? { ...def, ...p } : p;
+             });
+             setTrendingProjects(merged);
+        } else setTrendingProjects(defaultTrending);
 
         if (savedRoles) setOpenRoles(JSON.parse(savedRoles));
         else setOpenRoles(defaultRoles);
 
-        if (savedWorkspaces) {
-            const parsed = JSON.parse(savedWorkspaces);
-            const patched = { ...parsed };
-            // Migration: Ensure new default channels/messages are merged into existing local state
-            Object.keys(defaultWorkspaces).forEach(id => {
-                if (patched[id]) {
-                    const missingChannels = defaultWorkspaces[id].channels.filter(c => !patched[id].channels.includes(c));
-                    if (missingChannels.length > 0) {
-                        patched[id].channels = [...patched[id].channels, ...missingChannels];
-                        missingChannels.forEach(c => {
-                            if (defaultWorkspaces[id].messages[c]) {
-                                patched[id].messages[c] = defaultWorkspaces[id].messages[c];
-                            }
-                        });
-                    }
-                    // Also refresh Home-Base messages if they are the old repetitive ones
-                    if (patched[id].messages['Home-Base']?.length > 5 && patched[id].messages['Home-Base'].every((m: any) => m.sender === 'Bruce W.')) {
-                         patched[id].messages['Home-Base'] = defaultWorkspaces[id].messages['Home-Base'];
-                    }
-                } else {
-                    patched[id] = defaultWorkspaces[id];
-                }
-            });
-            setWorkspaces(patched);
-        } else setWorkspaces(defaultWorkspaces);
+        setOtherUsers(initialOtherUsers);
 
-        if (savedUnread) setUnreadCounts(JSON.parse(savedUnread));
-        else {
-            // Default unread counts for a fresh look
-            setUnreadCounts({
-                'bar-man': { 'Clandestine-Intel': 2, 'Bruce-W.': 1 },
-                'space-balls': { 'Home-Base': 1 }
-            });
+        setOtherUsers(initialOtherUsers);
+    }, []);
+
+    // Session-based Data loading
+    useEffect(() => {
+        setIsLoaded(false);
+        if (!userEmail) {
+            // CRITICAL: Hardware-reset to guest state whenever session is lost or absent.
+            // This is the primary defense against "Pietro" or other profile leakage.
+            setUserProfile(guestProfile);
+            setMissions([]);
+            setWorkspaces({});
+            setIps([]);
+            setNotifications([]);
+            setUnreadCounts({});
+            setOtherUsers(initialOtherUsers);
+            setIsLoaded(true);
+            return;
         }
 
-        if (savedProfile) setUserProfile(JSON.parse(savedProfile));
-        else setUserProfile(defaultProfile);
-        
+        const prefix = `hashi_${userEmail}`;
+        const savedMissions = localStorage.getItem(`${prefix}_missions`);
+        const savedWorkspaces = localStorage.getItem(`${prefix}_workspaces`);
+        const savedProfile = localStorage.getItem(`${prefix}_profile`);
+        const savedIPs = localStorage.getItem(`${prefix}_ips`);
+
+        if (savedProfile) {
+            setUserProfile(JSON.parse(savedProfile));
+        } else {
+            // New user or Pietro
+            if (userEmail === 'pietro@hashi.cx') {
+                setUserProfile(pietroProfile);
+            } else {
+                setUserProfile({ ...guestProfile, name: session?.user?.name || '', email: userEmail });
+            }
+        }
+
+        if (savedMissions) setMissions(JSON.parse(savedMissions));
+        else if (userEmail === 'pietro@hashi.cx') setMissions(defaultMissions);
+        else setMissions([]);
+
+        if (savedWorkspaces) setWorkspaces(JSON.parse(savedWorkspaces));
+        else if (userEmail === 'pietro@hashi.cx') setWorkspaces(defaultWorkspaces);
+        else setWorkspaces({});
+
+        if (savedIPs) setIps(JSON.parse(savedIPs));
+        else {
+            setIps([]);
+        }
+
         setIsLoaded(true);
-    }, []);
+    }, [userEmail]);
 
     // Save to localStorage
     useEffect(() => {
+        if (isLoaded && userEmail) {
+            const prefix = `hashi_${userEmail}`;
+            localStorage.setItem(`${prefix}_missions`, JSON.stringify(missions));
+            localStorage.setItem(`${prefix}_workspaces`, JSON.stringify(workspaces));
+            localStorage.setItem(`${prefix}_profile`, JSON.stringify(userProfile));
+            localStorage.setItem(`${prefix}_ips`, JSON.stringify(ips));
+        }
+        // Always save global shared data
         if (isLoaded) {
-            localStorage.setItem('hashi_missions', JSON.stringify(missions));
             localStorage.setItem('hashi_trending', JSON.stringify(trendingProjects));
             localStorage.setItem('hashi_roles', JSON.stringify(openRoles));
-            localStorage.setItem('hashi_workspaces', JSON.stringify(workspaces));
-            localStorage.setItem('hashi_unread', JSON.stringify(unreadCounts));
-            localStorage.setItem('hashi_profile', JSON.stringify(userProfile));
         }
-    }, [missions, trendingProjects, openRoles, workspaces, unreadCounts, userProfile, isLoaded]);
+    }, [missions, trendingProjects, openRoles, workspaces, userProfile, ips, isLoaded, userEmail]);
 
     const publishMission = (data: {
         name: string;
@@ -624,6 +803,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
         coverImage: string | null;
         roles: string[];
         deadlines: { label: string; date: string }[];
+        ipId?: string;
     }) => {
         const id = data.name.toLowerCase().replace(/\s+/g, '-');
         const projectNumber = `#00${Math.floor(Math.random() * 90) + 10}`;
@@ -638,6 +818,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
             summary: data.summary || 'A new collaborative mission on Hashi.',
             coverImage: data.coverImage,
             tagline: 'NEW PRODUCTION',
+            ipId: data.ipId,
             members: [{ initials: 'PM', color: '#1e3a5f', name: 'Pietro M.' }],
             milestones: [
                 { label: 'Initialization', state: 'done', tooltip: 'Project initialized on Hashi' },
@@ -897,6 +1078,58 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
         return otherUsers[id];
     };
 
+    const addReview = (targetUserId: string, review: Omit<Review, 'id' | 'date'>) => {
+        const newReview: Review = {
+            ...review,
+            id: `rev-${Date.now()}`,
+            date: new Date().toLocaleDateString('it-IT')
+        };
+
+        const updateRatings = (currentRatings: RatingBreakdown, reviewRating: number, reviewCount: number, reviewCategories?: RatingBreakdown) => {
+            const updated = { ...currentRatings };
+            Object.keys(updated).forEach(key => {
+                const k = key as keyof RatingBreakdown;
+                const currentVal = updated[k] || 0;
+                const newVal = reviewCategories ? reviewCategories[k] : reviewRating;
+                updated[k] = (currentVal * reviewCount + newVal) / (reviewCount + 1);
+            });
+            return updated;
+        };
+
+        if (targetUserId === userProfile.id) {
+            setUserProfile(prev => {
+                const newReviews = [newReview, ...prev.reviews];
+                const newRating = newReviews.reduce((acc, r) => acc + r.rating, 0) / newReviews.length;
+                const updatedRatings = updateRatings(prev.ratings, review.rating, prev.reviewCount, review.categories);
+                return {
+                    ...prev,
+                    reviews: newReviews,
+                    reviewCount: newReviews.length,
+                    rating: newRating,
+                    ratings: updatedRatings
+                };
+            });
+        } else if (otherUsers[targetUserId]) {
+            setOtherUsers(prev => {
+                const target = prev[targetUserId];
+                if (!target) return prev;
+                const newReviews = [newReview, ...target.reviews];
+                const newRating = newReviews.reduce((acc, r) => acc + r.rating, 0) / newReviews.length;
+                const updatedRatings = updateRatings(target.ratings, review.rating, target.reviewCount, review.categories);
+                return {
+                    ...prev,
+                    [targetUserId]: {
+                        ...target,
+                        reviews: newReviews,
+                        reviewCount: newReviews.length,
+                        rating: newRating,
+                        ratings: updatedRatings
+                    }
+                };
+            });
+        }
+    };
+
     // --- Message Simulation Engine ---
     useEffect(() => {
         if (!isLoaded) return;
@@ -933,6 +1166,29 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
         return () => clearInterval(simulationInterval);
     }, [isLoaded, missions, addMessageToProject]);
 
+    const removeNotification = (id: string) => {
+        setNotifications(prev => prev.filter(n => n.id !== id));
+    };
+
+    const addIP = (data: Omit<IntellectualProperty, 'id' | 'createdAt' | 'creatorId' | 'creatorName'>) => {
+        const newIP: IntellectualProperty = {
+            ...data,
+            id: `ip-${Date.now()}`,
+            creatorId: userProfile.id || 'pietro-m',
+            creatorName: userProfile.name || 'Pietro M.',
+            createdAt: new Date().toISOString().split('T')[0]
+        };
+        setIps(prev => [newIP, ...prev]);
+    };
+
+    const updateIP = (id: string, data: Partial<IntellectualProperty>) => {
+        setIps(prev => prev.map(ip => ip.id === id ? { ...ip, ...data } : ip));
+    };
+
+    const deleteIP = (id: string) => {
+        setIps(prev => prev.filter(ip => ip.id !== id));
+    };
+
     return (
         <ProjectContext.Provider value={{
             missions,
@@ -943,17 +1199,22 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
             deleteProject,
             addPhotoToProject,
             addMessageToProject,
+            joinProject,
+            reachOut,
             notifications,
-            removeNotification: (id: string) => {
-                setNotifications(prev => prev.filter(n => n.id !== id));
-            },
+            removeNotification,
             unreadCounts,
             markAsRead,
             userProfile,
             updateProfile,
             getOtherUserById,
-            joinProject,
-            reachOut
+            otherUsers,
+            addReview,
+            ips,
+            addIP,
+            updateIP,
+            deleteIP,
+            isLoaded
         }}>
             {children}
         </ProjectContext.Provider>

@@ -33,6 +33,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials) {
+                // Dev mode bypass for Pietro Maggiotto
+                if (credentials?.email === 'pietro@hashi.cx' && credentials?.password === 'password123') {
+                    return { 
+                        id: 'pietro-m', 
+                        email: 'pietro@hashi.cx', 
+                        name: 'Pietro Maggiotto', 
+                        image: '/images/avatars/pietro.png' 
+                    };
+                }
+
                 const parsed = z
                     .object({ email: z.string().email(), password: z.string().min(6) })
                     .safeParse(credentials);

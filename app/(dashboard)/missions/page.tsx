@@ -2,8 +2,11 @@
 
 import { useState } from 'react';
 import { ChevronDown, ChevronUp, Search, X, Plus, Trash2, AlertTriangle } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { useProjects, Mission } from '@/app/context/ProjectContext';
+import { useUI } from '@/context/UIContext';
 import { NewMissionModal } from '@/components/missions/NewMissionModal';
+import { VerificationBadge } from '@/components/ui/VerificationBadge';
 
 type MissionStatus = 'IN_PROGRESS' | 'COMPLETED' | 'IN_CONSIDERATION';
 type FilterTab = 'ALL' | 'CURRENT' | 'PAST' | 'FUTURE';
@@ -41,6 +44,9 @@ const FILTER_MAP: Record<FilterTab, MissionStatus[]> = {
 
 export default function MissionsPage() {
     const { missions, deleteProject } = useProjects();
+    const { status } = useSession();
+    const { setAuthModalOpen } = useUI();
+
     const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set(['bar-man']));
     const [filter, setFilter] = useState<FilterTab>('ALL');
     const [search, setSearch] = useState('');
@@ -76,7 +82,9 @@ export default function MissionsPage() {
 
     const showTooltip = (e: React.MouseEvent, text: string) => {
         const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-        setTooltip({ text, x: rect.left + rect.width / 2, y: rect.top - 8 });
+        // Mocking verified status for specific known names for demonstration
+        const isVerified = ['Bruce W.', 'Pietro M.', 'Lord Helmet', 'Tony S.'].includes(text);
+        setTooltip({ text: isVerified ? `${text} ✓` : text, x: rect.left + rect.width / 2, y: rect.top - 8 });
     };
     const hideTooltip = () => setTooltip(null);
 
@@ -111,7 +119,13 @@ export default function MissionsPage() {
                         </button>
                     ))}
                     <button 
-                        onClick={() => setShowNewMissionModal(true)}
+                        onClick={() => {
+                            if (status === 'unauthenticated') {
+                                setAuthModalOpen(true);
+                            } else {
+                                setShowNewMissionModal(true);
+                            }
+                        }}
                         style={{ marginLeft: '12px', padding: '6px 16px', background: '#65a30d', border: 'none', borderRadius: '20px', color: '#ffffff', fontSize: '10px', fontWeight: 800, fontFamily: 'Courier New, monospace', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '0 4px 12px rgba(163,230,53,0.2)' }}
                     >
                         <Plus size={12} /> NEW MISSION

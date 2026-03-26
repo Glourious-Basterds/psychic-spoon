@@ -19,12 +19,13 @@ const DEADLINE_LABELS = [
 ];
 
 export function NewMissionModal({ onClose }: NewMissionModalProps) {
-    const { publishMission } = useProjects();
+    const { publishMission, ips } = useProjects();
     const [name, setName] = useState('');
     const [summary, setSummary] = useState('');
     const [coverImage, setCoverImage] = useState<string | null>(null);
     const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
     const [deadlines, setDeadlines] = useState<{ label: string; date: string }[]>([]);
+    const [selectedIpId, setSelectedIpId] = useState<string | undefined>(undefined);
     const [isPublic, setIsPublic] = useState(true);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -68,7 +69,8 @@ export function NewMissionModal({ onClose }: NewMissionModalProps) {
             summary,
             coverImage,
             roles: selectedRoles,
-            deadlines
+            deadlines,
+            ipId: selectedIpId
         });
         onClose();
     };
@@ -206,6 +208,21 @@ export function NewMissionModal({ onClose }: NewMissionModalProps) {
                             >
                                 <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: '#ffffff', position: 'absolute', top: '3px', left: isPublic ? '21px' : '3px', transition: 'all 0.3s' }} />
                             </button>
+                        </div>
+
+                        {/* IP Link */}
+                        <div style={{ marginTop: '32px', padding: '16px', background: '#f9fafb', borderRadius: '12px', border: '1px solid rgba(0,0,0,0.06)' }}>
+                            <div style={{ fontSize: '10px', fontWeight: 800, fontFamily: 'Courier New, monospace', color: '#6b7280', letterSpacing: '0.1em', marginBottom: '12px', textTransform: 'uppercase' }}>Link to IP Vault (Optional)</div>
+                            <select 
+                                value={selectedIpId || ''}
+                                onChange={e => setSelectedIpId(e.target.value || undefined)}
+                                style={{ width: '100%', height: '44px', background: '#ffffff', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '10px', padding: '0 12px', fontSize: '13px', fontWeight: 600, color: '#030712', outline: 'none' }}
+                            >
+                                <option value="">None — Independent IP</option>
+                                {ips.map(ip => (
+                                    <option key={ip.id} value={ip.id}>{ip.title} ({ip.category})</option>
+                                ))}
+                            </select>
                         </div>
 
                     </div>
